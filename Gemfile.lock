@@ -41,6 +41,13 @@ GEM
     arel (8.0.0)
     builder (3.2.3)
     byebug (9.1.0)
+    carrierwave (1.1.0)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
+    carrierwave-base64 (2.5.3)
+      carrierwave (>= 0.8.0)
+      mime-types (~> 3.0)
     concurrent-ruby (1.0.5)
     erubi (1.6.1)
     ffi (1.9.18)
@@ -123,6 +130,8 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  carrierwave (~> 1.1)
+  carrierwave-base64 (~> 2.5, >= 2.5.3)
   listen (>= 3.0.5, < 3.2)
   pg (~> 0.18)
   puma (~> 3.7)
