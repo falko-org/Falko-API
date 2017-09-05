@@ -1,0 +1,33 @@
+version: '3'
+services:
+
+  falko-db:
+    image: postgres
+    ports:
+      - 5000:5432
+    environment:
+      - PGDATA=/postgresql
+      - PG_PASSWORD=password
+    volumes:
+      - ./Falko-2017.2-BackEnd/tmp/data/postgresql:/postgresql
+
+  falko-front:
+    image: alaxalves/falko-2017.2-frontend
+    command: npm run dev
+    volumes:
+      - .:/Falko-2017.2/Falko-2017.2-FrontEnd/
+    ports:
+      - 8080:8080
+    depends_on:
+      - falko-db
+      - falko-api
+
+  falko-api:
+    image: alaxalves/falko-2017.2-backend
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - ./:/Falko-2017.2-BackEnd
+    ports:
+      - 3000:3000
+    links:
+      - falko-db
