@@ -1,7 +1,8 @@
 version: '3'
 services:
 
-  falko-db:
+  falko-database:
+    container_name: falko-database
     image: postgres
     ports:
       - 5000:5432
@@ -10,25 +11,15 @@ services:
       - PG_PASSWORD=password
     volumes:
       - ./tmp/data/postgresql:/postgresql
+      - .:/Falko-2017.2-BackEnd
 
-  falko-front:
-    image: alaxalves/front:1.3
-    command: npm install
-    command: npm run dev
-    volumes:
-      - .:/Falko-2017.2/Falko-2017.2-FrontEnd/
-    ports:
-      - 8080:8080
-    depends_on:
-      - falko-db
-      - falko-api
-
-  falko-api:
+  falko-server:
+    container_name: falko-server
     image: alaxalves/api:1.1
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
     volumes:
-      - ./:/Falko-2017.2-BackEnd
+      - .:/Falko-2017.2-BackEnd
     ports:
       - 3000:3000
-    links:
-      - falko-db
+    depends_on:
+      - falko-database
