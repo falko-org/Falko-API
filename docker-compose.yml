@@ -9,6 +9,7 @@ services:
     environment:
       - PGDATA=/postgresql
       - PG_PASSWORD=password
+      - PG_DATABASE=Falko-2017_2-BackEnd_development 
     volumes:
       - ./tmp/data/postgresql:/postgresql
       - .:/Falko-2017.2-BackEnd

@@ -21,10 +21,10 @@ default: &default
 
 development: &development
   <<: *default
-  database: Falko-2017_2_development
+  database: Falko-2017_2-BackEnd_development
   username: postgres
   password: password
-  host: localhost
+  host: falko-database
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
