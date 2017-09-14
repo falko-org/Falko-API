@@ -15,7 +15,7 @@ services:
 
   falko-server:
     container_name: falko-server
-    image: alaxalves/api:1.1
+    image: alaxalves/api:1.2
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
     volumes:
       - .:/Falko-2017.2-BackEnd
