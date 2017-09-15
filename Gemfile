@@ -21,6 +21,7 @@ gem 'puma', '~> 3.7'
 gem 'carrierwave', '~> 1.1'
 gem 'carrierwave-base64', '~> 2.5', '>= 2.5.3'
 
+gem 'simple_token_authentication', '~> 1.0'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
