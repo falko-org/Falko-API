@@ -2,44 +2,43 @@ class ProjectsController < ApplicationController
 
   def index
     @projects = Project.all
-    json_response(@projects)
+    render json: @projects
   end
 
   def new
     @project = Project.new
-    json_response(@project)
+    render json: @project
   end
 
   def show
     @project = Project.find(params[:id])
-    json_response(@project)
+    render json: @project
   end
 
   def edit
     @project = Project.find(params[:id])
-    json_response(@project)
+    render json: @project
   end
 
   def create
     @project = Project.create(project_params)
-    json_response(@project, :created)
+    render json: @project
   end
 
   def update
     @project = Project.update(project_params)
-    head :no_content
+    render json: @project
   end
 
   def destroy
     @project = Project.find(params[:id])
     @project.destroy
-    head :no_content
   end
 
   private
 
   def project_params
-    params.permit(:name, :description)
+    params.require(:project).permit(:name, :description)
   end
 
 end
