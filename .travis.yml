@@ -1,0 +1,30 @@
+sudo: required
+
+group: deprecated-2017Q3
+
+language: ruby
+
+ruby: 2.4.1
+
+services: 
+  - docker
+  - postgresql
+
+install: true
+
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+
+test:
+  adapter: postgresql
+  database: travis_ci_test
+
+notifications:
+    slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
+
+script:
+  - docker pull alaxalves/api-test
+  - docker create --name travis -v `pwd`:/Falko-2017.2-BackEnd alaxalves/api-test
+  - docker start travis
+  - docker logs -f travis
+  - test `docker ps -a --filter exited=1 | wc -l` == "1"

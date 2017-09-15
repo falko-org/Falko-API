@@ -21,3 +21,4 @@ RUN bundle install
 
 ADD . $PWD/
 
+CMD rails test
