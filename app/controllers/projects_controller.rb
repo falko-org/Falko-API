@@ -22,12 +22,20 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.create(project_params)
-    render json: @project
+    if @project.save
+      render json: @project
+    else
+      render json: @project.errors, status: :unprocessable_entity
+    end
   end
 
   def update
     @project = Project.update(project_params)
-    render json: @project
+    if @project.update(project_params)
+      render json: @project
+    else
+      render json: @project.errors, status: :unprocessable_entity
+    end
   end
 
   def destroy
