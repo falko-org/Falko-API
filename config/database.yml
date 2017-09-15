@@ -12,7 +12,6 @@ development: &development
 
 test:
   <<: *development
-  database: Falko-2017_2-BackEnd_test
   adapter: postgresql
   database: travis_ci_test
 
