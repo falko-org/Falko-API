@@ -19,6 +19,10 @@ test:
   adapter: postgresql
   database: travis_ci_test
 
+addons:
+    code_climate:
+            repo_token: 095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3
+
 notifications:
     slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
 
