@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-before_action :set_user, only: [:show, :update, :destroy]
+skip_before_action :authenticate_request, only: [:create, :all]
+before_action :authenticate_member, :set_user, only: [:show, :update, :destroy]
 
   def index
     @user = User.all
@@ -7,16 +8,20 @@ before_action :set_user, only: [:show, :update, :destroy]
   end
 
   def show
-    render json: @user
+    @user = User.find(params[:id])
   end
 
   def create
     @user = User.new(user_params)
 
     if @user.save
-      render json: @user, status: :created, location: @user
+      log_in @user
+      redirect_to home_path @user
+
+      send_notification("first_notification", nil)
     else
-      render json: @user.errors, status: :unprocessable_entity
+      flash[:alert] = "user not created"
+      render 'new'
     end
   end
 
@@ -39,7 +44,7 @@ before_action :set_user, only: [:show, :update, :destroy]
   end
 
   def user_params
-      params.require(:user).permit(:name, :email, :password, :github)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :github)
   end
 
 end
