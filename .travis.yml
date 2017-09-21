@@ -6,6 +6,10 @@ language: ruby
 
 ruby: 2.4.1
 
+env:
+    global:
+      - CC_TEST_REPORTER_ID=095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3 
+
 services: 
   - docker
   - postgresql
@@ -14,10 +18,17 @@ install: true
 
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 test:
   adapter: postgresql
   database: travis_ci_test
+
+addons:
+    code_climate:
+            repo_token: 095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3
 
 notifications:
     slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
@@ -28,3 +39,6 @@ script:
   - docker start travis
   - docker logs -f travis
   - test `docker ps -a --filter exited=1 | wc -l` == "1"
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
