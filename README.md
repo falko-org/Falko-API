@@ -41,6 +41,11 @@ O ambiente de desenvolvimento é implantado por meio de contêineres utilizando 
 
 A documentação completa da aplicação está disponível em nossa [Wiki](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/wiki).
 
+## Como Contribuir
+
+Para contribuir com o Falko, o colaborador deve criar seu próprio Fork e enviar um [pull request](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/pulls) com a contribuição para a branch 'devel' do projeto. 
+O código enviado será submetido a uma avaliação por um dos administradores do repositório e, se aprovado, incluído ao _core_ da aplicação.
+
 ## Licença
 
 [MIT](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/blob/devel/LICENSE)
