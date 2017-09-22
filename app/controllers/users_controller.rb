@@ -1,30 +1,39 @@
 class UsersController < ApplicationController
 skip_before_action :authenticate_request, only: [:create, :all]
-before_action :authenticate_member, :set_user, only: [:show, :update, :destroy]
+before_action :set_user, only: [:show, :update, :destroy]
 
+
+  # GET /users
   def index
-    @user = User.all
+    @users = User.all
     render json: @users
   end
 
+  def all
+    @users = User.all.order('id ASC')
+    render :index
+  end
+
+  # GET /users/1
   def show
     @user = User.find(params[:id])
   end
 
+  # POST /users
   def create
     @user = User.new(user_params)
 
     if @user.save
-      log_in @user
-      redirect_to home_path @user
+      @token = AuthenticateUser.call(@user.email, @user.password)
 
-      send_notification("first_notification", nil)
+      response.set_header("auth_token", @token.result)
+      render :show, status: :created
     else
-      flash[:alert] = "user not created"
-      render 'new'
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
 
+  # PATCH/PUT /users/1
   def update
     if @user.update(user_params)
       render json: @user
@@ -33,8 +42,10 @@ before_action :authenticate_member, :set_user, only: [:show, :update, :destroy]
     end
   end
 
+  # DELETE /users/1
   def destroy
     @user.destroy
+    redirect_to action: 'index', status:200
   end
 
   private
