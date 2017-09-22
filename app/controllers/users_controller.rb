@@ -2,7 +2,6 @@ class UsersController < ApplicationController
 skip_before_action :authenticate_request, only: [:create, :all]
 before_action :set_user, only: [:show, :update, :destroy]
 
-
   # GET /users
   def index
     @users = User.all
@@ -17,6 +16,7 @@ before_action :set_user, only: [:show, :update, :destroy]
   # GET /users/1
   def show
     @user = User.find(params[:id])
+    render json: @user
   end
 
   # POST /users
