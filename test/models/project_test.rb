@@ -37,11 +37,6 @@ class ProjectTest < ActiveSupport::TestCase
     assert @project.save
   end
 
-  test "should not save a project with description smaller than 5 characters" do
-    @project.description = "Mary"
-    assert_not @project.save
-  end
-
   test "should not save a project with description bigger than 256 characters" do
     @project.description = "a" * 257
     assert_not @project.save
