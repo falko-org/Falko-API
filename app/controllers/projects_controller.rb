@@ -23,14 +23,14 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.create(project_params)
     if @project.save
-      render json: @project
+      render json: @project, status: :created
     else
       render json: @project.errors, status: :unprocessable_entity
     end
   end
 
   def update
-    @project = Project.update(project_params)
+    @project = Project.find(params[:id])
     if @project.update(project_params)
       render json: @project
     else

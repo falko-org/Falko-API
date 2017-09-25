@@ -42,10 +42,13 @@ class ProjectTest < ActiveSupport::TestCase
     assert_not @project.save
   end
 
-  test "should save a project with an exacty 5 or 256 characters description" do
-    @project.description = "Maria"
-    assert @project.save
+  test "should save a project with an exacty 256 characters description" do
     @project.description = "a" * 256
+    assert @project.save
+  end
+
+  test "should save a project with a blank description" do
+    @project.description = ""
     assert @project.save
   end
 
