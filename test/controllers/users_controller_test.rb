@@ -48,7 +48,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
        }
      }, headers: {:Authorization => @token.result}
      @user.reload
-     puts @user.name
     assert_response :success
   end
 end

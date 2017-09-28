@@ -22,7 +22,6 @@ before_action :set_user, only: [:show, :update, :destroy]
   # POST /users
   def create
     @user = User.new(user_params)
-    puts @user
 
     if @user.save
       @token = AuthenticateUser.call(@user.email, @user.password)
