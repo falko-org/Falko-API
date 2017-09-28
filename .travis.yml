@@ -34,9 +34,9 @@ notifications:
     slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
 
 script:
-  - docker pull alaxalves/api-test
-  - docker create --name travis -v `pwd`:/Falko-2017.2-BackEnd alaxalves/api-test
-  - docker start travis
+  - docker pull alaxalves/api:1.3
+  - docker create --name travis -v `pwd`:/Falko-2017.2-BackEnd alaxalves/api:1.3
+  - sudo docker start travis
   - docker logs -f travis
   - test `docker ps -a --filter exited=1 | wc -l` == "1"
 
