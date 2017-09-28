@@ -2,23 +2,27 @@ FROM ruby:2.4.1
 
 MAINTAINER alaxallves@gmail.com
 
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
-RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - \
-&& apt-get install -y nodejs
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-RUN apt-get update && apt-get install -y curl apt-transport-https wget && \
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-apt-get update && apt-get install -y yarn
+RUN apt-get update && apt-get install -y nodejs mysql-client postgresql-client --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir Falko-2017.2-BackEnd
-WORKDIR $PWD/Falko-2017.2-BackEnd
+ENV RAILS_ENV production
+ENV RAILS_SERVE_STATIC_FILES true
+ENV RAILS_LOG_TO_STDOUT true
 
-ADD Gemfile /Falko-2017.2-BackEnd/Gemfile
-ADD Gemfile.lock /Falko-2017.2-BackEnd/Gemfile.lock
+COPY Gemfile /usr/src/app/
+COPY Gemfile.lock /usr/src/app/
 
-RUN bundle install
+RUN bundle config --global frozen 1\
+    bundle install --without development test
 
-ADD . $PWD/
+COPY . /usr/src/app
 
-CMD rails test
+RUN bundle exec rake DATABASE_URL=postgresql:does_not_exist assets:precompile
+
+CMD bundle install \
+    bundle exec rake db:create; \
+    bundle exec rake db:migrate; \
+    bundle exec rails s -p 3000 -b '0.0.0.0';
+
