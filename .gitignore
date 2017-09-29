@@ -1,0 +1,23 @@
+# Ignore bundler config.
+/.bundle
+Gemfile.lock
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+*.log
+
+#Ignore databases
+*.sql
+
+#Ignore vim temporary files
+*.sw*
+*.swp*
+
+#Ignore development.rb file
+config/environments/development.rb
+
+vendor/bundle
+db/schema.rb

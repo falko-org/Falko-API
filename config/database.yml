@@ -1,0 +1,25 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development: &development
+  <<: *default
+  database: Falko-2017_2-BackEnd_development
+  username: postgres
+  password: password
+  host: falko-database
+
+test:
+  <<: *development
+  adapter: postgresql
+  database: travis_ci_test
+
+production:
+  url: <%= ENV['DATABASE_URL'] %>
+
+#production:
+#  <<: *default
+#  database: Falko-2017_2_production
+#  username: Falko-2017_2
+#  password: <%= ENV['FALKO-2017_2_DATABASE_PASSWORD'] %>
