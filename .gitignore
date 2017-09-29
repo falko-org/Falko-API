@@ -16,7 +16,8 @@ Gemfile.lock
 *.sw*
 *.swp*
 
-#Ignore development.rb file 
+#Ignore development.rb file
 config/environments/development.rb
 
 vendor/bundle
+db/schema.rb

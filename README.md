@@ -11,7 +11,7 @@
     <a href="https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/wiki"><strong>Visite nossa Wiki &raquo;</strong></a>
     <br>
     <br>
-    <a href="falko.solutions">Acesse o Falko</a>
+    <a href="http://falko.solutions">Acesse o Falko</a>
     &middot;
     <a href="https://github.com/fga-gpp-mds/Falko-2017.2-FrontEnd">Repositório de FrontEnd</a>
     &middot;
@@ -30,7 +30,7 @@
 
 ## Introdução
 
-Falko é uma aplicação web, desenvolvida com Ruby on Rails API e Vue.js. É um projeto de Software Livre, desenvolvido para a disciplina de GPP/MDS do curso de Engenharia de Software Universidade de Brasília - Campus de Engenharia do Gama (FGA). 
+Falko é uma aplicação web, desenvolvida com Ruby on Rails API e Vue.js. É um projeto de Software Livre, desenvolvido para a disciplina de GPP/MDS do curso de Engenharia de Software Universidade de Brasília - Campus de Engenharia do Gama (FGA).
 O Falko tem como objetivo prover uma plataforma que facilite a gestão de projetos ágeis por meio da exibição de métricas e informações relevantes, contribuindo para tomadas de decisão mais eficientes.
 
 ## Instalação de Ambiente
@@ -43,7 +43,7 @@ A documentação completa da aplicação está disponível em nossa [Wiki](https
 
 ## Como Contribuir
 
-Para contribuir com o Falko, o colaborador deve criar seu próprio Fork e enviar um [pull request](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/pulls) com a contribuição para a branch 'devel' do projeto. 
+Para contribuir com o Falko, o colaborador deve criar seu próprio Fork e enviar um [pull request](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/pulls) com a contribuição para a branch 'devel' do projeto.
 O código enviado será submetido a uma avaliação por um dos administradores do repositório e, se aprovado, incluído ao _core_ da aplicação.
 
 ## Licença

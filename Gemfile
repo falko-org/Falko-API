@@ -16,7 +16,12 @@ gem 'puma', '~> 3.7'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
+gem 'jwt'
+gem 'simple_command'
+
+
+gem "codeclimate-test-reporter", group: :test, require: nil
 
 gem 'carrierwave', '~> 1.1'
 gem 'carrierwave-base64', '~> 2.5', '>= 2.5.3'
@@ -31,6 +36,7 @@ gem 'rack-cors'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'simplecov', :require => false
 end
 
 group :development do
