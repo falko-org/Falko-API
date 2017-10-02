@@ -9,6 +9,7 @@ ruby: 2.4.1
 env:
     global:
       - CC_TEST_REPORTER_ID=095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3
+      - DB=pgsql
 
 services:
   - docker
@@ -21,6 +22,8 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
+  - sudo service postgresql stop
+  - while sudo lsof -Pi :5432 -sTCP:LISTEN -t; do sleep 1; done
 
 test:
   adapter: postgresql
@@ -34,11 +37,9 @@ notifications:
     slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
 
 script:
-  - docker pull alaxalves/api:1.3
-  - docker create --name travis -v `pwd`:/Falko-2017.2-BackEnd alaxalves/api:1.3
-  - sudo docker start travis
-  - docker logs -f travis
-  - test `docker ps -a --filter exited=1 | wc -l` == "1"
+  - docker-compose -f docker-compose.test.yml -p travis up -d
+  - docker logs -f falko-test
+  - test `docker wait falko-test | wc -l` == "0"
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

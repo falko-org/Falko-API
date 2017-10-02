@@ -11,9 +11,12 @@ development: &development
   host: falko-database
 
 test:
-  <<: *development
+  <<: *default
   adapter: postgresql
+  username: postgres
+  password: password
   database: travis_ci_test
+  host: falko-database
 
 production:
   url: <%= ENV['DATABASE_URL'] %>
