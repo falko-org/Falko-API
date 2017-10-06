@@ -1,8 +1,9 @@
 class ProjectsController < ApplicationController
- skip_before_action :authenticate_request
+before_action :set_project, only: [:destroy, :index, :show]
 
   def index
-    @projects = Project.all
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @projects = @current_user.projects
     render json: @projects
   end
 
@@ -22,7 +23,10 @@ class ProjectsController < ApplicationController
   end
 
   def create
+    @current_user = AuthorizeApiRequest.call(request.headers).result
     @project = Project.create(project_params)
+    @project.user_id = @current_user.id
+
     if @project.save
       render json: @project, status: :created
     else
@@ -46,8 +50,12 @@ class ProjectsController < ApplicationController
 
   private
 
+  def set_project
+    @project = Project.find(params[:id])
+  end
+
   def project_params
-    params.require(:project).permit(:name, :description)
+    params.require(:project).permit(:name, :description, :user_id)
   end
 
 end
