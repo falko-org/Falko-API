@@ -4,4 +4,8 @@ Rails.application.routes.draw do
 
   resources :users
   resources :projects
+
+  get 'users/:id/projects' => 'projects#index'
+  post 'users/:id/projects' => 'projects#create'
+
 end
