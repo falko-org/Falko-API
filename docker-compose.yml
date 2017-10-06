@@ -16,8 +16,8 @@ services:
 
   falko-server:
     container_name: falko-server
-    image: alaxalves/api:1.3
-    command: /bin/bash -l -c "bundle install && rails db:create && rails db:migrate && rails s -p 3000 -b '0.0.0.0'"
+    image: alaxalves/api:1.5
+    command: rails s -p 3000 -b '0.0.0.0'
     volumes:
       - .:/Falko-2017.2-BackEnd
     ports:
