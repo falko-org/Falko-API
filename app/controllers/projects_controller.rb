@@ -3,8 +3,12 @@ before_action :set_project, only: [:destroy, :index, :show]
 
   def index
     @current_user = AuthorizeApiRequest.call(request.headers).result
-    @projects = @current_user.projects
-    render json: @projects
+    if @current_user.id == User.find_by_id(params[:id]).id
+      @projects = @current_user.projects
+      render json: @projects
+    else
+      render json: {error: 'Not Authorized'}, status: 401
+    end
   end
 
   def new
@@ -24,13 +28,17 @@ before_action :set_project, only: [:destroy, :index, :show]
 
   def create
     @current_user = AuthorizeApiRequest.call(request.headers).result
-    @project = Project.create(project_params)
-    @project.user_id = @current_user.id
+    if @current_user.id == User.find_by_id(params[:id]).id
+      @project = Project.create(project_params)
+      @project.user_id = @current_user.id
 
-    if @project.save
-      render json: @project, status: :created
+      if @project.save
+        render json: @project, status: :created
+      else
+        render json: @project.errors, status: :unprocessable_entity
+      end
     else
-      render json: @project.errors, status: :unprocessable_entity
+      render json: {error: 'Not Authorized'}, status: 401
     end
   end
 
