@@ -10,12 +10,7 @@ before_action :set_project, only: [:destroy, :index, :show]
       render json: {error: 'Not Authorized'}, status: 401
     end
   end
-
-  def new
-    @project = Project.new
-    render json: @project
-  end
-
+ 
   def show
     @project = Project.find(params[:id])
     render json: @project
