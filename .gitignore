@@ -21,3 +21,5 @@ config/environments/development.rb
 
 vendor/bundle
 db/schema.rb
+
+coverage/
