@@ -3,7 +3,8 @@ require 'test_helper'
 class ProjectTest < ActiveSupport::TestCase
 
   def setup
-    @project = Project.create(name: "Falko", description: "Esse projeto faz parte da disciplina MDS.")
+    @user = User.create(name: 'Ronaldo', email: 'Ronaldofenomeno@gmail.com', password: '123456789', password_confirmation: '123456789', github: 'ronaldobola')
+    @project = Project.create(name: "Falko", description: "Esse projeto faz parte da disciplina MDS.", user_id: @user.id)
   end
 
   test "should save valid project" do
