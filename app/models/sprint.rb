@@ -4,6 +4,7 @@ class Sprint < ApplicationRecord
   has_many :stories, dependent: :destroy
   belongs_to :release
 
+  belongs_to :user
   validates :name, presence: true, length: { maximum: 128, minimum: 2 }
   validates :description, length: { maximum: 256 }
   validates :initial_date, presence: true
