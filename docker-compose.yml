@@ -3,7 +3,7 @@ services:
 
   falko-database:
     container_name: falko-database
-    image: postgres
+    image: postgres:9.6
     ports:
       - 5000:5432
     environment:
