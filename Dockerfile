@@ -19,7 +19,6 @@ WORKDIR /Falko-2017.2-BackEnd
 COPY . /Falko-2017.2-BackEnd
 
 COPY Gemfile /Falko-2017.2-BackEnd/Gemfile
-COPY Gemfile.lock /Falko-2017.2-BackEnd/Gemfile.lock
 COPY wait-4-postgres.sh /Falko-2017.2-BackEnd/wait-4-postgres.sh
 
 RUN chmod +x ./wait-4-postgres.sh

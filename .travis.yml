@@ -39,7 +39,8 @@ notifications:
 script:
   - docker-compose -f docker-compose.test.yml -p travis up -d
   - docker logs -f falko-test
-  - test `docker wait falko-test | wc -l` == "0"
+  - test `docker wait falko-test | wc -l` == "1"
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - $CODECLIMATE_REPO_TOKEN bundle exec codeclimate-test-reporter
