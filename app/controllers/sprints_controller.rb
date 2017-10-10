@@ -1,5 +1,5 @@
 class SprintsController < ApplicationController
-  before_action :set_asdf, only: [:show, :update, :destroy]
+  before_action :set_sprint, only: [:show, :update, :destroy]
 
   # GET /sprints
   def index
