@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   resources :users
   resources :projects
+  resources :sprints
 
   get 'users/:id/projects' => 'projects#index'
   post 'users/:id/projects' => 'projects#create'
