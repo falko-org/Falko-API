@@ -1,4 +1,5 @@
 class Release < ApplicationRecord
+  belongs_to :project
   validates :name, presence: true, length:{in: 2..80}
   validates :description, length: { maximum: 256 }
   validates :initial_date, presence: true
