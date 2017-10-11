@@ -35,9 +35,7 @@ class ReleaseTest < ActiveSupport::TestCase
     @release.name = "R" * 81
     assert_not @release.save
   end
-  
-  # ñ pode ter data final antes da data inicial.
-
+ 
   test "should not save a release with initial date after final date" do
     @release.initial_date = "01/01/2017"
     @release.final_date = "01/01/2016"    
@@ -55,12 +53,12 @@ class ReleaseTest < ActiveSupport::TestCase
   end
 
   test "should not save a release with an invalid initial date" do
-    @release.initial_date = "00/00/00"
+    @release.initial_date = "50/50/2000"
     assert_not @release.save
   end
 
   test "should not save a release with an invalid final date" do
-    @release.final_date = "00/00/00"
+    @release.final_date = "50/50/2000"
     assert_not @release.save
   end
   
