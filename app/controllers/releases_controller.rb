@@ -5,7 +5,10 @@ class ReleasesController < ApplicationController
   end
 
   def new
+    @project = Project.find(params[:project_id])    
     @release = Release.new
+    @release.project = @project
+
     render json: @release
   end
 
@@ -20,7 +23,10 @@ class ReleasesController < ApplicationController
   end
 
   def create
+    @project = Project.find(params[:project_id])        
     @release = Release.create(release_params)
+    @release.project = @project
+
     if @release.save
       render json: @release, status: :created
     else
