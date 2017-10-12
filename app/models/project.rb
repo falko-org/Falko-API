@@ -1,6 +1,7 @@
 class Project < ApplicationRecord
 
-  belongs_to :user
+  belongs_to :user, dependent: :destroy
+  has_many :sprints
   validates :name, presence: true, length: { maximum: 128, minimum: 2 }
   validates :description, length: { maximum: 256 }
 
