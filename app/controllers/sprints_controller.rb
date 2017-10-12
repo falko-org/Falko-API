@@ -3,39 +3,59 @@ class SprintsController < ApplicationController
 
   # GET /sprints
   def index
-    @sprints = Project.find((params[:project_id]).to_i).sprints
-    render json: @sprints
+    if Project.validate
+      @sprints = Project.find((params[:project_id]).to_i).sprints
+      render json: @sprints
+    else
+      render json: { error: 'Not Authorized' }, status: 401
+    end
   end
 
   # GET /sprints/1
   def show
-    render json: @sprint
+    if Project.validate
+      render json: @sprint
+    else
+      render json: { error: 'Not Authorized' }, status: 401
+    end
   end
 
   # POST /sprints
   def create
-    @sprint = Sprint.new(sprint_params)
-    @sprint.project_id = params[:project_id]
+    if Project.validate
+      @sprint = Sprint.new(sprint_params)
+      @sprint.project_id = params[:project_id]
 
-    if @sprint.save
-      render json: @sprint, status: :created
+      if @sprint.save
+        render json: @sprint, status: :created
+      else
+        render json: @sprint.errors, status: :unprocessable_entity
+      end
     else
-      render json: @sprint.errors, status: :unprocessable_entity
+      render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
   # PATCH/PUT /sprints/1
   def update
-    if @sprint.update(sprint_params)
-      render json: @sprint
+    if Project.validate
+      if @sprint.update(sprint_params)
+        render json: @sprint
+      else
+        render json: @sprint.errors, status: :unprocessable_entity
+      end
     else
-      render json: @sprint.errors, status: :unprocessable_entity
+      render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
   # DELETE /sprints/1
   def destroy
-    @sprint.destroy
+    if Project.validate
+      @sprint.destroy
+    else
+      render json: { error: 'Not Authorized' }, status: 401
+    end
   end
 
   private
