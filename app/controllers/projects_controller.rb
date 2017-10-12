@@ -1,16 +1,16 @@
 class ProjectsController < ApplicationController
-before_action :set_project, only: [:destroy, :index, :show]
+before_action :set_project, only: [:destroy, :show]
 
   def index
     @current_user = AuthorizeApiRequest.call(request.headers).result
-    if @current_user.id == User.find_by_id(params[:id]).id
-      @projects = @current_user.projects
-      render json: @projects
+    if @current_user.id == params[:user_id].to_i
+      @project = User.find((params[:user_id]).to_i).projects
+      render json: @project
     else
       render json: {error: 'Not Authorized'}, status: 401
     end
   end
- 
+
   def show
     @project = Project.find(params[:id])
     render json: @project
@@ -23,7 +23,8 @@ before_action :set_project, only: [:destroy, :index, :show]
 
   def create
     @current_user = AuthorizeApiRequest.call(request.headers).result
-    if @current_user.id == User.find_by_id(params[:id]).id
+    if params[:user_id].to_i == @current_user.id
+
       @project = Project.create(project_params)
       @project.user_id = @current_user.id
 

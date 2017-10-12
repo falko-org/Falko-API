@@ -3,7 +3,7 @@ class SprintsController < ApplicationController
 
   # GET /sprints
   def index
-    @sprints = Sprint.all
+    @sprints = Project.find((params[:project_id]).to_i).sprints
     render json: @sprints
   end
 
@@ -15,9 +15,10 @@ class SprintsController < ApplicationController
   # POST /sprints
   def create
     @sprint = Sprint.new(sprint_params)
+    @sprint.project_id = params[:project_id]
 
     if @sprint.save
-      render json: @sprint, status: :created, location: @sprint
+      render json: @sprint, status: :created
     else
       render json: @sprint.errors, status: :unprocessable_entity
     end
@@ -45,6 +46,6 @@ class SprintsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def sprint_params
-      params.require(:sprint).permit(:string, :string)
+      params.require(:sprint).permit(:name, :description, :project_id, :start_date, :end_date)
     end
 end
