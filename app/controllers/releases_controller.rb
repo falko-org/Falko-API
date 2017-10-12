@@ -51,6 +51,6 @@ class ReleasesController < ApplicationController
   private
 
   def release_params
-    params.require(:release).permit(:name, :description, :amount_of_sprints)
+    params.require(:release).permit(:name, :description, :amount_of_sprints, :initial_date, :final_date)
   end
 end
