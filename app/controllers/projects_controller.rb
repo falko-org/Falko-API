@@ -75,17 +75,11 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    if User.validate
-      @project = Project.find(params[:id])
+    if validate_project
       @project.destroy
     else
       render json: { error: 'Not Authorized' }, status: 401
     end
-  end
-
-  def validate
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    @current_user.id == params[:project_id].to_i
   end
 
   private

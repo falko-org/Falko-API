@@ -76,11 +76,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def validate
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    @current_user.id == params[:user_id].to_i
-  end
-
   private
 
     def set_user
