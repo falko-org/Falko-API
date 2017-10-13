@@ -16,7 +16,7 @@ before_action :set_user, only: [:show, :update, :destroy]
   # GET /users/1
   def show
     if validate_user
-      @user = User.find(params[:user_id].to_i)
+      @user = User.find(params[:id].to_i)
       render json: @user
     else
       render json: { error: 'Not Authorized' }, status: 401
@@ -71,7 +71,7 @@ before_action :set_user, only: [:show, :update, :destroy]
 
   def validate_user
     @current_user = AuthorizeApiRequest.call(request.headers).result
-    @current_user.id == params[:user_id].to_i
+    @current_user.id == (params[:id]).to_i
   end
 
 end
