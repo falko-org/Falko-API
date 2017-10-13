@@ -1,5 +1,6 @@
 require "test_helper"
 class UsersControllerTest < ActionDispatch::IntegrationTest
+
   def setup
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
   end
