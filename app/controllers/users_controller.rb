@@ -15,14 +15,17 @@ before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /users/1
   def show
-    @user = User.find(params[:id])
-    render json: @user
+    if validate_user
+      @user = User.find(params[:user_id].to_i)
+      render json: @user
+    else
+      render json: { error: 'Not Authorized' }, status: 401
+    end
   end
 
   # POST /users
   def create
     @user = User.new(user_params)
-
     if @user.save
       @token = AuthenticateUser.call(@user.email, @user.password)
 
@@ -35,22 +38,25 @@ before_action :set_user, only: [:show, :update, :destroy]
 
   # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
-      render json: @user
+    if validate_user
+      if @user.update(user_params)
+        render json: @user
+      else
+        render json: @user.errors, status: :unprocessable_entity
+      end
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
   # DELETE /users/1
   def destroy
-    @user.destroy
-    redirect_to action: 'index', status:200
-  end
-
-  def validate
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    @current_user.id == params[:user_id].to_i
+    if validate_user
+      @user.destroy
+      redirect_to action: 'index', status:200
+    else
+      render json: { error: 'Not Authorized' }, status: 401
+    end
   end
 
   private
@@ -60,7 +66,12 @@ before_action :set_user, only: [:show, :update, :destroy]
   end
 
   def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :github)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :github)
+  end
+
+  def validate_user
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @current_user.id == params[:user_id].to_i
   end
 
 end

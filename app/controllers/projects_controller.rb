@@ -2,31 +2,24 @@ class ProjectsController < ApplicationController
 before_action :set_project, only: [:destroy, :show]
 
   def index
-    if User.validate
-      @project = User.find((params[:user_id]).to_i).projects
-      render json: @project
+    if validate_user
+      @projects = User.find((params[:user_id]).to_i).projects
+      render json: @projects
     else
       render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
   def show
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    if User.validate
-      @project = Project.find(params[:id])
-      if @current_user.id == (@project.user_id).to_i
-        render json: @project
-      else
-        render json: { error: 'Not Authorized' }, status: 401
-      end
+    if validate_project
+      render json: @project
     else
       render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
   def edit
-    if User.validate
-      @project = Project.find(params[:id])
+    if validate_project
       render json: @project
     else
       render json: { error: 'Not Authorized' }, status: 401
@@ -34,7 +27,7 @@ before_action :set_project, only: [:destroy, :show]
   end
 
   def create
-    if User.validate
+    if validate_user
       @project = Project.create(project_params)
       @project.user_id = @current_user.id
 
@@ -49,8 +42,7 @@ before_action :set_project, only: [:destroy, :show]
   end
 
   def update
-    if User.validate
-      @project = Project.find(params[:id])
+    if validate_project
       if @project.update(project_params)
         render json: @project
       else
@@ -62,17 +54,11 @@ before_action :set_project, only: [:destroy, :show]
   end
 
   def destroy
-    if User.validate
-      @project = Project.find(params[:id])
+    if validate_project
       @project.destroy
     else
       render json: { error: 'Not Authorized' }, status: 401
     end
-  end
-
-  def validate
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    @current_user.id == params[:project_id].to_i
   end
 
   private
@@ -83,6 +69,17 @@ before_action :set_project, only: [:destroy, :show]
 
   def project_params
     params.require(:project).permit(:name, :description, :user_id)
+  end
+
+  def validate_user
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @current_user.id == params[:user_id].to_i
+  end
+
+  def validate_project
+    @project = Project.find(params[:id])
+    # @current_user used from validate_user
+    @current_user.id == (@project.user_id).to_i
   end
 
 end
