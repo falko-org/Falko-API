@@ -1,9 +1,9 @@
 class SprintsController < ApplicationController
-  before_action :set_sprint, only: [:show, :update, :destroy]
+before_action :set_sprint, only: [:show, :update]
 
   # GET /sprints
   def index
-    if Project.validate
+    if validate_project
       @sprints = Project.find((params[:project_id]).to_i).sprints
       render json: @sprints
     else
@@ -13,7 +13,7 @@ class SprintsController < ApplicationController
 
   # GET /sprints/1
   def show
-    if Project.validate
+    if validate_sprint
       render json: @sprint
     else
       render json: { error: 'Not Authorized' }, status: 401
@@ -22,9 +22,9 @@ class SprintsController < ApplicationController
 
   # POST /sprints
   def create
-    if Project.validate
-      @sprint = Sprint.new(sprint_params)
-      @sprint.project_id = params[:project_id]
+    if validate_project
+      @sprint = Sprint.create(sprint_params)
+      @sprint.project_id = @project.id
 
       if @sprint.save
         render json: @sprint, status: :created
@@ -38,7 +38,7 @@ class SprintsController < ApplicationController
 
   # PATCH/PUT /sprints/1
   def update
-    if Project.validate
+    if validate_sprint
       if @sprint.update(sprint_params)
         render json: @sprint
       else
@@ -51,7 +51,8 @@ class SprintsController < ApplicationController
 
   # DELETE /sprints/1
   def destroy
-    if Project.validate
+    if validate_sprint
+      @sprint = Sprint.find(params[:id])
       @sprint.destroy
     else
       render json: { error: 'Not Authorized' }, status: 401
@@ -59,13 +60,30 @@ class SprintsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_sprint
-      @sprint = Sprint.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def sprint_params
-      params.require(:sprint).permit(:name, :description, :project_id, :start_date, :end_date)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_sprint
+    @sprint = Sprint.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def sprint_params
+    params.require(:sprint).permit(:name, :description, :project_id, :start_date, :end_date)
+  end
+
+  def validate_project
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @project = Project.find(params[:project_id].to_i)
+    (@project.user_id).to_i == @current_user.id
+  end
+
+  def validate_sprint
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @sprint = Sprint.find(params[:id])
+    @project = Project.find(@sprint.project_id)
+    @user = User.find(@project.user_id)
+
+    @current_user.id == @user.id
+  end
+
 end
