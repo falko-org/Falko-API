@@ -1,30 +1,52 @@
 require 'test_helper'
 class UsersControllerTest < ActionDispatch::IntegrationTest
+
   def setup
-    @user = User.create(name: 'Ronaldo', email: 'Ronaldofenomeno@gmail.com', password: '123456789', password_confirmation: '123456789', github: 'ronaldobola')
+    @user = User.create(name: 'Ronaldo', email: 'ronaldofenomeno@gmail.com', password: '123456789', password_confirmation: '123456789', github: 'ronaldobola')
   end
 
-  test "should login in" do
-    post '/authenticate', params: {email: 'Ronaldofenomeno@gmail.com', password: '123456789'}
+  test "should login with rights params" do
+    post '/authenticate', params: { email: 'ronaldofenomeno@gmail.com', password: '123456789' }
     assert_response :success
   end
 
-   test "should create" do
-     assert_difference('User.count') do
-       post '/users', params: {
-          "user":{
-            "email":"robakasdddi@email.com",
-            "name":"Fulvvano",
-            "password":"123456789",
-            "password_confirmation":"123456789",
-            "github":"fulanao"
-          }
+  # test "should not login with wrongs params" do
+  #   @post = post '/authenticate', params: { email: 'fenomeno@gmail.com', password: '123456789' }
+  #   @assert_error = {:error=>{:user_authentication=>["invalid credentials"]}}
+  #   puts @post
+  #   puts @assert_error
+  #   assert_equal @post, @assert_error
+  # end
+
+  test "should create a user with valids params" do
+    assert_difference('User.count') do
+      post '/users', params: {
+        "user":{
+          "email": "robakasdddi@email.com",
+          "name": "Fulvvano",
+          "password": "123456789",
+          "password_confirmation": "123456789",
+          "github": "fulanao"
         }
-        assert_response :success
-     end
+      }
+      assert_response :success
+    end
   end
 
-  test "should delete" do
+  test "should not create a user with invalid email" do
+    post '/users', params: {
+      "user":{
+        "email": "robakasdddi",
+        "name": "Fulvvano",
+        "password": "123456789",
+        "password_confirmation": "123456789",
+        "github": "fulanao"
+      }
+    }
+    assert_response :unprocessable_entity
+  end
+
+  test "should delete user " do
     @token = AuthenticateUser.call(@user.email, @user.password)
     delete "/users/#{@user.id}", headers: {:Authorization => @token.result}
     assert_response :success
@@ -50,4 +72,5 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
      @user.reload
     assert_response :success
   end
+
 end
