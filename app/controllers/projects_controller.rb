@@ -76,6 +76,7 @@ class ProjectsController < ApplicationController
 
   def destroy
     if validate_project
+      @project = Project.find(params[:id])
       @project.destroy
     else
       render json: { error: 'Not Authorized' }, status: 401

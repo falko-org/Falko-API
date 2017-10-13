@@ -20,7 +20,7 @@ class SprintsController < ApplicationController
 
   # GET /sprints/1
   def show
-    if Project.validate
+    if validate_sprint
       render json: @sprint
     else
       render json: { error: 'Not Authorized' }, status: 401
@@ -41,7 +41,7 @@ class SprintsController < ApplicationController
 
   # PATCH/PUT /sprints/1
   def update
-    if Project.validate
+    if validate_sprint
       if @sprint.update(sprint_params)
         render json: @sprint
       else
@@ -54,7 +54,8 @@ class SprintsController < ApplicationController
 
   # DELETE /sprints/1
   def destroy
-    if Project.validate
+    if validate_sprint
+      @sprint = Sprint.find(params[:id])
       @sprint.destroy
     else
       render json: { error: 'Not Authorized' }, status: 401
@@ -62,10 +63,6 @@ class SprintsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_sprint
-      @sprint = Sprint.find(params[:id])
-    end
 
     # Only allow a trusted parameter "white list" through.
     def sprint_params
