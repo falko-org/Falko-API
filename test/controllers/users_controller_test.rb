@@ -10,13 +10,10 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # test "should not login with wrongs params" do
-  #   @post = post '/authenticate', params: { email: 'fenomeno@gmail.com', password: '123456789' }
-  #   @assert_error = {:error=>{:user_authentication=>["invalid credentials"]}}
-  #   puts @post
-  #   puts @assert_error
-  #   assert_equal @post, @assert_error
-  # end
+  test "should not login with wrongs params" do
+    @post = post '/authenticate', params: { email: 'fenomeno@gmail.com', password: '123456789' }
+    assert_response :unauthorized
+  end
 
   test "should create a user with valids params" do
     assert_difference('User.count') do
