@@ -45,14 +45,17 @@ class UsersController < ApplicationController
 
 
     access_token = result.split('&')[0].split('=')[1]
+    unless access_token == "bad_verification_code"
+      @user = User.find(params[:id])
+      @user.access_token = access_token
 
-    @user = User.find(params[:id])
-    @user.access_token = access_token
-    puts result
-    if @user.update_column(:access_token, access_token)
-      render json: @user
+      if @user.update_column(:access_token, access_token)
+        render json: @user
+      else
+        render json: @user.errors, status: :unprocessable_entity
+      end
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: result, status: :bad_request
     end
   end
 
