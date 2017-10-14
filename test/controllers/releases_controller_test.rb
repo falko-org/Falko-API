@@ -21,7 +21,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     @release_another = Release.create(name: "Real Madrid", description: "Descriptions",
                         initial_date: "2018-01-01", final_date: "2019-01-01",
                         amount_of_sprints: "20", project_id: @project.id)
-    @token_another = AuthenticateUser.call(@user.email, @user.password)
+    @token_another = AuthenticateUser.call(@user_another.email, @user_another.password)
 
   end
 
@@ -138,11 +138,8 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-# FIX ME
-  # test "should not destroy release with another user" do
-  #   assert_no_difference 'Release.count' do
-  #       delete "/releases/#{@release.id}", headers: {:Authorization => @token_another.result}
-  #   end
-  # end
-  
+  test "should not destroy release with another user" do
+    delete "/releases/#{@release.id}", headers: {:Authorization => @token_another.result}
+    assert_response 401
+  end
 end
