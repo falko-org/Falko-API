@@ -15,8 +15,8 @@ class UserTest < ActiveSupport::TestCase
       assert_not @user.save
     end
 
-    test "User name should have more than 5 characters" do
-      @user.name = "gil"
+    test "User name should have more than 2 characters" do
+      @user.name = "gi"
       assert_not @user.save
     end
 
@@ -25,8 +25,8 @@ class UserTest < ActiveSupport::TestCase
       assert_not @user.save
     end
 
-    test "The number of characters in user name is between 5 and 80" do
-      @user.name = "odada"
+    test "The number of characters in user name is between 3 and 80" do
+      @user.name = "oda"
       assert @user.save
       @user.name = "a" * 80
       assert @user.save
