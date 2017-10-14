@@ -1,6 +1,6 @@
 require 'rest-client'
 class UsersController < ApplicationController
-  skip_before_action :authenticate_request, only: [:create, :all, :request_github_token]
+  skip_before_action :authenticate_request, only: [:create, :all]
   before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /users
@@ -42,11 +42,14 @@ class UsersController < ApplicationController
        :code => code_token,
        :accept => :json
       })
-    access_token = JSON.parse(result)['access_token']
+
+
+    access_token = result.split('&')[0].split('=')[1]
+
     @user = User.find(params[:id])
     @user.access_token = access_token
-
-    if @user.save
+    puts result
+    if @user.update_column(:access_token, access_token)
       render json: @user
     else
       render json: @user.errors, status: :unprocessable_entity
