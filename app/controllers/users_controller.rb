@@ -29,8 +29,10 @@ before_action :set_user, only: [:show, :update, :destroy]
     if @user.save
       @token = AuthenticateUser.call(@user.email, @user.password)
 
+      @result = { token:@token.result }
+
       response.set_header("auth_token", @token.result)
-      render :show, status: :created
+      render json: @result, status: :created
     else
       render json: @user.errors, status: :unprocessable_entity
     end
