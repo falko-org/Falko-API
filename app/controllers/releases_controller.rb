@@ -1,7 +1,8 @@
 class ReleasesController < ApplicationController
   def index
     if validate_project
-      @releases = Release.all
+      @project = Project.find(params[:project_id])
+      @releases = @project.releases.reverse
       render json: @releases
     else
       render json: { error: 'Not Authorized' }, status: 401
