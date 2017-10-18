@@ -15,10 +15,14 @@ RUN apt-get update && apt-get install -y curl apt-transport-https wget && \
 RUN mkdir Falko-2017.2-BackEnd
 WORKDIR /Falko-2017.2-BackEnd
 
+ENV RAILS_ENV=production
+
 COPY . /Falko-2017.2-BackEnd
 
 COPY Gemfile /Falko-2017.2-BackEnd/Gemfile
-COPY wait-4-postgres.sh /Falko-2017.2-BackEnd/wait-4-postgres.sh
 
-RUN chmod +x ./wait-4-postgres.sh
+RUN rails db:create
+RUN rails db:migrate
+
+RUN bundle install 
 
