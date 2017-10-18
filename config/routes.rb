@@ -6,12 +6,7 @@ Rails.application.routes.draw do
     resources :projects do
       resources :releases do
       end
+      resources :sprints
     end
   end
-
-  # get 'users/:id/projects' => 'projects#index'
-  # post 'users/:id/projects' => 'projects#create'
-  # get 'users/:id/projects/:id/releases' => 'releases#index'
-  # post 'users/:id/projects/:id/releases' => 'releases#create'
-
 end
