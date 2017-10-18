@@ -1,0 +1,25 @@
+version: '3'
+services:
+
+  falko-database:
+    container_name: falko-database
+    image: postgres:9.6
+    environment:
+      - PGDATA=/postgresql
+      - PG_PASSWORD=password
+      - PG_DATABASE=Falko-2017_2-BackEnd_development
+    volumes:
+      - ./tmp/data/postgresql:/postgresql
+      - .:/Falko-2017.2-BackEnd
+
+  falko-server:
+    container_name: falko-server
+    build: .
+    command: RAILS_ENV=production rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/Falko-2017.2-BackEnd
+    ports:
+      - 3000:3000
+    depends_on:
+      - falko-database
+
