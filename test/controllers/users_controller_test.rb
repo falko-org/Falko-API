@@ -78,4 +78,37 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   end
 
+  test "should not authenticate with another id" do
+
+    RestClient.stub :post, "access_token=token123&outra_coisa=outrosvalores" do
+
+      exception = assert_raises ActiveRecord::RecordNotFound do
+        post "/request_github_token", params: {
+          "code":"code123",
+          "id": "2"
+        }
+
+        assert_response 500
+
+      end
+
+      assert_equal("Couldn't find User with 'id'=2", exception.message)
+
+    end
+
+  end
+
+  test "should render unprocessable entity" do
+
+    RestClient.stub :post, "access_token=&outra_coisa=outrosvalores" do
+      post "/request_github_token", params: {
+        "code":"code123",
+        "id":"#{@user.id}"
+      }
+
+      assert_response :bad_request
+    end
+
+  end
+
 end

@@ -45,7 +45,8 @@ class UsersController < ApplicationController
 
 
     access_token = result.split('&')[0].split('=')[1]
-    unless access_token == "bad_verification_code"
+
+    unless access_token == "bad_verification_code" || access_token == nil
       @user = User.find(params[:id])
       @user.access_token = access_token
 
