@@ -50,4 +50,18 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
      @user.reload
     assert_response :success
   end
+
+  test "should authenticate user with github" do
+
+    RestClient.stub :post, "access_token=token123&outra_coisa=outrosvalores" do
+      post "/request_github_token", params: {
+        "code":"code123",
+        "id":"#{@user.id}"
+      }
+
+      assert_response :success
+      assert response.parsed_body["access_token"] != "bad_verification_code"
+    end
+    
+  end
 end
