@@ -30,20 +30,37 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should not create a user with invalid email" do
-    post '/users', params: {
-      "user":{
-        "email": "robakasdddi",
-        "name": "Fulvvano",
-        "password": "123456789",
-        "password_confirmation": "123456789",
-        "github": "fulanao"
-      }
-    }
-    assert_response :unprocessable_entity
+  test "should not create invalid user with short name" do
+     assert_no_difference('User.count') do
+       post '/users', params: {
+          "user":{
+            "email":"robakasdddi@email.com",
+            "name":"Fu", 
+            "password":"123456789",
+            "password_confirmation":"123456789",
+            "github":"fulanao"
+          }
+        }
+        assert_response :unprocessable_entity
+     end
   end
 
-  test "should delete user " do
+  test "should not create invalid user with too large name" do
+     assert_no_difference('User.count') do
+       post '/users', params: {
+          "user":{
+            "email":"robakasdddi@email.com",
+            "name":"F" * 81, 
+            "password":"123456789",
+            "password_confirmation":"123456789",
+            "github":"fulanao"
+          }
+        }
+        assert_response :unprocessable_entity
+     end
+  end
+
+  test "should delete user" do
     @token = AuthenticateUser.call(@user.email, @user.password)
     delete "/users/#{@user.id}", headers: {:Authorization => @token.result}
     assert_response :success
