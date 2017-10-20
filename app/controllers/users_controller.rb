@@ -1,6 +1,7 @@
+require 'rest-client'
 class UsersController < ApplicationController
-skip_before_action :authenticate_request, only: [:create, :all]
-before_action :set_user, only: [:show, :update, :destroy]
+  skip_before_action :authenticate_request, only: [:create, :all, :request_github_token]
+  before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /users
   def index
@@ -35,6 +36,32 @@ before_action :set_user, only: [:show, :update, :destroy]
       render json: @result, status: :created
     else
       render json: @user.errors, status: :unprocessable_entity
+    end
+  end
+
+  def request_github_token
+    code_token = params[:code]
+    result = RestClient.post('https://github.com/login/oauth/access_token',
+      {:client_id => 'cbd5f91719282354f09b',
+       :client_secret => '634dd13c943b8196d4345334031c43d6d5a75fc8',
+       :code => code_token,
+       :accept => :json
+      })
+
+
+    access_token = result.split('&')[0].split('=')[1]
+
+    unless access_token == "bad_verification_code" || access_token == nil
+      @user = User.find(params[:id])
+      @user.access_token = access_token
+
+      if @user.update_column(:access_token, access_token)
+        render json: @user
+      else
+        render json: @user.errors, status: :unprocessable_entity
+      end
+    else
+      render json: result, status: :bad_request
     end
   end
 
