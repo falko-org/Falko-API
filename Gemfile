@@ -19,7 +19,7 @@ gem "puma", "~> 3.7"
 gem "bcrypt", "~> 3.1.7"
 gem "jwt", "~> 1.5.6"
 gem "simple_command"
-
+gem "rest-client"
 
 gem "codeclimate-test-reporter", group: :test, require: nil
 

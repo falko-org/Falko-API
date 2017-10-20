@@ -17,11 +17,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should create project" do
     @token = AuthenticateUser.call(@user.email, @user.password)
 
-    post "/users/#{@user.id}/projects", params: {
+    post "/users/" + @user.id.to_s  + "/projects", params: {
        "project": {
          "name": "Falko",
          "description": "Descrição do projeto.",
-         "user_id": "@user.id"
+         "user_id": @user.id
        }
      }, headers: { Authorization: @token.result }
 
@@ -33,7 +33,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     @old_count = Project.count
 
-    post "/users/#{@user.id}/projects", params: {
+    post "/users/" + @user.id.to_s + "/projects", params: {
        "project": {
          "name": "",
          "description": "A" * 260

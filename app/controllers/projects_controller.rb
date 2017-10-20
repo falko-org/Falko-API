@@ -2,28 +2,32 @@ class ProjectsController < ApplicationController
   before_action :set_project, only: [:destroy, :index, :show]
 
   def index
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    if @current_user.id == User.find_by_id(params[:id]).id
-      @projects = @current_user.projects
+    if validate_user
+      @projects = User.find((params[:user_id]).to_i).projects
       render json: @projects
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
   def show
-    @project = Project.find(params[:id])
-    render json: @project
+    if validate_project
+      render json: @project
+    else
+      render json: { error: 'Not Authorized' }, status: 401
+    end
   end
 
   def edit
-    @project = Project.find(params[:id])
-    render json: @project
+    if validate_project
+      render json: @project
+    else
+      render json: { error: 'Not Authorized' }, status: 401
+    end
   end
 
   def create
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    if @current_user.id == User.find_by_id(params[:id]).id
+    if validate_user
       @project = Project.create(project_params)
       @project.user_id = @current_user.id
 
@@ -38,17 +42,24 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    @project = Project.find(params[:id])
-    if @project.update(project_params)
-      render json: @project
+    if validate_project
+      if @project.update(project_params)
+        render json: @project
+      else
+        render json: @project.errors, status: :unprocessable_entity
+      end
     else
-      render json: @project.errors, status: :unprocessable_entity
+      render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
   def destroy
-    @project = Project.find(params[:id])
-    @project.destroy
+    if validate_project
+      @project = Project.find(params[:id])
+      @project.destroy
+    else
+      render json: { error: 'Not Authorized' }, status: 401
+    end
   end
 
   private
@@ -59,5 +70,18 @@ class ProjectsController < ApplicationController
 
     def project_params
       params.require(:project).permit(:name, :description, :user_id)
+    end
+
+    def validate_user
+      @current_user = AuthorizeApiRequest.call(request.headers).result
+      puts @current_user.id
+      puts params[:user_id].to_i
+      @current_user.id == params[:user_id].to_i
+    end
+
+    def validate_project
+      @project = Project.find(params[:id])
+      # @current_user used from validate_user
+      @current_user.id == (@project.user_id).to_i
     end
 end
