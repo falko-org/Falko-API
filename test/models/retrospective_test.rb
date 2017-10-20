@@ -17,18 +17,38 @@ class RetrospectiveTest < ActiveSupport::TestCase
     assert_not @retrospective.save
   end
 
-  test "Restrospective should have sprint_report less than 500" do
+  test "Restrospective should have sprint_report between 0 and 1500" do
+    @retrospective.sprint_report = ""
+    assert @retrospective.save
+  end
+
+  test "Restrospective should have positive_points less than 500" do
     @retrospective.positive_points = "b" * 501
     assert_not @retrospective.save
   end
 
-  test "Restrospective should have sprint_report less than 500" do
+  test "Restrospective should have positive_points between 0 and 500" do
+    @retrospective.positive_points = ""
+    assert @retrospective.save
+  end
+
+  test "Restrospective should have negative_points less than 500" do
     @retrospective.negative_points = "c" * 501
     assert_not @retrospective.save
   end
 
-  test "Restrospective should have sprint_report less than 500" do
+  test "Restrospective should have negative_points between 0 and 500" do
+    @retrospective.negative_points = ""
+    assert @retrospective.save
+  end
+
+  test "Restrospective should have improvements less than 500" do
     @retrospective.improvements = "d" * 501
     assert_not @retrospective.save
+  end
+
+  test "Restrospective should have improvements between 0 and 500" do
+    @retrospective.improvements = ""
+    assert @retrospective.save
   end
 end
