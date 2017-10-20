@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-skip_before_action :authenticate_request, only: [:create, :all]
-before_action :set_user, only: [:show, :update, :destroy]
+  skip_before_action :authenticate_request, only: [:create, :all]
+  before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /users
   def index
@@ -9,7 +9,7 @@ before_action :set_user, only: [:show, :update, :destroy]
   end
 
   def all
-    @users = User.all.order('id ASC')
+    @users = User.all.order("id ASC")
     render :index
   end
 
@@ -45,17 +45,16 @@ before_action :set_user, only: [:show, :update, :destroy]
   # DELETE /users/1
   def destroy
     @user.destroy
-    redirect_to action: 'index', status:200
+    redirect_to action: "index", status: 200
   end
 
   private
 
-  def set_user
-    @user = User.find(params[:id])
-  end
+    def set_user
+      @user = User.find(params[:id])
+    end
 
-  def user_params
+    def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation, :github)
-  end
-
+    end
 end
