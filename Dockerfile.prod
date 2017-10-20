@@ -17,12 +17,10 @@ WORKDIR /Falko-2017.2-BackEnd
 
 ENV RAILS_ENV=production
 
+ENV BUNDLE_PATH=/bundle-cache
+
 COPY . /Falko-2017.2-BackEnd
 
 COPY Gemfile /Falko-2017.2-BackEnd/Gemfile
 
-RUN bundle exec rails db:create
-RUN bundle exec rails db:migrate
-
-RUN bundle install 
-
+ENTRYPOINT /bin/bash -lc "chmod +x start-prod.sh && ./start-prod.sh"
