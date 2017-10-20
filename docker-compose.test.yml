@@ -2,7 +2,9 @@ version: '3'
 services:
   falko-test:
     container_name: falko-test
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.test
     command: /bin/bash -l -c "./wait-4-postgres.sh && bundle install && RAILS_ENV=test bundle exec rails db:create && RAILS_ENV=test bundle exec rails db:migrate && bundle exec rake db:test:prepare && bundle exec rails test"
     links:
       - falko-server
@@ -15,7 +17,6 @@ services:
     environment:
       - PGDATA=/postgresql
       - PG_USER=postgres
-      - PG_PASSWORD=password
       - PG_DATABASE=travis_ci_test
     volumes:
       - ./tmp/data/postgresql:/postgresql
@@ -24,7 +25,9 @@ services:
   falko-server:
     container_name: falko-server
     image: alaxalves/api:1.5
-    command: rails s -e test -p 3000 -b '0.0.0.0'
+    command: /bin/bash -l -c "bundle install && bundle exec rails s -p 3000 -b '0.0.0.0' -P tmp/pids/server.pid"
+    environment:
+      - RAILS_ENV=test
     volumes:
       - .:/Falko-2017.2-BackEnd
     depends_on:
