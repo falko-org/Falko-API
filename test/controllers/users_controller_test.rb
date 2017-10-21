@@ -121,7 +121,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-<<<<<<< c31cdbd335e8b6f88a65443b0585ae976ad69ae7
   test "should not update user with invalid params" do
     @token = AuthenticateUser.call(@user.email, @user.password)
     patch "/users/#{@user.id}", params: {
@@ -135,11 +134,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
      }, headers: { Authorization: @token.result }
     @user.reload
     assert_response :unprocessable_entity
-=======
-      assert_response :success
-      assert response.parsed_body["access_token"] != "bad_verification_code"
-    end
-
+    assert response.parsed_body["access_token"] != "bad_verification_code"
   end
 
   test "should authenticate user with github" do
