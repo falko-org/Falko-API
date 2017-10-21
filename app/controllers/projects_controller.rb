@@ -6,7 +6,7 @@ class ProjectsController < ApplicationController
       @projects = User.find((params[:user_id]).to_i).projects
       render json: @projects
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
     if validate_project
       render json: @project
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
     if validate_project
       render json: @project
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -49,7 +49,7 @@ class ProjectsController < ApplicationController
         render json: @project.errors, status: :unprocessable_entity
       end
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -58,7 +58,7 @@ class ProjectsController < ApplicationController
       @project = Project.find(params[:id])
       @project.destroy
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 

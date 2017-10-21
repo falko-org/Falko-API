@@ -1,6 +1,5 @@
 require "test_helper"
 class UsersControllerTest < ActionDispatch::IntegrationTest
-
   def setup
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
   end
@@ -26,19 +25,19 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
  end
 
   test "should login with rights params" do
-    post '/authenticate', params: { email: 'Ronaldofenomeno@gmail.com', password: '123456789' }
+    post "/authenticate", params: { email: "Ronaldofenomeno@gmail.com", password: "123456789" }
     assert_response :success
   end
 
   test "should not login with wrongs params" do
-    @post = post '/authenticate', params: { email: 'fenomeno@gmail.com', password: '123456789' }
+    @post = post "/authenticate", params: { email: "fenomeno@gmail.com", password: "123456789" }
     assert_response :unauthorized
   end
 
   test "should create a user with valids params" do
-    assert_difference('User.count') do
-      post '/users', params: {
-        "user":{
+    assert_difference("User.count") do
+      post "/users", params: {
+        "user": {
           "email": "robakasdddi@email.com",
           "name": "Fulvvano",
           "password": "123456789",
@@ -140,8 +139,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     RestClient.stub :post, "access_token=token123&outra_coisa=outrosvalores" do
       post "/request_github_token", params: {
-        "code":"code123",
-        "id":"#{@user.id}"
+        "code": "code123",
+        "id": "#{@user.id}"
       }
 
       assert_response :success
@@ -154,8 +153,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     RestClient.stub :post, "access_token=bad_verification_code&outra_coisa=outrosvalores" do
       post "/request_github_token", params: {
-        "code":"code123",
-        "id":"#{@user.id}"
+        "code": "code123",
+        "id": "#{@user.id}"
       }
 
       assert_response :bad_request
@@ -169,7 +168,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
       exception = assert_raises ActiveRecord::RecordNotFound do
         post "/request_github_token", params: {
-          "code":"code123",
+          "code": "code123",
           "id": "2"
         }
 
@@ -187,13 +186,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     RestClient.stub :post, "access_token=&outra_coisa=outrosvalores" do
       post "/request_github_token", params: {
-        "code":"code123",
-        "id":"#{@user.id}"
+        "code": "code123",
+        "id": "#{@user.id}"
       }
 
       assert_response :bad_request
     end
 
   end
-
 end

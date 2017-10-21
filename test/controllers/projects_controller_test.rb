@@ -17,7 +17,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should create project" do
     @token = AuthenticateUser.call(@user.email, @user.password)
 
-    post "/users/" + @user.id.to_s  + "/projects", params: {
+    post "/users/" + @user.id.to_s + "/projects", params: {
        "project": {
          "name": "Falko",
          "description": "Descrição do projeto.",
