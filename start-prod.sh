@@ -2,7 +2,7 @@
 
 bundle check || bundle install
 
-while ! pg_isready -h falko-database -p 5432 -q -U postgres; do
+while ! pg_isready -h dokku.postgres.falko-database -p 5432 -q -U postgres; do
   >&2 echo "Postgres is unavailable - sleeping"
   sleep 1
 done
@@ -19,4 +19,5 @@ if [ -f $pidfile ] ; then
 	rm $pidfile
 fi
 
-bundle exec rails s -p 3000 -b 0.0.0.0
+bundle exec puma -C config/puma.rb
+#bundle exec rails s -p 3000 -b 0.0.0.0
