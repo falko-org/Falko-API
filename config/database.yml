@@ -17,10 +17,11 @@ test:
   database: travis_ci_test
 
 production:
-  <<: 
   adapter: postgresql
-  pool: 5
-  encoding: unicode
-  url: <%= ENV['POSTGRESQL_URL'] %>
   database: Falko-2017_2-BackEnd_production
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: postgres
+  password:
+  host: dokku.postgres.falko
   
