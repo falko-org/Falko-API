@@ -204,6 +204,7 @@ DEPENDENCIES
   rails_12factor
   rest-client
   rails_12factor (~> 0.0.3)
+  rest-client
   simple_command
   simple_token_authentication (~> 1.0)
   simplecov

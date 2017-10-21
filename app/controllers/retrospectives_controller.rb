@@ -43,12 +43,13 @@ before_action :set_retrospective, only:[:show, :edit, :update]
   def update
     if validate_retrospective
       if @retrospective.update(retrospective_params)
-        render @json: @retrospective
+        render json: @retrospective
       else
-        render @json: @retrospective.erros, status: :unprocessable_entity
-      else
+        render json: @retrospective.erros, status: :unprocessable_entity
+      end
     else
-      render @json: { error: 'Not Authorized'}, status: 401
+      render json: { error: 'Not Authorized'}, status: 401
+    end
   end
 
   def destroy
@@ -56,7 +57,8 @@ before_action :set_retrospective, only:[:show, :edit, :update]
       @retrospective = Retrospective.find(params[:id])
       @retrospective.destroy
     else
-      render json: {error :'Not Authorized'}, status: 401
+      render json: {error: 'Not Authorized'}, status: 401
+    end
   end
 
   private
@@ -82,10 +84,10 @@ before_action :set_retrospective, only:[:show, :edit, :update]
 
   def validate_sprint
     @current_user = AuthorizeApiRequest.call(request.headers).result
-    @sprint = Sprint.find(params[:id])
+    @sprint = Sprint.find(params[:sprint_id])
     @project = Project.find(@sprint.project_id)
     @user = User.find(@project.user_id)
-
+    
     @current_user.id == @user.id
   end
 
