@@ -17,7 +17,7 @@ WORKDIR /Falko-2017.2-BackEnd
 
 ENV RAILS_ENV=production
 
-ENV BUNDLE_PATH=/bundle-cache
+ENV BUNDLE_PATH /bundle-cache
 
 COPY . /Falko-2017.2-BackEnd
 
