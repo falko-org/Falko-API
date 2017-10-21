@@ -23,5 +23,6 @@ production:
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: postgres
   password:
-  host: dokku.postgres.falko
+  url: <%= ENV["DATABASE_URL"] %>
+  host: dokku.postgres.falko-database
   

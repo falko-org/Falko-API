@@ -23,4 +23,9 @@ COPY . /Falko-2017.2-BackEnd
 
 COPY Gemfile /Falko-2017.2-BackEnd/Gemfile
 
-ENTRYPOINT /bin/bash -lc "chmod +x start-prod.sh && ./start-prod.sh"
+RUN chmod +x start-prod.sh
+
+EXPOSE 3000
+
+ENTRYPOINT ["./start-prod.sh"]
+
