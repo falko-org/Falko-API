@@ -1,8 +1,8 @@
-require 'test_helper'
+require "test_helper"
 
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @user = User.create(name: 'Ronaldo', email: 'Ronaldofenomeno@gmail.com', password: '123456789', password_confirmation: '123456789', github: 'ronaldobola')
+    @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
     @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id)
   end
 
@@ -17,13 +17,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should create project" do
     @token = AuthenticateUser.call(@user.email, @user.password)
 
-    post "/users/#{@user.id}/projects", params: {
-       "project":{
-         "name":"Falko",
-         "description":"Descrição do projeto.",
-         "user_id":"@user.id"
+    post "/users/" + @user.id.to_s + "/projects", params: {
+       "project": {
+         "name": "Falko",
+         "description": "Descrição do projeto.",
+         "user_id": @user.id
        }
-     }, headers: {:Authorization => @token.result}
+     }, headers: { Authorization: @token.result }
 
     assert_response :created
   end
@@ -33,12 +33,12 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     @old_count = Project.count
 
-    post "/users/#{@user.id}/projects", params: {
-       "project":{
-         "name":"",
-         "description":"A" * 260
+    post "/users/" + @user.id.to_s + "/projects", params: {
+       "project": {
+         "name": "",
+         "description": "A" * 260
        }
-     }, headers: {:Authorization => @token.result}
+     }, headers: { Authorization: @token.result }
 
     assert_response :unprocessable_entity
     assert_equal @old_count, Project.count
@@ -47,7 +47,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should show project" do
     @token = AuthenticateUser.call(@user.email, @user.password)
 
-    get project_url(@project), as: :json, headers: {:Authorization => @token.result}
+    get project_url(@project), as: :json, headers: { Authorization: @token.result }
 
     assert_response :success
   end
@@ -55,7 +55,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should get edit" do
     @token = AuthenticateUser.call(@user.email, @user.password)
 
-    get project_url(@project), as: :json, headers: {:Authorization => @token.result}
+    get project_url(@project), as: :json, headers: { Authorization: @token.result }
 
     assert_response :success
   end
@@ -66,7 +66,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @old_name = @project.name
     @old_description = @project.description
 
-    patch project_url(@project), params: { project: { name: "Falko BackEnd", description: "Este é o BackEnd do Falko!" } }, as: :json, headers: {:Authorization => @token.result}
+    patch project_url(@project), params: { project: { name: "Falko BackEnd", description: "Este é o BackEnd do Falko!" } }, as: :json, headers: { Authorization: @token.result }
     @project.reload
 
     assert_not_equal @old_name, @project.name
@@ -80,7 +80,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @old_name = @project.name
     @old_description = @project.description
 
-    patch project_url(@project), params: { project: { name: "Falko", description: "a" * 260 } }, as: :json, headers: {:Authorization => @token.result}
+    patch project_url(@project), params: { project: { name: "Falko", description: "a" * 260 } }, as: :json, headers: { Authorization: @token.result }
     @project.reload
 
     assert_response :unprocessable_entity
@@ -91,8 +91,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should destroy project" do
     @token = AuthenticateUser.call(@user.email, @user.password)
 
-    assert_difference('Project.count', -1) do
-      delete project_url(@project), as: :json, headers: {:Authorization => @token.result}
+    assert_difference("Project.count", -1) do
+      delete project_url(@project), as: :json, headers: { Authorization: @token.result }
     end
 
     assert_response 204
