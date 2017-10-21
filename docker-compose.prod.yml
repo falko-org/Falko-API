@@ -5,7 +5,6 @@ services:
     container_name: falko-database
     image: postgres:9.6
     environment:
-      - PGDATA=/postgresql
       - PG_HOST=falko-database
       - PG_USERNAME=postgres
     volumes:
@@ -17,7 +16,6 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.prod
-    command: rails s -p 3000 -b '0.0.0.0' -P tmp/pids/server.pid
     environment: 
       - RAILS_ENV=production
     volumes:
@@ -30,3 +28,5 @@ services:
 
 volumes:
   bundle-cache:
+
+
