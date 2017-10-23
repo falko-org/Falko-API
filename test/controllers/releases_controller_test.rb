@@ -1,11 +1,10 @@
-require 'test_helper'
+require "test_helper"
 
 class ReleasesControllerTest < ActionDispatch::IntegrationTest
-
   def setup
-    @user = User.create(name: 'Robert', email: 'robert@email.com',
-                        password: '123123', password_confirmation: '123123',
-                        github: 'robertGit')
+    @user = User.create(name: "Robert", email: "robert@email.com",
+                        password: "123123", password_confirmation: "123123",
+                        github: "robertGit")
     @project = Project.create(name: "Falko", description: "Description.",
                               user_id: @user.id)
     @release = Release.create(name: "R1", description: "Description",
@@ -13,28 +12,27 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
                         amount_of_sprints: "20", project_id: @project.id)
     @token = AuthenticateUser.call(@user.email, @user.password)
 
-    @another_user = User.create(name: 'Ronaldo', email: 'ronaldo@email.com',
-                        password: '123123', password_confirmation: '123123',
-                        github: 'ronaldoGit')
+    @another_user = User.create(name: "Ronaldo", email: "ronaldo@email.com",
+                        password: "123123", password_confirmation: "123123",
+                        github: "ronaldoGit")
     @another_project = Project.create(name: "Futebol", description: "Description.",
                               user_id: @user.id)
     @another_release = Release.create(name: "Real Madrid", description: "Descriptions",
                         initial_date: "2018-01-01", final_date: "2019-01-01",
                         amount_of_sprints: "20", project_id: @project.id)
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
-
   end
 
   test "should create release" do
     post "/projects/#{@project.id}/releases", params: {
       "release": {
-        "name":"Release 01",
-        "description":"First Release",
-        "amount_of_sprints":"20",
-        "initial_date":"2018-01-01",
-        "final_date":"2019-01-01"
+        "name": "Release 01",
+        "description": "First Release",
+        "amount_of_sprints": "20",
+        "initial_date": "2018-01-01",
+        "final_date": "2019-01-01"
       }
-    }, headers: {:Authorization => @token.result}
+    }, headers: { Authorization: @token.result }
 
     assert_response :created
   end
@@ -43,13 +41,13 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     # Final date before initial date
     post "/projects/#{@project.id}/releases", params: {
       "release": {
-        "name":"Release 01",
-        "description":"First Release",
-        "amount_of_sprints":"20",
-        "initial_date":"2018-01-01",
-        "final_date":"1900-01-01"
+        "name": "Release 01",
+        "description": "First Release",
+        "amount_of_sprints": "20",
+        "initial_date": "2018-01-01",
+        "final_date": "1900-01-01"
       }
-    }, headers: {:Authorization => @token.result}
+    }, headers: { Authorization: @token.result }
 
     assert_response :unprocessable_entity
   end
@@ -58,11 +56,11 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
   test "should not create release without authentication" do
     post "/projects/#{@project.id}/releases", params: {
       "release": {
-        "name":"Release 01",
-        "description":"First Release",
-        "amount_of_sprints":"20",
-        "initial_date":"2018-01-01",
-        "final_date":"2019-01-01"
+        "name": "Release 01",
+        "description": "First Release",
+        "amount_of_sprints": "20",
+        "initial_date": "2018-01-01",
+        "final_date": "2019-01-01"
       }
     }
 
@@ -75,7 +73,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get releases index" do
-    get "/projects/#{@project.id}/releases", headers: {:Authorization => @token.result}
+    get "/projects/#{@project.id}/releases", headers: { Authorization: @token.result }
     assert_response :success
   end
 
@@ -85,7 +83,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get releases show" do
-    get "/releases/#{@release.id}", headers: {:Authorization => @token.result}
+    get "/releases/#{@release.id}", headers: { Authorization: @token.result }
     assert_response :success
   end
 
@@ -94,11 +92,11 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     @old_description_release = @release.description
     @old_initial_date_release = @release.initial_date
 
-    patch "/releases/#{@release.id}", params:{
+    patch "/releases/#{@release.id}", params: {
       release: {
         name: "Daniboy", description: "CBlacku", initial_date: "2010-05-06"
       }
-    }, headers: {:Authorization => @token.result}
+    }, headers: { Authorization: @token.result }
 
     @release.reload
 
@@ -113,7 +111,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     @old_description_release = @release.description
     @old_initial_date_release = @release.initial_date
 
-    patch "/releases/#{@release.id}", params:{
+    patch "/releases/#{@release.id}", params: {
       release: {
         name: "Daniboy", description: "CBlacku", initial_date: "2010-05-06"
       }
@@ -132,11 +130,11 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     @old_description_release = @release.description
     @old_initial_date_release = @release.initial_date
 
-    patch "/releases/#{@release.id}", params:{
+    patch "/releases/#{@release.id}", params: {
       release: {
         name: "", description: "", initial_date: ""
       }
-    }, headers: {:Authorization => @token.result}
+    }, headers: { Authorization: @token.result }
 
     @release.reload
 
@@ -147,23 +145,23 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy release" do
-    assert_difference('Release.count', -1) do
-      delete "/releases/#{@release.id}", headers: {:Authorization => @token.result}
+    assert_difference("Release.count", -1) do
+      delete "/releases/#{@release.id}", headers: { Authorization: @token.result }
     end
 
     assert_response :no_content
   end
 
   test "should not destroy release without authentication" do
-    assert_no_difference 'Release.count' do
-        delete "/releases/#{@release.id}"
+    assert_no_difference "Release.count" do
+      delete "/releases/#{@release.id}"
     end
 
     assert_response :unauthorized
   end
 
   test "should not destroy release of another user" do
-    delete "/releases/#{@release.id}", headers: {:Authorization => @another_token.result}
+    delete "/releases/#{@release.id}", headers: { Authorization: @another_token.result }
 
     assert_response :unauthorized
   end

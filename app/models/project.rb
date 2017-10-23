@@ -1,5 +1,4 @@
 class Project < ApplicationRecord
-  
   has_many :releases, dependent: :destroy
   belongs_to :user
   has_many :sprints

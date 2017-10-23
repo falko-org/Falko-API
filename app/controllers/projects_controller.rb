@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:destroy, :show]
 
-  def index    
+  def index
     if validate_user
       @projects = User.find(params[:user_id]).projects
       render json: @projects
