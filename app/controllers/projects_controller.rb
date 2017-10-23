@@ -1,20 +1,37 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:destroy, :index, :show]
+before_action :set_project, only: [:destroy, :show]
 
   def index
     if validate_user
       @projects = User.find((params[:user_id]).to_i).projects
       render json: @projects
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: { error: 'Not Authorized' }, status: 401
     end
+  end
+
+  def githubProjectsList
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @client = Octokit::Client.new(:access_token => @current_user.access_token)
+
+    @user = @client.user
+    @user.login
+
+    @repos = @client.repositories(@user)
+
+    form_params = {user: []}
+    @repos.each do |repo|
+      form_params[:user].push(repo.name)
+    end
+    render json: form_params
+
   end
 
   def show
     if validate_project
       render json: @project
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
@@ -22,7 +39,7 @@ class ProjectsController < ApplicationController
     if validate_project
       render json: @project
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
@@ -37,7 +54,7 @@ class ProjectsController < ApplicationController
         render json: @project.errors, status: :unprocessable_entity
       end
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
@@ -49,7 +66,7 @@ class ProjectsController < ApplicationController
         render json: @project.errors, status: :unprocessable_entity
       end
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
@@ -58,30 +75,29 @@ class ProjectsController < ApplicationController
       @project = Project.find(params[:id])
       @project.destroy
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: { error: 'Not Authorized' }, status: 401
     end
   end
 
   private
 
-    def set_project
-      @project = Project.find(params[:id])
-    end
+  def set_project
+    @project = Project.find(params[:id])
+  end
 
-    def project_params
-      params.require(:project).permit(:name, :description, :user_id)
-    end
+  def project_params
+    params.require(:project).permit(:name, :description, :user_id)
+  end
 
-    def validate_user
-      @current_user = AuthorizeApiRequest.call(request.headers).result
-      puts @current_user.id
-      puts params[:user_id].to_i
-      @current_user.id == params[:user_id].to_i
-    end
+  def validate_user
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @current_user.id == params[:user_id].to_i
+  end
 
-    def validate_project
-      @project = Project.find(params[:id])
-      # @current_user used from validate_user
-      @current_user.id == (@project.user_id).to_i
-    end
+  def validate_project
+    @project = Project.find(params[:id])
+    # @current_user used from validate_user
+    @current_user.id == (@project.user_id).to_i
+  end
+
 end
