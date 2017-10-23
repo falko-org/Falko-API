@@ -23,6 +23,18 @@ ActiveRecord::Schema.define(version: 20171013150638) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "releases", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "amount_of_sprints"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date "initial_date"
+    t.date "final_date"
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_releases_on_project_id"
+  end
+
   create_table "sprints", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -33,17 +45,6 @@ ActiveRecord::Schema.define(version: 20171013150638) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "releases", force: :cascade do |t|
-    t.text "description"
-    t.string "name"
-    t.datetime "created_at", null: false
-
-    t.integer "amount_of_sprints"
-    t.datetime "updated_at", null: false
-    t.date "initial_date"
-    t.date "final_date"
-
-  end
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -54,4 +55,5 @@ ActiveRecord::Schema.define(version: 20171013150638) do
     t.string "access_token"
   end
 
+  add_foreign_key "releases", "projects"
 end

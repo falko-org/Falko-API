@@ -34,6 +34,20 @@ projects = Project.create(
   ]
 )
 
+puts 'Creating Sprints'
+releases = Sprint.create(
+  [
+    {
+      name: 'Sprint 01', description: 'First Sprint', initial_date: '01-08-2016',
+      final_date: '01-10-2016', project_id: Project.find_by(name: 'Owla').id
+    },
+    {
+      name: 'S1', description: 'First Sprint', initial_date: '01-10-2016', 
+      final_date: '01-12-2016', project_id: Project.find_by(name: 'Falko').id
+    }
+  ]
+)
+
 puts 'Creating Releases'
 releases = Release.create(
   [
