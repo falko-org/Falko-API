@@ -14,16 +14,31 @@ before_action :set_project, only: [:destroy, :show]
     @current_user = AuthorizeApiRequest.call(request.headers).result
     @client = Octokit::Client.new(:access_token => @current_user.access_token)
 
-    @user = @client.user
-    @user.login
+    @user = @client.user.login
 
     @repos = @client.repositories(@user)
 
-    form_params = {user: []}
+    @form_params = {user: []}
     @repos.each do |repo|
-      form_params[:user].push(repo.name)
+      @form_params[:user].push(repo.name)
     end
-    render json: form_params
+
+    @orgs = @client.organizations(@user)
+    
+    @form_params2 = {:orgs => []}
+    
+    @orgs.each do |org|
+      repos = @client.organization_repositories(org.login)
+      repos_names = []
+      repos.each do |repo|
+        repos_names.push(repo.name)
+      end
+      @form_params2[:orgs].push({name: org.login, repos: repos_names })
+    end
+
+      @form_params3 = @form_params2.merge(@form_params)
+
+    render json: @form_params3
 
   end
 
