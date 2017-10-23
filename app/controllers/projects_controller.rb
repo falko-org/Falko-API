@@ -1,9 +1,9 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:destroy, :index, :show]
+  before_action :set_project, only: [:destroy, :show]
 
   def index
     if validate_user
-      @projects = User.find((params[:user_id]).to_i).projects
+      @projects = User.find(params[:user_id]).projects
       render json: @projects
     else
       render json: { error: "Not Authorized" }, status: 401
@@ -74,8 +74,6 @@ class ProjectsController < ApplicationController
 
     def validate_user
       @current_user = AuthorizeApiRequest.call(request.headers).result
-      puts @current_user.id
-      puts params[:user_id].to_i
       @current_user.id == params[:user_id].to_i
     end
 

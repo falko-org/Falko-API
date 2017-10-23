@@ -17,6 +17,8 @@ tmp/
 *.sw*
 *.swp*
 
+#Ignore code editor configurantion files
+.vscode/
 
 vendor/bundle
 coverage/
