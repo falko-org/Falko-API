@@ -3,11 +3,11 @@ require "test_helper"
 class SprintsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
-    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id)
+    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, check_project: true)
     @sprint = Sprint.create(name: "Sprint 1", description: "Sprint 1 us10", start_date: "06/10/2017", end_date: "13/10/2017", project_id: @project.id)
 
     @user2 = User.create(name: "Ronaldo", email: "Ronaldofenomeno1@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
-    @project2 = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user2.id)
+    @project2 = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user2.id, check_project: true)
     @sprint2 = Sprint.create(name: "Sprint 1", description: "Sprint 1 us10", start_date: "06/10/2017", end_date: "13/10/2017", project_id: @project2.id)
 
     @token = AuthenticateUser.call(@user.email, @user.password)

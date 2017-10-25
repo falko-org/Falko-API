@@ -4,7 +4,7 @@ class SprintTest < ActiveSupport::TestCase
   def setup
     @user = User.create(name: "Gilberto", email: "gilbertin@teste.com", password: "1234567", password_confirmation: "1234567", github: "gilbertoCoder")
 
-    @project = Project.create(name: "Falko", description: "Esse projeto faz parte da disciplina MDS.", user_id: @user.id)
+    @project = Project.create(name: "Falko", description: "Esse projeto faz parte da disciplina MDS.", user_id: @user.id, check_project: true)
 
     @sprint = Sprint.create(name: "Sprint 1", description: "Sprint 1 us10", start_date: "06/10/2017", end_date: "13/10/2017", project_id: @project.id)
   end

@@ -3,7 +3,8 @@ require "test_helper"
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
-    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id)
+    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, check_project: true)
+    @project2 = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, check_project: false)
   end
 
   # test "should get index" do
@@ -21,7 +22,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
        "project": {
          "name": "Falko",
          "description": "Descrição do projeto.",
-         "user_id": @user.id
+         "user_id": @user.id,
+         "check_project": true
        }
      }, headers: { Authorization: @token.result }
 
@@ -36,7 +38,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     post "/users/" + @user.id.to_s + "/projects", params: {
        "project": {
          "name": "",
-         "description": "A" * 260
+         "description": "A" * 260,
+         "check_project": true
        }
      }, headers: { Authorization: @token.result }
 
@@ -46,9 +49,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test "should show project" do
     @token = AuthenticateUser.call(@user.email, @user.password)
-
     get project_url(@project), as: :json, headers: { Authorization: @token.result }
-
     assert_response :success
   end
 
@@ -66,7 +67,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @old_name = @project.name
     @old_description = @project.description
 
-    patch project_url(@project), params: { project: { name: "Falko BackEnd", description: "Este é o BackEnd do Falko!" } }, as: :json, headers: { Authorization: @token.result }
+    patch project_url(@project), params: { project: { name: "Falko BackEnd", description: "Este é o BackEnd do Falko!" , check_project: true} }, as: :json, headers: { Authorization: @token.result }
     @project.reload
 
     assert_not_equal @old_name, @project.name
@@ -80,7 +81,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @old_name = @project.name
     @old_description = @project.description
 
-    patch project_url(@project), params: { project: { name: "Falko", description: "a" * 260 } }, as: :json, headers: { Authorization: @token.result }
+    patch project_url(@project), params: { project: { name: "Falko", description: "a" * 260 ,check_project: true} }, as: :json, headers: { Authorization: @token.result }
     @project.reload
 
     assert_response :unprocessable_entity
@@ -96,5 +97,18 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response 204
+  end
+
+  test "should not import a project from github if the check_project is invalid" do
+    @token = AuthenticateUser.call(@user.email, @user.password)
+    post "/users/" + @user.id.to_s + "/projects", params: {
+       "project": {
+         "name": "Falko",
+         "description": "Descrição do projeto.",
+         "user_id": @user.id
+       }
+     }, headers: { Authorization: @token.result }
+
+    assert_response :unprocessable_entity
   end
 end
