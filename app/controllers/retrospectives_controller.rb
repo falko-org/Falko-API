@@ -1,5 +1,5 @@
 class RetrospectivesController < ApplicationController
-before_action :set_retrospective, only:[:show, :edit, :update]
+  before_action :set_retrospective, only:   [:show, :edit, :update]
 
   def new
     @sprint = Sprint.find(params[:sprint_id])
@@ -20,7 +20,7 @@ before_action :set_retrospective, only:[:show, :edit, :update]
         render json: @retrospective.errors, status: :unprocessable_entity
       end
     else
-      render json: {error: 'Not Authorized'}, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -28,7 +28,7 @@ before_action :set_retrospective, only:[:show, :edit, :update]
     if validate_retrospective
       render json: @retrospective
     else
-      render json: {error: 'Not Authorized'}, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -36,7 +36,7 @@ before_action :set_retrospective, only:[:show, :edit, :update]
     if validate_retrospective
       render json: @retrospective
     else
-      render json: {error: 'Not Authorized'}, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -48,7 +48,7 @@ before_action :set_retrospective, only:[:show, :edit, :update]
         render json: @retrospective.erros, status: :unprocessable_entity
       end
     else
-      render json: { error: 'Not Authorized'}, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -57,38 +57,37 @@ before_action :set_retrospective, only:[:show, :edit, :update]
       @retrospective = Retrospective.find(params[:id])
       @retrospective.destroy
     else
-      render json: {error: 'Not Authorized'}, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
   private
 
-  def set_retrospective
-    @retrospective = Retrospective.find(params[:id])
-  end
+    def set_retrospective
+      @retrospective = Retrospective.find(params[:id])
+    end
 
-  def retrospective_params
-    params.require(:retrospective).permit(:sprint_report, :positive_points,
-                   :negative_points, :improvements)
-  end
+    def retrospective_params
+      params.require(:retrospective).permit(:sprint_report, positive_points: [], negative_points: [] , improvements: [])
+    end
 
-  def validate_retrospective
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    @retrospective = Retrospective.find(params[:id])
-    @sprint = Sprint.find(@retrospective.sprint_id)
-    @project = Project.find(@sprint.project_id)
-    @user = User.find(@project.user_id)
+    def validate_retrospective
+      @current_user = AuthorizeApiRequest.call(request.headers).result
+      @retrospective = Retrospective.find(params[:id])
+      @sprint = Sprint.find(@retrospective.sprint_id)
+      @project = Project.find(@sprint.project_id)
+      @user = User.find(@project.user_id)
 
-    @current_user.id == @user.id
-  end
+      @current_user.id == @user.id
+    end
 
-  def validate_sprint
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    @sprint = Sprint.find(params[:sprint_id])
-    @project = Project.find(@sprint.project_id)
-    @user = User.find(@project.user_id)
-    
-    @current_user.id == @user.id
-  end
+    def validate_sprint
+      @current_user = AuthorizeApiRequest.call(request.headers).result
+      @sprint = Sprint.find(params[:sprint_id])
+      @project = Project.find(@sprint.project_id)
+      @user = User.find(@project.user_id)
+
+      @current_user.id == @user.id
+    end
 
 end
