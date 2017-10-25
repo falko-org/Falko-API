@@ -1,9 +1,9 @@
 class ProjectsController < ApplicationController
-before_action :set_project, only: [:destroy, :show]
+  before_action :set_project, only: [:destroy, :show]
 
   def index
     if validate_user
-      @projects = User.find((params[:user_id]).to_i).projects
+      @projects = User.find(params[:user_id]).projects
       render json: @projects
     else
       render json: { error: 'Not Authorized' }, status: 401
