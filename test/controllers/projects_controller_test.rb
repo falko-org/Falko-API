@@ -3,7 +3,12 @@ require "test_helper"
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
-    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id)
+    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id)    
+    @token = AuthenticateUser.call(@user.email, @user.password)
+
+    @client = Octokit::Client.new \
+      :login    => 'ronaldobola',
+      :password => '123456789!'
   end
 
   # test "should get index" do
@@ -97,4 +102,111 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 204
   end
+
+  test "should see repositories if user is loged in" do
+    @token = AuthenticateUser.call(@user.email, @user.password)
+
+    mock = Minitest::Mock.new
+    def mock.repositories
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste"})]
+    end
+    def mock.organizations
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {login: "teste"})]
+    end
+    def mock.organization_repositories(login)
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste1"})]
+    end
+
+    Octokit::Client.stub :new, mock do
+      get '/repos', headers: { Authorization: @token.result }
+
+      assert response.parsed_body["user"] == ["teste"]
+      assert_response :success
+    end
+  end
+
+  test "should not see repositories if user email is wrong" do
+    @token = AuthenticateUser.call('testeerrado@teste.com', @user.password) 
+
+    mock = Minitest::Mock.new
+    def mock.repositories
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste"})]
+    end
+    def mock.organizations
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {login: "teste"})]
+    end
+    def mock.organization_repositories(login)
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste1"})]
+    end
+
+    Octokit::Client.stub :new, mock do
+      get '/repos', headers: { Authorization: @token.result }
+
+      assert_response :unauthorized
+    end
+  end
+
+  test "should not see repositories if user password is wrong" do
+    @token = AuthenticateUser.call(@user.email, 'testeerrado') 
+
+    mock = Minitest::Mock.new
+    def mock.repositories
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste"})]
+    end
+    def mock.organizations
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {login: "teste"})]
+    end
+    def mock.organization_repositories(login)
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste1"})]
+    end
+
+    Octokit::Client.stub :new, mock do
+      get '/repos', headers: { Authorization: @token.result }
+
+      assert_response :unauthorized
+    end
+  end
+
+  test "should not see repositories if user password and email are wrong" do
+    @token = AuthenticateUser.call('testeerrado2@teste.com', 'testeerrado') 
+
+    mock = Minitest::Mock.new
+    def mock.repositories
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste"})]
+    end
+    def mock.organizations
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {login: "teste"})]
+    end
+    def mock.organization_repositories(login)
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste1"})]
+    end
+
+    Octokit::Client.stub :new, mock do
+      get '/repos', headers: { Authorization: @token.result }
+
+      assert_response :unauthorized
+    end
+  end
+
+  test "should not see repositories if user token is wrong" do
+    @token = AuthenticateUser.call(@user.email, @user.password) 
+
+    mock = Minitest::Mock.new
+    def mock.repositories
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste"})]
+    end
+    def mock.organizations
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {login: "teste"})]
+    end
+    def mock.organization_repositories(login)
+      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste1"})]
+    end
+
+    Octokit::Client.stub :new, mock do
+      get '/repos', headers: { Authorization: 'hgfcjgcgfc' }
+
+      assert_response :unauthorized
+    end
+  end
+
 end

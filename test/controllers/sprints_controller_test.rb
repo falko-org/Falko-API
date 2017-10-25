@@ -193,7 +193,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
 
   end
 
-  test "shold show a sprint information of current user" do
+  test "should show a sprint information of current user" do
 
     get "/sprints/#{@sprint.id}", headers: { Authorization: @token.result }
 
