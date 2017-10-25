@@ -10,7 +10,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def githubProjectsList
+  def github_projects_list
     @current_user = AuthorizeApiRequest.call(request.headers).result
     @client = Octokit::Client.new(:access_token => @current_user.access_token)
 
