@@ -2,43 +2,43 @@ require 'test_helper'
 
 class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @another_user = User.create(name: 'Felipe', email: 'Felipe@gmail.com', password: '123456789', password_confirmation: '123456789', github: 'felipe')
-    @another_project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @another_user.id)
-    @another_sprint = Sprint.create(name: "Sprint1", description: "Essa sprint", project_id: @another_project.id, start_date: "23-04-1993", end_date: "23-04-2003")
-    @another_retrospective = Retrospective.create(sprint_report: "Sprint descricao", positive_points: "muito boa", negative_points: "Horrivel", improvements: "Melhorar visual", sprint_id: @another_sprint.id)
-    @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
-
     @user = User.create(name: 'Ronaldo', email: 'Ronaldofenomeno@gmail.com', password: '123456789', password_confirmation: '123456789', github: 'ronaldobola')
     @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id)
     @sprint = Sprint.create(name: "Sprint1", description: "Essa sprint", project_id: @project.id, start_date: "23-04-1993", end_date: "23-04-2003")
     @retrospective = Retrospective.create(sprint_report: "Sprint descricao", positive_points: "muito boa", negative_points: "Horrivel", improvements: "Melhorar visual", sprint_id: @sprint.id)
     @token = AuthenticateUser.call(@user.email, @user.password)
+
+    @another_user = User.create(name: 'Felipe', email: 'Felipe@gmail.com', password: '123456789', password_confirmation: '123456789', github: 'felipe')
+    @another_project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @another_user.id)
+    @another_sprint = Sprint.create(name: "Sprint1", description: "Essa sprint", project_id: @another_project.id, start_date: "23-04-1993", end_date: "23-04-2003")
+    @another_retrospective = Retrospective.create(sprint_report: "Sprint descricao", positive_points: "muito boa", negative_points: "Horrivel", improvements: "Melhorar visual", sprint_id: @another_sprint.id)
+    @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
   end
 
   test "Should create a Retrospective" do
     post "/sprints/#{@sprint.id}/retrospectives", params: {
        "retrospective":{
-         "sprint_report":"Descricao Retro",
-         "positive_points":"Bom demais",
-         "negative_points":"Ruim demais",
-         "improvements":"Tem que melhorar"
+         "sprint_report": "Description",
+         "positive_points": ["None", "none"],
+         "negative_points": ["none"],
+         "improvements": ["improvements"]
        }
-     }, headers: {:Authorization => @token.result}
+     }, headers: { Authorization: @token.result }
 
-     assert_response :created
+    assert_response :created
   end
 
   test "Should not create a Retrospective without authentication" do
     post "/sprints/#{@sprint.id}/retrospectives", params: {
        "retrospective":{
-         "sprint_report":"Descricao Retro",
-         "positive_points":"Bom demais",
-         "negative_points":"Ruim demais",
-         "improvements":"Tem que melhorar"
+         "sprint_report": "Description",
+         "positive_points": ["None", "none"],
+         "negative_points": ["none"],
+         "improvements": ["improvements"]
        }
      }
 
-     assert_response :unauthorized
+    assert_response :unauthorized
   end
 
   test "Should get retrospective show" do
@@ -59,8 +59,10 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
 
     patch "/retrospectives/#{@retrospective.id}", params: {
       retrospective: {
-        sprint_report: "muda", positive_points: "muda", negative_points: "muda",
-        improvements: "muda"
+        sprint_report: "changed", 
+        positive_points: ["changed"], 
+        negative_points: ["changed"],
+        improvements: ["changed"]
       }
     }, headers: {:Authorization => @token.result}
 
@@ -81,8 +83,10 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
 
     patch "/retrospectives/#{@retrospective.id}", params: {
       retrospective: {
-        sprint_report: "muda", positive_points: "muda", negative_points: "muda",
-        improvements: "muda"
+        sprint_report: "changed", 
+        positive_points: ["changed"], 
+        negative_points: ["changed"],
+        improvements: ["changed"]
 
       }
     }
@@ -104,21 +108,19 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
       assert_response :no_content
     end
 
-    test "should not destroy retrospective without authentication" do
-        assert_no_difference "Retrospective.count" do
-          delete "/retrospectives/#{@retrospective.id}"
-        end
+  test "should not destroy retrospective without authentication" do
+    assert_no_difference "Retrospective.count" do
+      delete "/retrospectives/#{@retrospective.id}"
+    end
 
-        assert_response :unauthorized
-      end
+    assert_response :unauthorized
+  end
 
-    test "should not destroy retrospective of another user" do
-        assert_no_difference "Retrospective.count" do
-          delete "/retrospectives/#{@retrospective.id}", headers: { Authorization: @another_token.result }
-        end
+  test "should not destroy retrospective of another user" do
+    assert_no_difference "Retrospective.count" do
+      delete "/retrospectives/#{@retrospective.id}", headers: { Authorization: @another_token.result }
+    end
 
-        assert_response :unauthorized
-      end
-
-
+    assert_response :unauthorized
+  end
 end
