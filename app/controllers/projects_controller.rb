@@ -12,7 +12,7 @@ class ProjectsController < ApplicationController
 
   def github_projects_list
     @current_user = AuthorizeApiRequest.call(request.headers).result
-    @client = Octokit::Client.new( access_token: @current_user.access_token)
+    @client = Octokit::Client.new(access_token: @current_user.access_token)
 
     @repos = @client.repositories
     @form_params = { user: [] }
@@ -41,7 +41,7 @@ class ProjectsController < ApplicationController
     if validate_project
       render json: @project
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -49,7 +49,7 @@ class ProjectsController < ApplicationController
     if validate_project
       render json: @project
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -64,7 +64,7 @@ class ProjectsController < ApplicationController
         render json: @project.errors, status: :unprocessable_entity
       end
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -76,7 +76,7 @@ class ProjectsController < ApplicationController
         render json: @project.errors, status: :unprocessable_entity
       end
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -85,7 +85,7 @@ class ProjectsController < ApplicationController
       @project = Project.find(params[:id])
       @project.destroy
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: { error: "Not Authorized" }, status: 401
     end
   end
 
@@ -109,5 +109,4 @@ class ProjectsController < ApplicationController
       # @current_user used from validate_user
       @current_user.id == (@project.user_id).to_i
     end
-
 end

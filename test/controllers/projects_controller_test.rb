@@ -107,7 +107,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @token = AuthenticateUser.call(@user.email, @user.password)
 
     mock = Minitest::Mock.new
-    
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
@@ -129,10 +128,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not see repositories if user email is wrong" do
-    @token = AuthenticateUser.call('testeerrado@teste.com', @user.password)
+    @token = AuthenticateUser.call("testeerrado@teste.com", @user.password)
 
     mock = Minitest::Mock.new
-    
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
@@ -153,10 +151,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not see repositories if user password is wrong" do
-    @token = AuthenticateUser.call(@user.email, 'testeerrado')
+    @token = AuthenticateUser.call(@user.email, "testeerrado")
 
     mock = Minitest::Mock.new
-    
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
@@ -177,10 +174,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not see repositories if user password and email are wrong" do
-    @token = AuthenticateUser.call('testeerrado2@teste.com', 'testeerrado')
+    @token = AuthenticateUser.call("testeerrado2@teste.com", "testeerrado")
 
     mock = Minitest::Mock.new
-    
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
@@ -204,7 +200,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @token = AuthenticateUser.call(@user.email, @user.password)
 
     mock = Minitest::Mock.new
-    
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
@@ -218,7 +213,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
 
     Octokit::Client.stub :new, mock do
-      get '/repos', headers: { Authorization: 'hgfcjgcgfc' }
+      get "/repos", headers: { Authorization: "hgfcjgcgfc" }
 
       assert_response :unauthorized
     end
