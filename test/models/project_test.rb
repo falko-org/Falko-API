@@ -52,5 +52,4 @@ class ProjectTest < ActiveSupport::TestCase
     @project.description = ""
     assert @project.save
   end
-
 end

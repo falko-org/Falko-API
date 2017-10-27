@@ -67,7 +67,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @old_name = @project.name
     @old_description = @project.description
 
-    patch project_url(@project), params: { project: { name: "Falko BackEnd", description: "Este é o BackEnd do Falko!" , check_project: true} }, as: :json, headers: { Authorization: @token.result }
+    patch project_url(@project), params: { project: { name: "Falko BackEnd", description: "Este é o BackEnd do Falko!" , check_project: true } }, as: :json, headers: { Authorization: @token.result }
     @project.reload
 
     assert_not_equal @old_name, @project.name
@@ -81,7 +81,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @old_name = @project.name
     @old_description = @project.description
 
-    patch project_url(@project), params: { project: { name: "Falko", description: "a" * 260 ,check_project: true} }, as: :json, headers: { Authorization: @token.result }
+    patch project_url(@project), params: { project: { name: "Falko", description: "a" * 260 , check_project: true } }, as: :json, headers: { Authorization: @token.result }
     @project.reload
 
     assert_response :unprocessable_entity
