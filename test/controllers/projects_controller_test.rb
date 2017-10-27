@@ -107,18 +107,21 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @token = AuthenticateUser.call(@user.email, @user.password)
 
     mock = Minitest::Mock.new
+    
     def mock.repositories
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
+    
     def mock.organizations
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {login: "teste"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
+    
     def mock.organization_repositories(login)
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste1"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
 
     Octokit::Client.stub :new, mock do
-      get '/repos', headers: { Authorization: @token.result }
+      get "/repos", headers: { Authorization: @token.result }
 
       assert response.parsed_body["user"] == ["teste"]
       assert_response :success
@@ -126,80 +129,92 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not see repositories if user email is wrong" do
-    @token = AuthenticateUser.call('testeerrado@teste.com', @user.password) 
+    @token = AuthenticateUser.call('testeerrado@teste.com', @user.password)
 
     mock = Minitest::Mock.new
+    
     def mock.repositories
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
+    
     def mock.organizations
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {login: "teste"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
+    
     def mock.organization_repositories(login)
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste1"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
 
     Octokit::Client.stub :new, mock do
-      get '/repos', headers: { Authorization: @token.result }
+      get "/repos", headers: { Authorization: @token.result }
 
       assert_response :unauthorized
     end
   end
 
   test "should not see repositories if user password is wrong" do
-    @token = AuthenticateUser.call(@user.email, 'testeerrado') 
+    @token = AuthenticateUser.call(@user.email, 'testeerrado')
 
     mock = Minitest::Mock.new
+    
     def mock.repositories
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
+    
     def mock.organizations
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {login: "teste"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
+    
     def mock.organization_repositories(login)
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste1"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
 
     Octokit::Client.stub :new, mock do
-      get '/repos', headers: { Authorization: @token.result }
+      get "/repos", headers: { Authorization: @token.result }
 
       assert_response :unauthorized
     end
   end
 
   test "should not see repositories if user password and email are wrong" do
-    @token = AuthenticateUser.call('testeerrado2@teste.com', 'testeerrado') 
+    @token = AuthenticateUser.call('testeerrado2@teste.com', 'testeerrado')
 
     mock = Minitest::Mock.new
+    
     def mock.repositories
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
+    
     def mock.organizations
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {login: "teste"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
+    
     def mock.organization_repositories(login)
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste1"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
 
     Octokit::Client.stub :new, mock do
-      get '/repos', headers: { Authorization: @token.result }
+      get "/repos", headers: { Authorization: @token.result }
 
       assert_response :unauthorized
     end
   end
 
   test "should not see repositories if user token is wrong" do
-    @token = AuthenticateUser.call(@user.email, @user.password) 
-
+    @token = AuthenticateUser.call(@user.email, @user.password)
+    
     mock = Minitest::Mock.new
+    
     def mock.repositories
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
+    
     def mock.organizations
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {login: "teste"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
+    
     def mock.organization_repositories(login)
-      [Sawyer::Resource.new(Sawyer::Agent.new("/teste"), {name: "teste1"})]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
 
     Octokit::Client.stub :new, mock do
@@ -208,5 +223,4 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       assert_response :unauthorized
     end
   end
-
 end
