@@ -3,12 +3,12 @@ require "test_helper"
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
-    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id)    
+    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id)
     @token = AuthenticateUser.call(@user.email, @user.password)
 
     @client = Octokit::Client.new \
-      :login    => 'ronaldobola',
-      :password => '123456789!'
+      login: "ronaldobola",
+      password: "123456789!"
   end
 
   # test "should get index" do
@@ -126,7 +126,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not see repositories if user email is wrong" do
-    @token = AuthenticateUser.call('testeerrado@teste.com', @user.password) 
+    @token = AuthenticateUser.call('testeerrado@teste.com', @user.password)
 
     mock = Minitest::Mock.new
     def mock.repositories
@@ -147,7 +147,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not see repositories if user password is wrong" do
-    @token = AuthenticateUser.call(@user.email, 'testeerrado') 
+    @token = AuthenticateUser.call(@user.email, 'testeerrado')
 
     mock = Minitest::Mock.new
     def mock.repositories
@@ -168,7 +168,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not see repositories if user password and email are wrong" do
-    @token = AuthenticateUser.call('testeerrado2@teste.com', 'testeerrado') 
+    @token = AuthenticateUser.call('testeerrado2@teste.com', 'testeerrado')
 
     mock = Minitest::Mock.new
     def mock.repositories
@@ -189,7 +189,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not see repositories if user token is wrong" do
-    @token = AuthenticateUser.call(@user.email, @user.password) 
+    @token = AuthenticateUser.call(@user.email, @user.password)
 
     mock = Minitest::Mock.new
     def mock.repositories
