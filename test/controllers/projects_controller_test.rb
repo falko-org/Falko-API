@@ -214,7 +214,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :unauthorized
     end
-    
+  end
+   
   test "should not import a project from github if the check_project is invalid" do
     @token = AuthenticateUser.call(@user.email, @user.password)
     post "/users/" + @user.id.to_s + "/projects", params: {
