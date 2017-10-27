@@ -2,11 +2,13 @@
 /.bundle
 
 # Ignore all logfiles and tempfiles.
-/log/*
-/tmp/*
+log/*
+tmp/*
 !/log/.keep
 !/tmp/.keep
 *.log
+log/
+tmp/
 
 #Ignore databases
 *.sql
@@ -15,10 +17,8 @@
 *.sw*
 *.swp*
 
-#Ignore development.rb file
-config/environments/development.rb
+#Ignore code editor configurantion files
+.vscode/
 
 vendor/bundle
-db/schema.rb
-
 coverage/
