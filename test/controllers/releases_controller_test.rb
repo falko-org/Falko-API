@@ -6,7 +6,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
                         password: "123123", password_confirmation: "123123",
                         github: "robertGit")
     @project = Project.create(name: "Falko", description: "Description.",
-                              user_id: @user.id)
+                              user_id: @user.id, check_project: true)
     @release = Release.create(name: "R1", description: "Description",
                         initial_date: "2018-01-01", final_date: "2019-01-01",
                         amount_of_sprints: "20", project_id: @project.id)
@@ -16,7 +16,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
                         password: "123123", password_confirmation: "123123",
                         github: "ronaldoGit")
     @another_project = Project.create(name: "Futebol", description: "Description.",
-                              user_id: @user.id)
+                              user_id: @user.id, check_project: true)
     @another_release = Release.create(name: "Real Madrid", description: "Descriptions",
                         initial_date: "2018-01-01", final_date: "2019-01-01",
                         amount_of_sprints: "20", project_id: @project.id)
