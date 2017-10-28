@@ -10,6 +10,33 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def github_projects_list
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @client = Octokit::Client.new(access_token: @current_user.access_token)
+
+    @repos = @client.repositories
+    @form_params = { user: [] }
+    @repos.each do |repo|
+      @form_params[:user].push(repo.name)
+    end
+
+    @orgs = @client.organizations
+
+    @form_params2 = { orgs: [] }
+    @orgs.each do |org|
+      repos = @client.organization_repositories(org.login)
+      repos_names = []
+      repos.each do |repo|
+        repos_names.push(repo.name)
+      end
+      @form_params2[:orgs].push(name: org.login, repos: repos_names)
+    end
+
+    @form_params3 = @form_params2.merge(@form_params)
+
+    render json: @form_params3
+  end
+
   def show
     if validate_project
       render json: @project
