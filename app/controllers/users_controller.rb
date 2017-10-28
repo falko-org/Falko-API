@@ -1,6 +1,6 @@
 require "rest-client"
 class UsersController < ApplicationController
-  skip_before_action :authenticate_request, only: [:create, :all, :request_github_token]
+  skip_before_action :authenticate_request, only: [:create, :all]
   before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /users
