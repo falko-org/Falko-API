@@ -29,10 +29,10 @@ class ProjectsController < ApplicationController
       repos.each do |repo|
         repos_names.push(repo.name)
       end
-      @form_params2[:orgs].push({ name: org.login, repos: repos_names })
+      @form_params2[:orgs].push(name: org.login, repos: repos_names)
     end
 
-      @form_params3 = @form_params2.merge(@form_params)
+    @form_params3 = @form_params2.merge(@form_params)
 
     render json: @form_params3
   end
