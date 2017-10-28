@@ -1,10 +1,10 @@
 class SprintsController < ApplicationController
-  before_action :set_sprint, only: [:show, :update]
-  include ProjectsHelper
+  before_action :set_sprint, only: [:show, :update, :destroy]
   # GET /sprints
   def index
-    if validate_project(:user_id, :project_id)
-      @sprints = Project.find((params[:project_id]).to_i).sprints
+    if validate_release(:user_id, :release_id)
+      @release = Release.find(params[:release_id])
+      @sprints = @release.sprints.reverse
       render json: @sprints
     else
       render json: { error: "Not Authorized" }, status: 401
@@ -22,9 +22,10 @@ class SprintsController < ApplicationController
 
   # POST /sprints
   def create
-    if validate_project(:user_id, :project_id)
+    if validate_release(:user_id, :release_id)
+      @release = Release.find(params[:release_id])
       @sprint = Sprint.create(sprint_params)
-      @sprint.project_id = @project.id
+      @sprint.release = @release
 
       if @sprint.save
         render json: @sprint, status: :created
@@ -52,7 +53,6 @@ class SprintsController < ApplicationController
   # DELETE /sprints/1
   def destroy
     if validate_sprint
-      @sprint = Sprint.find(params[:id])
       @sprint.destroy
     else
       render json: { error: "Not Authorized" }, status: 401
@@ -68,13 +68,21 @@ class SprintsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def sprint_params
-      params.require(:sprint).permit(:name, :description, :project_id, :start_date, :end_date)
+      params.require(:sprint).permit(:name, :description, :start_date, :end_date, :release_id)
+    end
+
+    def validate_release(user_id, release_id)
+      @current_user = AuthorizeApiRequest.call(request.headers).result
+      @release = Release.find(params[:release_id].to_i)
+      @project = Project.find(@release.project_id)
+      (@project.user_id).to_i == @current_user.id
     end
 
     def validate_sprint
       @current_user = AuthorizeApiRequest.call(request.headers).result
       @sprint = Sprint.find(params[:id])
-      @project = Project.find(@sprint.project_id)
+      @release = Release.find(@sprint.release_id)
+      @project = Project.find(@release.project_id)
       @user = User.find(@project.user_id)
 
       @current_user.id == @user.id
