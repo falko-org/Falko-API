@@ -1,9 +1,9 @@
 class SprintsController < ApplicationController
   before_action :set_sprint, only: [:show, :update]
-
+  include ProjectsHelper
   # GET /sprints
   def index
-    if validate_project
+    if validate_project(:user_id, :project_id)
       @sprints = Project.find((params[:project_id]).to_i).sprints
       render json: @sprints
     else
@@ -22,7 +22,7 @@ class SprintsController < ApplicationController
 
   # POST /sprints
   def create
-    if validate_project
+    if validate_project(:user_id, :project_id)
       @sprint = Sprint.create(sprint_params)
       @sprint.project_id = @project.id
 
@@ -69,12 +69,6 @@ class SprintsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def sprint_params
       params.require(:sprint).permit(:name, :description, :project_id, :start_date, :end_date)
-    end
-
-    def validate_project
-      @current_user = AuthorizeApiRequest.call(request.headers).result
-      @project = Project.find(params[:project_id].to_i)
-      (@project.user_id).to_i == @current_user.id
     end
 
     def validate_sprint
