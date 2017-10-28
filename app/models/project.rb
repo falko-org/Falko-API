@@ -5,5 +5,5 @@ class Project < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 128, minimum: 2 }
   validates :description, length: { maximum: 256 }
-  validates :check_project, presence: true
+  validates :check_project, :inclusion => {:in => [true, false]}
 end
