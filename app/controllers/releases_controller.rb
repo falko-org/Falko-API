@@ -1,7 +1,7 @@
 class ReleasesController < ApplicationController
-  include ProjectsHelper
+  include ValidationsHelper
   def index
-    if validate_project(:user_id, :project_id)
+    if validate_previous_project(:project_id)
       @project = Project.find(params[:project_id])
       @releases = @project.releases.reverse
       render json: @releases
@@ -19,7 +19,7 @@ class ReleasesController < ApplicationController
   end
 
   def show
-    if validate_releases
+    if validate_current_release(:id)
       @release = Release.find(params[:id])
       render json: @release
     else
@@ -28,7 +28,7 @@ class ReleasesController < ApplicationController
   end
 
   def edit
-    if validate_releases
+    if validate_current_release(:id)
       @release = Release.find(params[:id])
       render json: @release
     else
@@ -37,7 +37,7 @@ class ReleasesController < ApplicationController
   end
 
   def create
-    if validate_project(:user_id, :project_id)
+    if validate_previous_project(:project_id)
       @project = Project.find(params[:project_id])
       @release = Release.create(release_params)
       @release.project = @project
@@ -53,7 +53,7 @@ class ReleasesController < ApplicationController
   end
 
   def update
-    if validate_releases
+    if validate_current_release(:id)
       @release = Release.find(params[:id])
       if @release.update(release_params)
         render json: @release
@@ -66,7 +66,7 @@ class ReleasesController < ApplicationController
   end
 
   def destroy
-    if validate_releases
+    if validate_current_release(:id)
       @release = Release.find(params[:id])
       @release.destroy
     else
@@ -75,17 +75,7 @@ class ReleasesController < ApplicationController
   end
 
   private
-
     def release_params
       params.require(:release).permit(:name, :description, :amount_of_sprints, :initial_date, :final_date)
-    end
-
-    def validate_releases
-      @current_user = AuthorizeApiRequest.call(request.headers).result
-      @release = Release.find(params[:id])
-      @project = Project.find(@release.project_id)
-      @user = User.find(@project.user_id)
-
-      @current_user.id == @user.id
     end
 end
