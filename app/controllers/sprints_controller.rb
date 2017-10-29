@@ -3,7 +3,7 @@ class SprintsController < ApplicationController
   # GET /sprints
   def index
     if validate_release
-      @release = Release.find(params[:release_id])
+      # @release used from validate_release
       @sprints = @release.sprints.reverse
       render json: @sprints
     else
@@ -24,7 +24,9 @@ class SprintsController < ApplicationController
   def create
     if validate_release
       @sprint = Sprint.create(sprint_params)
-      @sprint.release = Release.find(params[:release_id])
+
+      # @release used from validate_release
+      @sprint.release = @release
 
       if @sprint.save
         render json: @sprint, status: :created
