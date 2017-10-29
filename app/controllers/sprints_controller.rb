@@ -2,7 +2,7 @@ class SprintsController < ApplicationController
   before_action :set_sprint, only: [:show, :update, :destroy]
   # GET /sprints
   def index
-    if validate_release(:user_id, :release_id)
+    if validate_release
       @release = Release.find(params[:release_id])
       @sprints = @release.sprints.reverse
       render json: @sprints
@@ -22,7 +22,7 @@ class SprintsController < ApplicationController
 
   # POST /sprints
   def create
-    if validate_release(:user_id, :release_id)
+    if validate_release
       @release = Release.find(params[:release_id])
       @sprint = Sprint.create(sprint_params)
       @sprint.release = @release
@@ -68,10 +68,10 @@ class SprintsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def sprint_params
-      params.require(:sprint).permit(:name, :description, :start_date, :end_date, :release_id)
+      params.require(:sprint).permit(:name, :description, :initial_date, :final_date, :release_id)
     end
 
-    def validate_release(user_id, release_id)
+    def validate_release
       @current_user = AuthorizeApiRequest.call(request.headers).result
       @release = Release.find(params[:release_id].to_i)
       @project = Project.find(@release.project_id)
