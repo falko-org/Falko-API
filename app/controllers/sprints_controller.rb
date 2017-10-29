@@ -23,9 +23,8 @@ class SprintsController < ApplicationController
   # POST /sprints
   def create
     if validate_release
-      @release = Release.find(params[:release_id])
       @sprint = Sprint.create(sprint_params)
-      @sprint.release = @release
+      @sprint.release = Release.find(params[:release_id])
 
       if @sprint.save
         render json: @sprint, status: :created
