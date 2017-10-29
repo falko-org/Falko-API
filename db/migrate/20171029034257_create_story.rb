@@ -5,9 +5,6 @@ class CreateStory < ActiveRecord::Migration[5.1]
       t.text :description
       t.string :assign
       t.string :pipeline
-      t.string :sprint_id
-      t.date :start_date
-      t.date :conclusion_date
     end
   end
 end
