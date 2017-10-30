@@ -29,7 +29,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create story" do
-    post "/releases/#{@release.id}/stories", params: {
+    post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -44,7 +44,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
 
   test "should not create story without correct params" do
     # Final date before initial date
-    post "/releases/#{@release.id}/stories", params: {
+    post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -59,7 +59,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
 
 
   test "should not create story without authentication" do
-    post "/releases/#{@release.id}/stories", params: {
+    post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -73,12 +73,12 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not get stories index without authentication" do
-    get "/releases/#{@release.id}/stories"
+    get "/sprints/#{@sprint.id}/stories"
     assert_response :unauthorized
   end
 
   test "should get stories index" do
-    get "/releases/#{@release.id}/stories", headers: { Authorization: @token.result }
+    get "/sprints/#{@sprint.id}/stories", headers: { Authorization: @token.result }
     assert_response :success
   end
 
@@ -99,7 +99,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
 
     patch "/stories/#{@story.id}", params: {
       story: {
-        name: "Story 5", description: "Story 3 us14", assign: "Richard", pipeline: "Done", initial_date: "01/01/2017"
+        name: "Story 5", description: "Story 3 us14", assign: "Richard", pipeline: "Done", initial_date: "02/01/2017"
       }
     }, headers: { Authorization: @token.result }
 

@@ -1,4 +1,4 @@
-class StoryController < ApplicationController
+class StoriesController < ApplicationController
   include ProjectsHelper
   def index
     if validate_sprint
@@ -31,7 +31,7 @@ class StoryController < ApplicationController
   def create
     if validate_sprint
       @story = Story.create(story_params)
-      
+
       # @sprint used from validate_sprint
       @story.sprint = @sprint
 
