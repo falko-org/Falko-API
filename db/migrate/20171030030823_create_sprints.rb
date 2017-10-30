@@ -1,4 +1,4 @@
-class CreateSprint < ActiveRecord::Migration[5.1]
+class CreateSprints < ActiveRecord::Migration[5.1]
   def change
     create_table :sprints do |t|
       t.string :name
