@@ -1,4 +1,4 @@
-module ValidateDateHelper
+module DateValidationHelper
   def is_final_date_valid?
     # Verifies if dates exist, and if final date is after initial date
     if self[:initial_date] && self[:final_date] && self[:final_date] < self[:initial_date]

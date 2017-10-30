@@ -1,5 +1,5 @@
 class Release < ApplicationRecord
-  include ValidateDateHelper
+  include DateValidationHelper
 
   has_many :sprints, dependent: :destroy
   belongs_to :project

@@ -1,5 +1,5 @@
 class Sprint < ApplicationRecord
-  include ValidateDateHelper
+  include DateValidationHelper
 
   belongs_to :release
 
