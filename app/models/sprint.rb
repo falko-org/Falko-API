@@ -1,6 +1,7 @@
 class Sprint < ApplicationRecord
   include DateValidationHelper
 
+  has_many :stories, dependent: :destroy
   belongs_to :release
 
   validates :name, presence: true, length: { maximum: 128, minimum: 2 }

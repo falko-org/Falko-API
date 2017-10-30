@@ -14,7 +14,9 @@ Rails.application.routes.draw do
   resources :users, shallow: true do
     resources :projects do
       resources :releases do
-        resources :sprints
+        resources :sprints do
+          resources :stories
+        end
       end
     end
   end
