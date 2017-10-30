@@ -3,7 +3,6 @@ class ProjectsController < ApplicationController
   include ValidationsHelper
 
   before_action :set_project, only: [:destroy, :show]
-  skip_before_action :authenticate_request, only: [:get_gpa]
 
   before_action only: [:index, :create] do
     validate_user(:user_id)

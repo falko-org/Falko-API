@@ -4,8 +4,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
 
-    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, check_project: true)
-    @project2 = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, check_project: false)
+    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, check_project: true, github_slug: "alaxalves/Falko")
+    @project2 = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, check_project: false, github_slug: "alaxalves/LabBancos")
   end
 
   # test "should get index" do
@@ -107,11 +107,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
-    
+
     def mock.organizations
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
-    
+
     def mock.organization_repositories(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
@@ -131,11 +131,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
-    
+
     def mock.organizations
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
-    
+
     def mock.organization_repositories(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
@@ -154,11 +154,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
-    
+
     def mock.organizations
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
-    
+
     def mock.organization_repositories(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
@@ -177,11 +177,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
-    
+
     def mock.organizations
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
-    
+
     def mock.organization_repositories(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
@@ -200,11 +200,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
-    
+
     def mock.organizations
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
-    
+
     def mock.organization_repositories(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
@@ -215,7 +215,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       assert_response :unauthorized
     end
   end
-   
+
   test "should not import a project from github if the check_project is invalid" do
     @token = AuthenticateUser.call(@user.email, @user.password)
     post "/users/" + @user.id.to_s + "/projects", params: {
@@ -227,5 +227,31 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
      }, headers: { Authorization: @token.result }
 
     assert_response :unprocessable_entity
+  end
+
+  test "should receive an numeric score" do
+    @token = AuthenticateUser.call(@user.email, @user.password)
+    codeclimate_response = '{
+        "data": [{
+            "id": "696a76232df2736347000001",
+            "type": "repos",
+            "attributes": {
+              "analysis_version": 3385,
+              "badge_token": "16096d266f46b7c68dd4",
+              "branch": "master",
+              "created_at": "2017-07-15T20:08:03.732Z",
+              "github_slug": "twinpeaks\/ranchorosa",
+              "human_name": "ranchorosa",
+              "last_activity_at": "2017-07-15T20:09:41.846Z",
+              "score": 2.92
+            }
+          }]
+        }'
+
+    RestClient.stub :get, codeclimate_response do
+      get "/projects/#{@project.id}/gpa", headers: { Authorization: @token.result }
+      assert_response :success
+      assert response.parsed_body == 2.92
+    end
   end
 end
