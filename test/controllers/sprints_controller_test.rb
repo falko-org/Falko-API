@@ -192,7 +192,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test "should list all sprints that belong to a project" do
+  test "should list all sprints that belong to a release" do
     get "/releases/#{@release.id}/sprints", headers: { Authorization: @token.result }
 
     assert_response :success

@@ -74,18 +74,16 @@ class SprintsController < ApplicationController
 
     def validate_release
       @current_user = AuthorizeApiRequest.call(request.headers).result
+      @release_user = Release.find(params[:release_id].to_i).project.user_id
       @release = Release.find(params[:release_id].to_i)
-      @project = Project.find(@release.project_id)
-      (@project.user_id).to_i == @current_user.id
+
+      @current_user.id == @release_user
     end
 
     def validate_sprint
       @current_user = AuthorizeApiRequest.call(request.headers).result
-      @sprint = Sprint.find(params[:id])
-      @release = Release.find(@sprint.release_id)
-      @project = Project.find(@release.project_id)
-      @user = User.find(@project.user_id)
+      @sprint_user = Sprint.find(params[:id]).release.project.user_id
 
-      @current_user.id == @user.id
+      @current_user.id == @sprint_user
     end
 end
