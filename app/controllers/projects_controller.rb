@@ -1,7 +1,6 @@
 require "rest-client"
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:destroy, :show]
-  skip_before_action :authenticate_request, only: [:get_gpa]
 
   def index
     if validate_user
