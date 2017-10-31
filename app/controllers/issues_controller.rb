@@ -22,6 +22,20 @@ class IssuesController < ApplicationController
 
   end
 
+  def update
+
+    @issue = @client.update_issue(@path, issue_params[:number], issue_params[:name], issue_params[:body], options = {assignee: issue_params[:assignee], labels: [issue_params[:labels]]})
+
+    render json: @issue
+
+  end
+
+  def close
+
+    @issue = @client.close_issue(@path, issue_params[:number])
+
+  end
+
   private
 
     def set_authorization
@@ -45,7 +59,7 @@ class IssuesController < ApplicationController
     end
 
     def issue_params
-      params.require(:issue).permit(:name, :body, :assignee, :labels)
+      params.require(:issue).permit(:name, :body, :assignee, :labels, :number)
     end
 
 end
