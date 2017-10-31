@@ -6,7 +6,9 @@ class SprintTest < ActiveSupport::TestCase
 
     @project = Project.create(name: "Falko", description: "Esse projeto faz parte da disciplina MDS.", user_id: @user.id, check_project: true)
 
-    @sprint = Sprint.create(name: "Sprint 1", description: "Sprint 1 us10", start_date: "06/10/2017", end_date: "13/10/2017", project_id: @project.id)
+    @release = Release.create(name: "Release 1", description: "First Release.", initial_date: "01/01/2017", final_date: "02/02/2019", project_id: @project.id)
+
+    @sprint = Sprint.create(name: "Sprint 1", description: "Sprint 1 us10", initial_date: "06/10/2017", final_date: "13/10/2017", release_id: @release.id)
   end
 
   test "should save a valid sprint" do
@@ -19,12 +21,12 @@ class SprintTest < ActiveSupport::TestCase
   end
 
   test "Sprint should have a start date" do
-    @sprint.start_date = ""
+    @sprint.initial_date = ""
     assert_not @sprint.save
   end
 
   test "Sprint should have an end date" do
-    @sprint.end_date = ""
+    @sprint.final_date = ""
     assert_not @sprint.save
   end
 
@@ -50,8 +52,8 @@ class SprintTest < ActiveSupport::TestCase
   end
 
   test "should not save a sprint with end date before start date" do
-    @sprint.start_date = "13/10/2017"
-    @sprint.end_date = "06/10/2017"
+    @sprint.initial_date = "13/10/2017"
+    @sprint.final_date = "06/10/2017"
     assert_not @sprint.save
   end
 end
