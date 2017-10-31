@@ -96,6 +96,8 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     @old_name_story = @story.name
     @old_description_story = @story.description
     @old_initial_date_story = @story.initial_date
+    @old_assign_story = @story.assign
+    @old_pipeline_story = @story.pipeline
 
     patch "/stories/#{@story.id}", params: {
       story: {
@@ -109,12 +111,16 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     assert_not_equal @old_name_story, @story.name
     assert_not_equal @old_description_story, @story.description
     assert_not_equal @old_initial_date_story, @story.initial_date
+    assert_not_equal @old_assign_story, @story.assign
+    assert_not_equal @old_pipeline_story, @story.pipeline
   end
 
   test "should not edit stories without authenticantion" do
     @old_name_story = @story.name
     @old_description_story = @story.description
     @old_initial_date_story = @story.initial_date
+    @old_assign_story = @story.assign
+    @old_pipeline_story = @story.pipeline
 
     patch "/stories/#{@story.id}", params: {
       story: {
@@ -128,12 +134,16 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @old_name_story, @story.name
     assert_equal @old_description_story, @story.description
     assert_equal @old_initial_date_story, @story.initial_date
+    assert_equal @old_assign_story, @story.assign
+    assert_equal @old_pipeline_story, @story.pipeline
   end
 
   test "should not edit stories with blank params" do
     @old_name_story = @story.name
     @old_description_story = @story.description
     @old_initial_date_story = @story.initial_date
+    @old_assign_story = @story.assign
+    @old_pipeline_story = @story.pipeline
 
     patch "/stories/#{@story.id}", params: {
       story: {
@@ -147,6 +157,8 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @old_name_story, @story.name
     assert_equal @old_description_story, @story.description
     assert_equal @old_initial_date_story, @story.initial_date
+    assert_equal @old_assign_story, @story.assign
+    assert_equal @old_pipeline_story, @story.pipeline
   end
 
   test "should destroy story" do
