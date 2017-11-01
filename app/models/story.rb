@@ -1,4 +1,5 @@
 class Story < ApplicationRecord
+  include DateValidationHelper
   belongs_to :sprint
 
   validates :name, presence: true, length: { maximum: 128, minimum: 2 }
@@ -7,6 +8,5 @@ class Story < ApplicationRecord
   validates :pipeline, length: { maximum: 16, minimum: 4 }
   validates :initial_date, presence: true
 
-  # Uncomment when DateValidationHelper PR is approved
-  # validate :is_final_date_valid?
+  validate :is_final_date_valid?
 end
