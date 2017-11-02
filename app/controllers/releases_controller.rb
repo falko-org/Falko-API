@@ -1,6 +1,7 @@
 class ReleasesController < ApplicationController
+  include ProjectsHelper
   def index
-    if validate_project
+    if validate_project(:user_id, :project_id)
       @project = Project.find(params[:project_id])
       @releases = @project.releases.reverse
       render json: @releases
@@ -36,7 +37,7 @@ class ReleasesController < ApplicationController
   end
 
   def create
-    if validate_project
+    if validate_project(:user_id, :project_id)
       @project = Project.find(params[:project_id])
       @release = Release.create(release_params)
       @release.project = @project
@@ -77,12 +78,6 @@ class ReleasesController < ApplicationController
 
     def release_params
       params.require(:release).permit(:name, :description, :amount_of_sprints, :initial_date, :final_date)
-    end
-
-    def validate_project
-      @current_user = AuthorizeApiRequest.call(request.headers).result
-      @project = Project.find(params[:project_id].to_i)
-      (@project.user_id).to_i == @current_user.id
     end
 
     def validate_releases

@@ -1,18 +1,7 @@
 require "rest-client"
 class UsersController < ApplicationController
-  skip_before_action :authenticate_request, only: [:create, :all, :request_github_token]
+  skip_before_action :authenticate_request, only: [:create, :all]
   before_action :set_user, only: [:show, :update, :destroy]
-
-  # GET /users
-  def index
-    @users = User.all
-    render json: @users
-  end
-
-  def all
-    @users = User.all.order("id ASC")
-    render :index
-  end
 
   # GET /users/1
   def show
@@ -81,7 +70,7 @@ class UsersController < ApplicationController
   def destroy
     if validate_user
       @user.destroy
-      redirect_to action: "index", status: 200
+      render json: { status: 200, message: "Usuario excluido com sucesso" }.to_json
     else
       render json: { error: "Not Authorized" }, status: 401
     end

@@ -13,8 +13,8 @@ Rails.application.routes.draw do
   resources :users, shallow: true do
     resources :projects do
       resources :releases do
+        resources :sprints
       end
-      resources :sprints
     end
   end
 end

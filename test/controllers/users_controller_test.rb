@@ -136,12 +136,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should authenticate user with github" do
+    @token = AuthenticateUser.call(@user.email, @user.password)
 
     RestClient.stub :post, "access_token=token123&outra_coisa=outrosvalores" do
       post "/request_github_token", params: {
         "code": "code123",
         "id": "#{@user.id}"
-      }
+      }, headers: { Authorization: @token.result }
 
       assert_response :success
       assert response.parsed_body["access_token"] != "bad_verification_code"
@@ -150,12 +151,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not authenticate with bad verification code" do
-
+    @token = AuthenticateUser.call(@user.email, @user.password)
     RestClient.stub :post, "access_token=bad_verification_code&outra_coisa=outrosvalores" do
       post "/request_github_token", params: {
         "code": "code123",
         "id": "#{@user.id}"
-      }
+      }, headers: { Authorization: @token.result }
 
       assert_response :bad_request
     end
@@ -163,6 +164,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not authenticate with another id" do
+    @token = AuthenticateUser.call(@user.email, @user.password)
 
     RestClient.stub :post, "access_token=token123&outra_coisa=outrosvalores" do
 
@@ -170,7 +172,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         post "/request_github_token", params: {
           "code": "code123",
           "id": "2"
-        }
+        }, headers: { Authorization: @token.result }
 
         assert_response 500
 
@@ -183,12 +185,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should render unprocessable entity" do
+    @token = AuthenticateUser.call(@user.email, @user.password)
 
     RestClient.stub :post, "access_token=&outra_coisa=outrosvalores" do
       post "/request_github_token", params: {
         "code": "code123",
         "id": "#{@user.id}"
-      }
+      }, headers: { Authorization: @token.result }
 
       assert_response :bad_request
     end
