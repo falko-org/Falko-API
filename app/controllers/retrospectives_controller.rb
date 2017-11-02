@@ -1,6 +1,17 @@
 class RetrospectivesController < ApplicationController
   before_action :set_retrospective, only:   [:show, :edit, :update]
 
+  def index
+    @sprint = Sprint.find(params[:sprint_id])
+    @retrospective = @sprint.retrospective
+
+    if @retrospective == nil
+      @retrospective = []
+    end
+
+    render json: @retrospective
+  end
+
   def new
     @sprint = Sprint.find(params[:sprint_id])
     @retrospective = Retrospective.new
