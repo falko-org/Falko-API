@@ -8,7 +8,7 @@ class SprintsController < ApplicationController
   end
 
   before_action only: [:show, :edit, :update, :destroy] do
-    validate_sprint(:id)
+    validate_sprint(:id, 0)
   end
 
   # GET /sprints
@@ -26,8 +26,6 @@ class SprintsController < ApplicationController
   # POST /sprints
   def create
     @sprint = Sprint.create(sprint_params)
-
-    # @release used from validate_previous_release(:release_id)
     @sprint.release = @release
 
     if @sprint.save

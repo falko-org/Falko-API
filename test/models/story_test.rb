@@ -11,7 +11,6 @@ class StoryTest < ActiveSupport::TestCase
     @sprint = Sprint.create(name: "Sprint 1", description: "Sprint 1 us10", initial_date: "06/10/2017", final_date: "13/10/2017", release_id: @release.id)
 
     @story = Story.create(name: "Story 1", description: "Story 1 us14", assign: "Lucas", pipeline: "in progress", initial_date: "01/01/2017", sprint_id: @sprint.id)
-
   end
 
   test "should save a valid story" do
@@ -90,6 +89,4 @@ class StoryTest < ActiveSupport::TestCase
     @story.pipeline = "s" * 16
     assert @story.save
   end
-
-
 end

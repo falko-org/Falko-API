@@ -1,90 +1,60 @@
 class StoriesController < ApplicationController
-  include ProjectsHelper
+  include ValidationsHelper
+
+  before_action :set_story, only: [:show, :update, :destroy]
+
+  before_action only: [:index, :create] do
+    validate_sprint(0, :sprint_id)
+  end
+
+  before_action only: [:show, :edit, :update, :destroy] do
+    validate_story(:id)
+  end
+
   def index
-    if validate_sprint
-      # @sprint used from validate_sprint
-      @stories = @sprint.stories.reverse
-      render json: @stories
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    # @sprint used from validate_sprint(0, :sprint_id)
+    @stories = @sprint.stories.reverse
+    render json: @stories
   end
 
   def show
-    if validate_story
-      @story = Story.find(params[:id])
-      render json: @story
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    @story = Story.find(params[:id])
+    render json: @story
   end
 
   def edit
-    if validate_story
-      @story = Story.find(params[:id])
-      render json: @story
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    render json: @story
   end
 
   def create
-    if validate_sprint
-      @story = Story.create(story_params)
+    @story = Story.create(story_params)
+    @story.sprint = @sprint
 
-      # @sprint used from validate_sprint
-      @story.sprint = @sprint
-
-      if @story.save
-        render json: @story, status: :created
-      else
-        render json: @story.errors, status: :unprocessable_entity
-      end
+    if @story.save
+      render json: @story, status: :created
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: @story.errors, status: :unprocessable_entity
     end
   end
 
   def update
-    if validate_story
-      @story = Story.find(params[:id])
-      if @story.update(story_params)
-        render json: @story
-      else
-        render json: @story.errors, status: :unprocessable_entity
-      end
+    if @story.update(story_params)
+      render json: @story
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: @story.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if validate_story
-      @story = Story.find(params[:id])
-      @story.destroy
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    @story.destroy
   end
 
   private
+    def set_story
+      @story = Story.find(params[:id])
+    end
 
     def story_params
       params.require(:story).permit(:name, :description, :assign, :pipeline, :initial_date)
-    end
-
-    def validate_sprint
-      @current_user = AuthorizeApiRequest.call(request.headers).result
-      @sprint_user = Sprint.find(params[:sprint_id].to_i).release.project.user_id
-      @sprint = Sprint.find(params[:sprint_id].to_i)
-
-      @current_user.id == @sprint_user
-    end
-
-    def validate_story
-      @current_user = AuthorizeApiRequest.call(request.headers).result
-      @story_user = Story.find(params[:id]).sprint.release.project.user_id
-
-      @current_user.id == @story_user
     end
 end
