@@ -27,7 +27,7 @@ class SprintsController < ApplicationController
   def create
     @sprint = Sprint.create(sprint_params)
     @sprint.release = @release
-
+    add_amount_of_sprints
     if @sprint.save
       render json: @sprint, status: :created
       # @release used from validate_release
