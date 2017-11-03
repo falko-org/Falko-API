@@ -47,8 +47,8 @@ group :development do
 end
 
 group :production do
-  gem 'rails_12factor'
-  gem 'activesupport', '~> 5.1', '>= 5.1.4'
+  gem "rails_12factor"
+  gem "activesupport", "~> 5.1", ">= 5.1.4"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
