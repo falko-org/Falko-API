@@ -5,10 +5,7 @@ class IssuesController < ApplicationController
 
     @issues = @client.list_issues(@path)
 
-    @form_params = { issues_infos: [] }
-    @issues.each do |issue|
-      @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body)
-    end
+    convert_form_params(@issues)
 
     render json: @form_params
 
@@ -17,8 +14,8 @@ class IssuesController < ApplicationController
   def create
 
     @issue = @client.create_issue(@path, issue_params[:name], issue_params[:body], options = {assignee: issue_params[:assignee], labels: issue_params[:labels]})
-    @form_params = { issues_infos: [] }
-    @form_params[:issues_infos].push(name: @issue.title, number: @issue.number, body: @issue.body)
+
+    convert_form_params(@issue)
 
     render json: @form_params, status: :created
 
@@ -27,8 +24,8 @@ class IssuesController < ApplicationController
   def update
 
     @issue = @client.update_issue(@path, issue_params[:number], issue_params[:name], issue_params[:body], options = {assignee: issue_params[:assignee], labels: [issue_params[:labels]]})
-    @form_params = { issues_infos: [] }
-    @form_params[:issues_infos].push(name: @issue.title, number: @issue.number, body: @issue.body)
+
+    convert_form_params(@issue)
 
     render json: @form_params
 
@@ -37,6 +34,8 @@ class IssuesController < ApplicationController
   def close
 
     @issue = @client.close_issue(@path, issue_params[:number])
+
+    render status: 200
 
   end
 
@@ -60,6 +59,18 @@ class IssuesController < ApplicationController
       end
 
       @path
+    end
+
+    def convert_form_params(issue)
+      @form_params = { issues_infos: [] }
+      if issue.kind_of?(Array)
+        @issues.each do |issue|
+          @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body)
+        end
+      else
+        @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body)
+      end
+      @form_params
     end
 
     def issue_params
