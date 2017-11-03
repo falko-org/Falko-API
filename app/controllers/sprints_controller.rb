@@ -30,6 +30,14 @@ class SprintsController < ApplicationController
 
     if @sprint.save
       render json: @sprint, status: :created
+      # @release used from validate_release
+      @sprint.release = @release
+      add_amount_of_sprints
+      if @sprint.save
+        render json: @sprint, status: :created
+      else
+        render json: @sprint.errors, status: :unprocessable_entity
+      end
     else
       render json: @sprint.errors, status: :unprocessable_entity
     end
