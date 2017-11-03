@@ -1,64 +1,54 @@
 class SprintsController < ApplicationController
   include ValidationsHelper
+
   before_action :set_sprint, only: [:show, :update, :destroy]
+
+  before_action only: [:index, :create] do
+    validate_release(0, :release_id)
+  end
+
+  before_action only: [:show, :edit, :update, :destroy] do
+    validate_sprint(:id)
+  end
+
   # GET /sprints
   def index
-    if validate_previous_release(:release_id)
-      # @release used from validate_previous_release(:release_id)
-      @sprints = @release.sprints.reverse
-      render json: @sprints
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    # @release used from validate_previous_release(:release_id)
+    @sprints = @release.sprints.reverse
+    render json: @sprints
   end
 
   # GET /sprints/1
   def show
-    if validate_current_sprint(:id)
-      render json: @sprint
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    render json: @sprint
   end
 
   # POST /sprints
   def create
-    if validate_previous_release(:release_id)
-      @sprint = Sprint.create(sprint_params)
+    @sprint = Sprint.create(sprint_params)
 
-      # @release used from validate_previous_release(:release_id)
-      @sprint.release = @release
+    # @release used from validate_previous_release(:release_id)
+    @sprint.release = @release
 
-      if @sprint.save
-        render json: @sprint, status: :created
-      else
-        render json: @sprint.errors, status: :unprocessable_entity
-      end
+    if @sprint.save
+      render json: @sprint, status: :created
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: @sprint.errors, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /sprints/1
   def update
-    if validate_current_sprint(:id)
-      if @sprint.update(sprint_params)
-        render json: @sprint
-      else
-        render json: @sprint.errors, status: :unprocessable_entity
-      end
+    if @sprint.update(sprint_params)
+      render json: @sprint
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: @sprint.errors, status: :unprocessable_entity
     end
   end
 
   # DELETE /sprints/1
   def destroy
-    if validate_current_sprint(:id)
-      @sprint.destroy
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    @sprint.destroy
   end
 
   private

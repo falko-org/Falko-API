@@ -11,52 +11,66 @@ module ValidationsHelper
     @project = Project.find(@release.project_id)
   end
 
+  def verifies_id(idp, project_id, idr, release_id)
+    if idp != 0
+      id = idp
+      @project = Project.find(params[:id].to_i)
+    elsif project_id != 0
+      @project = Project.find(params[:project_id].to_i)
+    elsif idr != 0
+      id = idr
+      @release = Release.find(params[:id].to_i)
+    elsif release_id != 0
+      @release = Release.find(params[:release_id].to_i)
+    end
+  end
+
   def validate_user(user_id)
     current_user
-    @current_user.id == params[:user_id].to_i
+
+    if @current_user.id == params[:user_id].to_i
+      return true
+    else
+      render json: { error: "Not Authorized" }, status: 401
+    end
   end
 
-  def validate_current_project(id)
+  def validate_project(id, project_id)
     current_user
-    @project = Project.find(params[:id].to_i)
+    verifies_id(id, project_id, 0, 0)
     user
 
-    @current_user.id == @user.id
+    if @current_user.id == @user.id
+      return true
+    else
+      render json: { error: "Not Authorized" }, status: 401
+    end
   end
 
-  def validate_previous_project(project_id)
+  def validate_release(id, release_id)
     current_user
-    @project = Project.find(params[:project_id].to_i)
-    user
-
-    @current_user.id == @user.id
-  end
-
-  def validate_current_release(id)
-    current_user
-    @release = Release.find(params[:id].to_i)
+    verifies_id(0, 0, id, release_id)
     project
     user
 
-    @current_user.id == @user.id
+    if @current_user.id == @user.id
+      return true
+    else
+      render json: { error: "Not Authorized" }, status: 401
+    end
   end
 
-  def validate_previous_release(release_id)
-    current_user
-    @release = Release.find(params[:release_id].to_i)
-    project
-    user
-
-    @current_user.id == @user.id
-  end
-
-  def validate_current_sprint(id)
+  def validate_sprint(id)
     current_user
     @sprint = Sprint.find(params[:id].to_i)
     @release = Release.find(@sprint.release_id)
     project
     user
 
-    @current_user.id == @user.id
+    if @current_user.id == @user.id
+      return true
+    else
+      render json: { error: "Not Authorized" }, status: 401
+    end
   end
 end
