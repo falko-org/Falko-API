@@ -20,7 +20,7 @@ class ProjectsController < ApplicationController
     @form_params = { user: [] }
     @form_params[:user].push(login: user)
     @repos.each do |repo|
-        user_repos.push(repo.name)
+      user_repos.push(repo.name)
     end
     @form_params[:user].push(repos: user_repos)
 
