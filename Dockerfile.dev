@@ -15,17 +15,12 @@ RUN apt-get update && apt-get install -y curl apt-transport-https wget && \
 RUN mkdir Falko-2017.2-BackEnd
 WORKDIR /Falko-2017.2-BackEnd
 
-ENV RAILS_ENV=production
-
-ENV BUNDLE_PATH /bundle-cache
-
 COPY . /Falko-2017.2-BackEnd
 
 COPY Gemfile /Falko-2017.2-BackEnd/Gemfile
 
-RUN chmod +x start-prod.sh
-
-EXPOSE 3000
-
-ENTRYPOINT ["./start-prod.sh"]
+RUN bundle install 
+RUN bundle exec rails db:create
+RUN bundle exec rails db:migrate
+RUN bundle exec rails db:seed
 
