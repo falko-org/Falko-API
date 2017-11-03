@@ -3,13 +3,17 @@ class ProjectsController < ApplicationController
 
   before_action :set_project, only: [:destroy, :show]
 
+  before_action only: [:index, :create] do
+    validate_user(:user_id)
+  end
+
+  before_action only: [:show, :edit, :update, :destroy] do
+    validate_project(:id, 0)
+  end
+
   def index
-    if validate_user(:user_id)
-      @projects = User.find(params[:user_id]).projects
-      render json: @projects
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    @projects = User.find(params[:user_id]).projects
+    render json: @projects
   end
 
   def github_projects_list
@@ -40,55 +44,35 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    if validate_current_project(:id)
-      render json: @project
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    render json: @project
   end
 
   def edit
-    if validate_current_project(:id)
-      render json: @project
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    render json: @project
   end
 
   def create
-    if validate_user(:user_id)
-      @project = Project.create(project_params)
-      @project.user_id = @current_user.id
+    @project = Project.create(project_params)
+    @project.user_id = @current_user.id
 
-      if @project.save
-        render json: @project, status: :created
-      else
-        render json: @project.errors, status: :unprocessable_entity
-      end
+    if @project.save
+      render json: @project, status: :created
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: @project.errors, status: :unprocessable_entity
     end
   end
 
   def update
-    if validate_current_project(:id)
-      if @project.update(project_params)
-        render json: @project
-      else
-        render json: @project.errors, status: :unprocessable_entity
-      end
+    if @project.update(project_params)
+      render json: @project
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: @project.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if validate_current_project(:id)
-      @project = Project.find(params[:id])
-      @project.destroy
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    @project = Project.find(params[:id])
+    @project.destroy
   end
 
   private
