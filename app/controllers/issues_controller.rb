@@ -5,9 +5,9 @@ class IssuesController < ApplicationController
 
     @issues = @client.list_issues(@path)
 
-    @form_params = { issues_names: [] }
+    @form_params = { issues_infos: [] }
     @issues.each do |issue|
-      @form_params[:issues_names].push(issue.title)
+      @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body)
     end
 
     render json: @form_params
@@ -17,16 +17,20 @@ class IssuesController < ApplicationController
   def create
 
     @issue = @client.create_issue(@path, issue_params[:name], issue_params[:body], options = {assignee: issue_params[:assignee], labels: issue_params[:labels]})
+    @form_params = { issues_infos: [] }
+    @form_params[:issues_infos].push(name: @issue.title, number: @issue.number, body: @issue.body)
 
-    render json: @issue, status: :created
+    render json: @form_params, status: :created
 
   end
 
   def update
 
     @issue = @client.update_issue(@path, issue_params[:number], issue_params[:name], issue_params[:body], options = {assignee: issue_params[:assignee], labels: [issue_params[:labels]]})
+    @form_params = { issues_infos: [] }
+    @form_params[:issues_infos].push(name: @issue.title, number: @issue.number, body: @issue.body)
 
-    render json: @issue
+    render json: @form_params
 
   end
 
