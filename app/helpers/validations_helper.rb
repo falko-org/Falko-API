@@ -11,16 +11,18 @@ module ValidationsHelper
     @project = Project.find(@release.project_id)
   end
 
-  def verifies_id(idp, project_id, idr, release_id)
-    if idp != 0
-      id = idp
+  def verifies_id(current_id, previous_id, component_type)
+    if component_type == "project" && current_id != 0
+      id = current_id
       @project = Project.find(params[:id].to_i)
-    elsif project_id != 0
+    elsif component_type == "project" && previous_id != 0
+      project_id = previous_id
       @project = Project.find(params[:project_id].to_i)
-    elsif idr != 0
-      id = idr
+    elsif component_type == "release" && current_id != 0
+      id = current_id
       @release = Release.find(params[:id].to_i)
-    elsif release_id != 0
+    elsif component_type == "release" && previous_id != 0
+      release_id = previous_id
       @release = Release.find(params[:release_id].to_i)
     end
   end
@@ -37,7 +39,7 @@ module ValidationsHelper
 
   def validate_project(id, project_id)
     current_user
-    verifies_id(id, project_id, 0, 0)
+    verifies_id(id, project_id, "project")
     user
 
     if @current_user.id == @user.id
@@ -49,7 +51,7 @@ module ValidationsHelper
 
   def validate_release(id, release_id)
     current_user
-    verifies_id(0, 0, id, release_id)
+    verifies_id(id, release_id, "release")
     project
     user
 
