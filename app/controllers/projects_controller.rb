@@ -20,11 +20,11 @@ class ProjectsController < ApplicationController
     @current_user = AuthorizeApiRequest.call(request.headers).result
     @client = Octokit::Client.new(access_token: @current_user.access_token)
 
-    user = @client.user.login
+    user_login = @client.user.login
     user_repos = []
     @repos = @client.repositories
     @form_params = { user: [] }
-    @form_params[:user].push(login: user)
+    @form_params[:user].push(login: user_login)
     @repos.each do |repo|
       user_repos.push(repo.name)
     end
