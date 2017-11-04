@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       resources :releases do
         resources :sprints do
           resources :stories
-        end
+          resources :revisions
       end
     end
   end
