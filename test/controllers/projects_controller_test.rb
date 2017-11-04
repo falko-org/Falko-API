@@ -104,22 +104,26 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @token = AuthenticateUser.call(@user.email, @user.password)
 
     mock = Minitest::Mock.new
+
+    def mock.user
+      Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" })
+    end
+
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
-    
+
     def mock.organizations
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
-    
+
     def mock.organization_repositories(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
 
     Octokit::Client.stub :new, mock do
       get "/repos", headers: { Authorization: @token.result }
-
-      assert response.parsed_body["user"] == ["teste"]
+      assert response.parsed_body["user"] == [{"login"=>"teste"}, {"repos"=>["teste"]}]
       assert_response :success
     end
   end
@@ -131,11 +135,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
-    
+
     def mock.organizations
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
-    
+
     def mock.organization_repositories(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
@@ -154,11 +158,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
-    
+
     def mock.organizations
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
-    
+
     def mock.organization_repositories(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
@@ -177,11 +181,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
-    
+
     def mock.organizations
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
-    
+
     def mock.organization_repositories(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
@@ -200,11 +204,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     def mock.repositories
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
     end
-    
+
     def mock.organizations
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
     end
-    
+
     def mock.organization_repositories(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
     end
@@ -215,7 +219,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       assert_response :unauthorized
     end
   end
-   
+
   test "should not import a project from github if the check_project is invalid" do
     @token = AuthenticateUser.call(@user.email, @user.password)
     post "/users/" + @user.id.to_s + "/projects", params: {
