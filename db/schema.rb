@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171030150130) do
+ActiveRecord::Schema.define(version: 20171104121652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,15 @@ ActiveRecord::Schema.define(version: 20171030150130) do
     t.date "initial_date"
     t.date "final_date"
     t.index ["project_id"], name: "index_releases_on_project_id"
+  end
+
+  create_table "revisions", force: :cascade do |t|
+    t.text "done_report"
+    t.text "undone_report"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "sprint_id"
+    t.index ["sprint_id"], name: "index_revisions_on_sprint_id"
   end
 
   create_table "sprints", force: :cascade do |t|
@@ -73,6 +82,7 @@ ActiveRecord::Schema.define(version: 20171030150130) do
 
   add_foreign_key "projects", "users"
   add_foreign_key "releases", "projects"
+  add_foreign_key "revisions", "sprints"
   add_foreign_key "sprints", "releases"
   add_foreign_key "stories", "sprints"
 end
