@@ -66,9 +66,11 @@ class ProjectsController < ApplicationController
     render json: @project
   end
 
-  def create
+  def create    
     @project = Project.create(project_params)
-    @project.user_id = @current_user.id
+    @project.user_id = @current_user.id   
+
+    puts @project.github_slug
 
     if @project.save
       render json: @project, status: :created
@@ -96,6 +98,6 @@ class ProjectsController < ApplicationController
     end
 
     def project_params
-      params.require(:project).permit(:name, :description, :user_id, :check_project)
+      params.require(:project).permit(:name, :description, :user_id, :check_project, :github_slug)
     end
 end
