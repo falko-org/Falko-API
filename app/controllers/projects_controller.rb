@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   include ValidationsHelper
 
-  before_action :set_project, only: [:destroy, :show]
+  before_action :set_project, only: [:destroy, :show, :get_contributors]
 
   before_action only: [:index, :create] do
     validate_user(:user_id)
@@ -77,6 +77,19 @@ class ProjectsController < ApplicationController
   def destroy
     @project = Project.find(params[:id])
     @project.destroy
+  end
+
+  def get_contributors
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @client = Octokit::Client.new(access_token: @current_user.access_token)
+
+    contributors = []
+
+    @client.contributors("fga-gpp-mds/Falko-2017.2-BackEnd").each do |contributor|
+      contributors.push(contributor.login)
+    end
+
+    render json: contributors
   end
 
   private

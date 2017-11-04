@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   post "request_github_token", to: "users#request_github_token"
 
   get "repos", to: "projects#github_projects_list"
+  get "projects/:id/contributors", to: "projects#get_contributors"
 
   resources :users, shallow: true do
     resources :projects do
