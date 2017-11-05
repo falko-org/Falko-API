@@ -25,6 +25,7 @@ class ReleasesController < ApplicationController
 
   def show
     @release = Release.find(params[:id])
+    update_amount_of_sprints
     render json: @release
   end
 
@@ -37,7 +38,7 @@ class ReleasesController < ApplicationController
     @project = Project.find(params[:project_id])
     @release = Release.create(release_params)
     @release.project = @project
-
+    update_amount_of_sprints
     if @release.save
       render json: @release, status: :created
     else
