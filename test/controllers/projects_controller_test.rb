@@ -106,7 +106,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     mock = Minitest::Mock.new
 
     def mock.user
-      Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" })
+      Sawyer::Resource.new(Sawyer::Agent.new("/teste"), login: "teste")
     end
 
     def mock.repositories
@@ -123,7 +123,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     Octokit::Client.stub :new, mock do
       get "/repos", headers: { Authorization: @token.result }
-      assert response.parsed_body["user"] == [{"login"=>"teste"}, {"repos"=>["teste"]}]
+      assert response.parsed_body["user"] == [{ "login"=>"teste" }, { "repos" => ["teste"] }]
       assert_response :success
     end
   end
