@@ -15,10 +15,6 @@ module ValidationsHelper
     @release = Release.find(@sprint.release_id)
   end
 
-  def sprint
-    @sprint = Sprint.find(@story.sprint_id)
-  end
-
   def verifies_id(current_id, previous_id, component_type)
     if component_type == "project" && current_id != 0
       id = current_id
@@ -93,7 +89,7 @@ module ValidationsHelper
   def validate_story(id)
     current_user
     @story = Story.find(params[:id].to_i)
-    sprint
+    @sprint = Sprint.find(@story.sprint_id)
     release
     project
     user
@@ -108,7 +104,7 @@ module ValidationsHelper
   def validate_revision(id)
     current_user
     @revision = Revision.find(params[:id].to_i)
-    sprint
+    @sprint = Sprint.find(@revision.sprint_id)
     release
     project
     user
