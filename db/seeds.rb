@@ -106,3 +106,74 @@ sprints = [
     release_id: "2"
   )
 ]
+
+puts "Creating Stories"
+stories = [
+  Story.find_or_create_by(
+    name: "Story 1",
+    description: "Story 1 us14",
+    assign: "Lucas",
+    pipeline: "Backlog",
+    initial_date: "01/01/2017",
+    final_date: "02/01/2017",
+    sprint_id: "1"
+  ),
+  Story.find_or_create_by(
+    name: "Story 2",
+    description: "Story 2 us14",
+    assign: "Alax",
+    pipeline: "Done",
+    initial_date: "01/01/2017",
+    final_date: "08/01/2017",
+    sprint_id: "1"
+  ),
+  Story.find_or_create_by(
+    name: "Story 1",
+    description: "Story 1 us14",
+    assign: "Matheus B",
+    pipeline: "In Progress",
+    initial_date: "03/01/2017",
+    sprint_id: "2"
+  ),
+  Story.find_or_create_by(
+    name: "Story 2",
+    description: "Story 2 us14",
+    assign: "Matheus R",
+    pipeline: "Backlog",
+    initial_date: "01/01/2017",
+    sprint_id: "2"
+  ),
+  Story.find_or_create_by(
+    name: "Story 1",
+    description: "Story 1 us14",
+    assign: "Matheus Roberto",
+    pipeline: "In Progress",
+    initial_date: "01/01/2017",
+    sprint_id: "3"
+  ),
+  Story.find_or_create_by(
+    name: "Story 2",
+    description: "Story 2 us14",
+    assign: "Thalisson",
+    pipeline: "Done",
+    initial_date: "07/01/2017",
+    final_date: "15/01/2017",
+    sprint_id: "3"
+  ),
+  Story.find_or_create_by(
+    name: "Story 1",
+    description: "Story 1 us14",
+    assign: "Vinícius",
+    pipeline: "In Progress",
+    initial_date: "01/01/2017",
+    sprint_id: "4"
+  ),
+  Story.find_or_create_by(
+    name: "Story 2",
+    description: "Story 2 us14",
+    assign: "Adrianne",
+    pipeline: "In Progress",
+    initial_date: "01/01/2017",
+    sprint_id: "4"
+  )
+]
