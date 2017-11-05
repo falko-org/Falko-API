@@ -12,14 +12,14 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
 
     @project = Project.create(
       name: "Falko",
-      description: "Project description",
-      check_project: true,
-      user_id: @user.id
+      description: "Deion.",
+      user_id: @user.id,
+      check_project: true
     )
 
     @release = Release.create(
       name: "R1",
-      description: "Release description",
+      description: "Deion",
       initial_date: "01/01/2018",
       final_date: "01/01/2019",
       amount_of_sprints: "20",
@@ -31,6 +31,13 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
       description: "Sprint 1 us10",
       initial_date: "06/10/2017",
       final_date: "13/10/2017",
+      release_id: @release.id
+    )
+    @no_revision_sprint = Sprint.create(
+      name: "Sprint 2",
+      description: "A Sprint",
+      initial_date: "23-04-1993",
+      final_date: "23-04-2003",
       release_id: @release.id
     )
 
@@ -52,18 +59,18 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
 
     @another_project = Project.create(
       name: "Futebol",
-      description: "Project description",
-      check_project: true,
-      user_id: @another_user.id
+      description: "Deion.",
+      user_id: @user.id,
+      check_project: true
     )
 
     @another_release = Release.create(
       name: "Real Madrid",
-      description: "Release description",
+      description: "Deions",
       initial_date: "01/01/2018",
       final_date: "01/01/2019",
       amount_of_sprints: "20",
-      project_id: @another_project.id
+      project_id: @project.id
     )
 
     @another_sprint = Sprint.create(
@@ -71,53 +78,52 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
       description: "Sprint 2 us10",
       initial_date: "06/10/2017",
       final_date: "13/10/2017",
-      release_id: @another_release.id
+      release_id: @release.id
     )
 
     @another_revision = Revision.create(
-      done_report: "Não foi feito nada",
-      undone_report: "Tudo",
-      sprint_id: @another_sprint.id
+    done_report: "Não foi feito nada",
+    undone_report: "Tudo",
+    sprint_id: @sprint.id
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
   end
 
-  test "should create revision" do
-    @sprint.revision = nil
-    post "/sprints/#{@sprint.id}/revisions", params: {
+  test "should create a Revision" do
+    post "/sprints/#{@no_revision_sprint.id}/revisions", params: {
       "revision": {
-        "done_report": "US14",
-        "undone_report": "US11 e US22"
+        "done_report": "US16",
+        "undone_report": "US17 e US28"
       }
-    }, headers: { Authorization: @token.result }
+     }, headers: { Authorization: @token.result }
 
     assert_response :created
   end
 
+  test "should not create multiple revisions" do
+  post "/sprints/#{@sprint.id}/revisions", params: {
+     "revision": {
+       "done_report": "US16",
+       "undone_report": "US17 e US28"
+     }
+   }, headers: { Authorization: @token.result }
+
+  assert_response :forbidden
+end
+
   test "should not create revision without correct params" do
-    @sprint.revision = nil
+    # Final date before initial date
     post "/sprints/#{@sprint.id}/revisions", params: {
       "revision": {
-        "done_report": "",
-        "undone_report": ""
-      }
-    }, headers: { Authorization: @token.result }
-
-    assert_response :unprocessable_entity
-  end
-
-  test "should not create revision if exist one" do
-    @sprint.revision != nil
-    post "/sprints/#{@sprint.id}/revisions", params: {
-      "revision": {
-        "done_report": "US14",
+        "done_report": "US14" * 500,
         "undone_report": "US11 e US22"
       }
     }, headers: { Authorization: @token.result }
 
     assert_response :forbidden
   end
+
 
   test "should not create revision without authentication" do
     post "/sprints/#{@sprint.id}/revisions", params: {
@@ -177,7 +183,7 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test "should update revisions" do
+  test "should edit revisions" do
     @old_done_report = @revision.done_report
     @old_undone_report = @revision.undone_report
 
@@ -191,11 +197,11 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     @revision.reload
 
     assert_response :ok
-    assert_not_equal @old_undone_report, @revision.done_report
+    assert_not_equal @old_done_report, @revision.done_report
     assert_not_equal @old_undone_report, @revision.undone_report
   end
 
-  test "should not update revisions without authenticantion" do
+  test "should not edit revision without authentication" do
     @old_done_report = @revision.done_report
     @old_undone_report = @revision.undone_report
 
@@ -213,13 +219,30 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @old_undone_report, @revision.undone_report
   end
 
-  test "should not update revisions with blank params" do
+  test "should not edit revision with wrong params" do
     @old_done_report = @revision.done_report
     @old_undone_report = @revision.undone_report
 
     patch "/revisions/#{@revision.id}", params: {
       revision: {
-        done_report: "",
+        done_report: "a"*1501,
+      }
+    }, headers: { Authorization: @token.result }
+
+    @revision.reload
+
+    assert_response :unprocessable_entity
+    assert_equal @old_done_report, @revision.done_report
+    assert_equal @old_undone_report, @revision.undone_report
+  end
+
+  test "should not edit revision with blank params" do
+    @old_done_report = @revision.done_report
+    @old_undone_report = @revision.undone_report
+
+    patch "/revisions/#{@revision.id}", params: {
+      revision: {
+        done_report: "a",
         undone_report: ""
       }
     }, headers: { Authorization: @token.result }
@@ -231,7 +254,7 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @old_undone_report, @revision.undone_report
   end
 
-  test "should not update revisions of another user" do
+  test "should not edit revisions of another user" do
     patch "/revisions/#{@revision.id}", params: {
       revision: {
         done_report: "US05",
