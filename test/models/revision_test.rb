@@ -34,8 +34,8 @@ class RevisionTest < ActiveSupport::TestCase
     )
 
     @revision = Revision.create(
-      done_report: "A us11 foi feita com sucesso",
-      undone_report: "Tudo foi feito",
+      done_report: ["A us11 foi feita com sucesso"],
+      undone_report: ["Tudo foi feito"],
       sprint_id: @sprint.id
     )
   end
@@ -45,12 +45,12 @@ class RevisionTest < ActiveSupport::TestCase
   end
 
   test "Revision should have done_report between 0 and 500 caracters" do
-    @revision.done_report = "r" * 250
+    @revision.done_report = ["r" * 250]
     assert @revision.save
   end
 
   test "Revision should have undone_report between 0 and 500 caracters" do
-    @revision.undone_report = "r" * 250
+    @revision.undone_report = ["r" * 250]
     assert @revision.save
   end
 
