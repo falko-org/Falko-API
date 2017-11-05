@@ -104,4 +104,19 @@ module ValidationsHelper
       render json: { error: "Not Authorized" }, status: 401
     end
   end
+
+  def validate_revision(id)
+    current_user
+    @revision = Revision.find(params[:id].to_i)
+    sprint
+    release
+    project
+    user
+
+    if @current_user.id == @user.id
+      return true
+    else
+      render json: { error: "Not Authorized" }, status: 401
+    end
+  end
 end
