@@ -317,4 +317,35 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unauthorized
   end
+
+  test "should create with story_points" do
+    post "/sprints/#{@sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018",
+        "final_date": "09/01/2018",
+        "story_points": "10"
+      }
+    }, headers: { Authorization: @token.result }
+
+    assert_response :created
+  end
+
+  test "should create without story_points and final_date" do
+    post "/sprints/#{@sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018"
+      }
+    }, headers: { Authorization: @token.result }
+
+    assert_response :created
+  end
+
 end
