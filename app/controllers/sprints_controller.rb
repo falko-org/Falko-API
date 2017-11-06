@@ -7,7 +7,7 @@ class SprintsController < ApplicationController
     validate_release(0, :release_id)
   end
 
-  before_action only: [:show, :edit, :update, :destroy] do
+  before_action only: [:show, :update, :destroy] do
     validate_sprint(:id, 0)
   end
 
@@ -20,11 +20,7 @@ class SprintsController < ApplicationController
 
   # GET /sprints/1
   def show
-    if validate_sprint
-      render json: @sprint
-    else
-      render json: { error: 'Not Authorized' }, status: 401
-    end
+    render json: @sprint
   end
 
   # POST /sprints
@@ -35,34 +31,29 @@ class SprintsController < ApplicationController
     if @sprint.save
       render json: @sprint, status: :created
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: @sprint.errors, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /sprints/1
   def update
-    if validate_sprint
-      if @sprint.update(sprint_params)
-        render json: @sprint
-      else
-        render json: @sprint.errors, status: :unprocessable_entity
-      end
+    if @sprint.update(sprint_params)
+      render json: @sprint
     else
-      render json: { error: 'Not Authorized' }, status: 401
+      render json: @sprint.errors, status: :unprocessable_entity
     end
   end
 
   # DELETE /sprints/1
   def destroy
-    if validate_sprint
-      @sprint = Sprint.find(params[:id])
-      @sprint.destroy
-    else
-      render json: { error: 'Not Authorized' }, status: 401
-    end
+    @sprint.destroy
   end
 
   private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_sprint
+      @sprint = Sprint.find(params[:id])
+    end
 
     # Only allow a trusted parameter "white list" through.
     def sprint_params

@@ -1,16 +1,18 @@
 require "rest-client"
 class UsersController < ApplicationController
-  skip_before_action :authenticate_request, only: [:create, :all, :request_github_token]
-  before_action :set_user, only: [:show, :update, :destroy]
+  include ValidationsHelper
+
+  skip_before_action :authenticate_request, only: [:create, :all]
+
+  before_action only: [:show, :update, :destroy] do
+    set_user
+    validate_user(:id, 0)
+  end
 
   # GET /users/1
   def show
-    if validate_user
-      @user = User.find(params[:id].to_i)
-      render json: @user
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    @user = User.find(params[:id].to_i)
+    render json: @user
   end
 
   # POST /users
@@ -30,11 +32,13 @@ class UsersController < ApplicationController
 
   def request_github_token
     code_token = params[:code]
-    result = RestClient.post("https://github.com/login/oauth/access_token",
+    result = RestClient.post(
+      "https://github.com/login/oauth/access_token",
       client_id: "cbd5f91719282354f09b",
-       client_secret: "634dd13c943b8196d4345334031c43d6d5a75fc8",
-       code: code_token,
-       accept: :json)
+      client_secret: "634dd13c943b8196d4345334031c43d6d5a75fc8",
+      code: code_token,
+      accept: :json
+    )
 
 
     access_token = result.split("&")[0].split("=")[1]
@@ -55,43 +59,25 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    if validate_user
-      if @user.update(user_params)
-        render json: @user
-      else
-        render json: @user.errors, status: :unprocessable_entity
-      end
+    if @user.update(user_params)
+      render json: @user
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
 
   # DELETE /users/1
   def destroy
-    if validate_user
-      @user.destroy
-      render json: { status: 200, message: "Usuario excluido com sucesso" }.to_json
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    @user.destroy
+    render json: { status: 200, message: "Usuario excluido com sucesso" }.to_json
   end
 
   private
-
     def set_user
       @user = User.find(params[:id])
     end
 
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation, :github)
-    end
-
-    def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :github)
-    end
-
-    def validate_user
-      @current_user = AuthorizeApiRequest.call(request.headers).result
-      @current_user.id == (params[:id]).to_i
     end
 end
