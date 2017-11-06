@@ -1,13 +1,13 @@
-require 'test_helper'
+require "test_helper"
 
 class RetrospectiveTest < ActiveSupport::TestCase
   def setup
     @user = User.create(
-      name: 'Ronaldo',
-      email: 'ronaldofenomeno@gmail.com',
-      password: '123456789',
-      password_confirmation: '123456789',
-      github: 'ronaldobola'
+      name: "Ronaldo",
+      email: "ronaldofenomeno@gmail.com",
+      password: "123456789",
+      password_confirmation: "123456789",
+      github: "ronaldobola"
     )
 
     @project = Project.create(
