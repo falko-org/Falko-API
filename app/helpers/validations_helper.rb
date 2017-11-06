@@ -122,4 +122,9 @@ module ValidationsHelper
       render json: { error: "Not Authorized" }, status: 401
     end
   end
+
+  def update_amount_of_sprints
+    @release.amount_of_sprints = @release.sprints.count
+    @release.save
+  end
 end
