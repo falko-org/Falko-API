@@ -2,18 +2,73 @@ require "test_helper"
 
 class SprintsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
-    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, check_project: true)
-    @release = Release.create(name: "R1", description: "Description", initial_date: "01/01/2018", final_date: "01/01/2019", amount_of_sprints: "20", project_id: @project.id)
-    @sprint = Sprint.create(name: "Sprint 1", description: "Sprint 1 us10", initial_date: "06/10/2017", final_date: "13/10/2017", release_id: @release.id)
+    @user = User.create(
+      name: "Ronaldo",
+      email: "Ronaldofenomeno@gmail.com",
+      password: "123456789",
+      password_confirmation: "123456789",
+      github: "ronaldobola"
+    )
 
-    @user2 = User.create(name: "Ronaldo 2", email: "Ronaldofenomeno1@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola2")
-    @project2 = Project.create(name: "Falko 2", description: "Descrição do projeto 2.", user_id: @user2.id, check_project: true)
-    @release = Release.create(name: "R2", description: "Description", initial_date: "01/01/2018", final_date: "01/01/2019", amount_of_sprints: "22", project_id: @project.id)
-    @sprint2 = Sprint.create(name: "Sprint 2", description: "Sprint 2 us10", initial_date: "06/10/2017", final_date: "13/10/2017", release_id: @release.id)
+    @project = Project.create(
+      name: "Falko",
+      description: "Descrição do projeto.",
+      user_id: @user.id,
+      check_project: true
+    )
+
+    @release = Release.create(
+      name: "R1",
+      description: "Description",
+      initial_date: "01/01/2018",
+      final_date: "01/01/2019",
+      amount_of_sprints: "20",
+      project_id: @project.id
+    )
+
+    @sprint = Sprint.create(
+      name: "Sprint 1",
+      description: "Sprint 1 us10",
+      initial_date: "06/10/2017",
+      final_date: "13/10/2017",
+      release_id: @release.id
+    )
+
+
+    @another_user = User.create(
+      name: "Ronaldo 2",
+      email: "Ronaldofenomeno1@gmail.com",
+      password: "123456789",
+      password_confirmation: "123456789",
+      github: "ronaldobola2"
+    )
+
+    @another_project = Project.create(
+      name: "Falko 2",
+      description: "Descrição do projeto 2.",
+      user_id: @another_user.id,
+      check_project: true
+    )
+
+    @another_release = Release.create(
+      name: "R2",
+      description: "Description",
+      initial_date: "01/01/2018",
+      final_date: "01/01/2019",
+      amount_of_sprints: "22",
+      project_id: @another_project.id
+    )
+
+    @another_sprint = Sprint.create(
+      name: "Sprint 2",
+      description: "Sprint 2 us10",
+      initial_date: "06/10/2017",
+      final_date: "13/10/2017",
+      release_id: @another_release.id
+    )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
-    @token2 = AuthenticateUser.call(@user2.email, @user2.password)
+    @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
   end
 
 
@@ -142,7 +197,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
         "initial_date": "13/10/2017",
         "final_date": "25/06/1996"
       }
-    }, headers: { Authorization: @token2.result }
+    }, headers: { Authorization: @another_token.result }
 
     assert_response :unauthorized
   end
@@ -175,7 +230,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not delete a sprint that belong to another user" do
-    delete "/sprints/#{@sprint.id}", headers: { Authorization: @token2.result }
+    delete "/sprints/#{@sprint.id}", headers: { Authorization: @another_token.result }
 
     assert_response :unauthorized
   end
@@ -187,7 +242,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not show a sprint information that belong to another user" do
-    get "/sprints/#{@sprint.id}", headers: { Authorization: @token2.result }
+    get "/sprints/#{@sprint.id}", headers: { Authorization: @another_token.result }
 
     assert_response :unauthorized
   end
