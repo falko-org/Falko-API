@@ -2,41 +2,33 @@ class IssuesController < ApplicationController
   before_action :set_authorization, :set_path
 
   def index
-
     @issues = @client.list_issues(@path)
 
     convert_form_params(@issues)
 
     render json: @form_params
-
   end
 
   def create
-
-    @issue = @client.create_issue(@path, issue_params[:name], issue_params[:body], options = {assignee: issue_params[:assignee], labels: issue_params[:labels]})
+    @issue = @client.create_issue(@path, issue_params[:name], issue_params[:body], options = { assignee: issue_params[:assignee], labels: issue_params[:labels] })
 
     convert_form_params(@issue)
 
     render json: @form_params, status: :created
-
   end
 
   def update
-
-    @issue = @client.update_issue(@path, issue_params[:number], issue_params[:name], issue_params[:body], options = {assignee: issue_params[:assignee], labels: [issue_params[:labels]]})
+    @issue = @client.update_issue(@path, issue_params[:number], issue_params[:name], issue_params[:body], options = { assignee: issue_params[:assignee], labels: [issue_params[:labels]] })
 
     convert_form_params(@issue)
 
     render json: @form_params
-
   end
 
   def close
-
     @issue = @client.close_issue(@path, issue_params[:number])
 
     render status: 200
-
   end
 
   private
@@ -47,7 +39,6 @@ class IssuesController < ApplicationController
     end
 
     def set_path
-
       @project = Project.find(params[:id])
 
       if @project.name.include? "/"
@@ -76,5 +67,4 @@ class IssuesController < ApplicationController
     def issue_params
       params.require(:issue).permit(:name, :body, :assignee, :labels, :number)
     end
-
 end
