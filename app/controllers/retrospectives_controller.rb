@@ -8,7 +8,7 @@ class RetrospectivesController < ApplicationController
   end
 
   before_action only: [:show, :update, :destroy] do
-    validate_retrospective(:id)
+    validate_sprint_dependencies(:id, "retrospective")
   end
 
 

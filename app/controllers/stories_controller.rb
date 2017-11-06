@@ -8,7 +8,7 @@ class StoriesController < ApplicationController
   end
 
   before_action only: [:show, :edit, :update, :destroy] do
-    validate_story(:id)
+    validate_sprint_dependencies(:id, "story")
   end
 
   def index
