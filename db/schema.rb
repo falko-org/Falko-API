@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20171106001427) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
-    t.boolean "check_project"
+    t.boolean "is_project_from_github"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
@@ -35,6 +35,17 @@ ActiveRecord::Schema.define(version: 20171106001427) do
     t.date "initial_date"
     t.date "final_date"
     t.index ["project_id"], name: "index_releases_on_project_id"
+  end
+
+  create_table "retrospectives", force: :cascade do |t|
+    t.text "sprint_report"
+    t.text "positive_points", default: [], array: true
+    t.text "negative_points", default: [], array: true
+    t.text "improvements", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "sprint_id"
+    t.index ["sprint_id"], name: "index_retrospectives_on_sprint_id"
   end
 
   create_table "sprints", force: :cascade do |t|
@@ -74,6 +85,7 @@ ActiveRecord::Schema.define(version: 20171106001427) do
 
   add_foreign_key "projects", "users"
   add_foreign_key "releases", "projects"
+  add_foreign_key "retrospectives", "sprints"
   add_foreign_key "sprints", "releases"
   add_foreign_key "stories", "sprints"
 end
