@@ -11,6 +11,7 @@ Rails.application.routes.draw do
         resources :sprints do
           resources :stories
           resources :revisions
+          resources :retrospectives
         end
       end
     end

@@ -200,4 +200,35 @@ revisions = [
     undone_report: ["Não foi feito a historia us24"],
     sprint_id: "4"
   )
+
+puts "Creating Retrospective"
+retrospectives = [
+  Retrospective.find_or_create_by(
+    sprint_report: "Sprint description",
+    positive_points: ["Very good"],
+    negative_points: ["No tests"],
+    improvements: ["Improve front-end"],
+    sprint_id: "1"
+  ),
+  Retrospective.find_or_create_by(
+    sprint_report: "Sprint description",
+    positive_points: ["Very good"],
+    negative_points: ["No tests"],
+    improvements: ["Improve back-end"],
+    sprint_id: "2"
+  ),
+  Retrospective.find_or_create_by(
+    sprint_report: "Sprint description",
+    positive_points: ["Very good"],
+    negative_points: ["No tests"],
+    improvements: ["Improve back-end"],
+    sprint_id: "3"
+  ),
+  Retrospective.find_or_create_by(
+    sprint_report: "Sprint description",
+    positive_points: ["Very good"],
+    negative_points: ["No tests"],
+    improvements: ["Improve front-end"],
+    sprint_id: "4"
+  ),
 ]
