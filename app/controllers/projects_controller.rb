@@ -66,7 +66,7 @@ class ProjectsController < ApplicationController
     if @project.update(project_params)
       render json: @project
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: @project.errors, status: :unprocessable_entity
     end
   end
 

@@ -79,23 +79,23 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # test "should not update project with invalid parameters" do
-  #   @old_name = @project.name
-  #   @old_description = @project.description
+  test "should not update project with invalid parameters" do
+    @old_name = @project.name
+    @old_description = @project.description
 
-  #   patch "/projects/#{@project.id}", params: {
-  #     project: {
-  #       "name": "Falko BackEnd",
-  #       "description": "a",
-  #       "check_project": "a"
-  #     }
-  #   }, headers: { Authorization: @token.result }
-  #   @project.reload
+    patch "/projects/#{@project.id}", params: {
+      project: {
+        "name": "a",
+        "description": "a",
+        "check_project": "false"
+      }
+    }, headers: { Authorization: @token.result }
+    @project.reload
 
-  #   assert_response :unprocessable_entity
-  #   assert_equal @old_name, @project.name
-  #   assert_equal @old_description, @project.description
-  # end
+    assert_response :unprocessable_entity
+    assert_equal @old_name, @project.name
+    assert_equal @old_description, @project.description
+  end
 
   test "should destroy project" do
     assert_difference("Project.count", -1) do

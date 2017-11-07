@@ -69,7 +69,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     @user.destroy
-    render json: { status: 200, message: "Usuario excluido com sucesso" }.to_json
+    render json: { status: 200, message: "User deleted successfully" }.to_json
   end
 
   private

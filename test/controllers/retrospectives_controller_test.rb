@@ -3,11 +3,11 @@ require "test_helper"
 class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create(
-      name: "Ronaldo",
-      email: "ronaldofenomeno@gmail.com",
+      name: "Ronald",
+      email: "ronald@gmail.com",
       password: "123456789",
       password_confirmation: "123456789",
-      github: "ronaldobola"
+      github: "ronaldGit"
     )
 
     @project = Project.create(
@@ -57,12 +57,12 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
       email: "felipe@gmail.com",
       password: "123456789",
       password_confirmation: "123456789",
-      github: "felipe"
+      github: "felipeGit"
     )
 
     @another_project = Project.create(
       name: "Falko",
-      description: "Descrição do projeto.",
+      description: "Project Description.",
       check_project: true,
       user_id: @another_user.id
     )
@@ -77,8 +77,8 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
     )
 
     @another_sprint = Sprint.create(
-      name: "Sprint1",
-      description: "Essa sprint",
+      name: "Sprint 1",
+      description: "A sprint",
       initial_date: "23-04-1993",
       final_date: "23-04-2003",
       release_id: @another_release.id
