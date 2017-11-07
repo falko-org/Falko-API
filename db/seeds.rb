@@ -200,6 +200,7 @@ revisions = [
     undone_report: ["Não foi feito a historia us24"],
     sprint_id: "4"
   )
+]
 
 puts "Creating Retrospective"
 retrospectives = [
