@@ -181,23 +181,23 @@ stories = [
 puts "Creating Revisions"
 revisions = [
   Revision.find_or_create_by(
-    done_report: "Foi feito a historia us11",
-    undone_report: "Não foi feito a historia us21",
+    done_report: ["Foi feito a historia us11"],
+    undone_report: ["Não foi feito a historia us21"],
     sprint_id: "1"
   ),
   Revision.find_or_create_by(
-    done_report: "Foi feito a historia us12",
-    undone_report: "Não foi feito a historia us22",
+    done_report: ["Foi feito a historia us12"],
+    undone_report: ["Não foi feito a historia us22"],
     sprint_id: "2"
   ),
   Revision.find_or_create_by(
-    done_report: "Foi feito a historia us13",
-    undone_report: "Não foi feito a historia us23",
+    done_report: ["Foi feito a historia us13"],
+    undone_report: ["Não foi feito a historia us23"],
     sprint_id: "3"
   ),
   Revision.find_or_create_by(
-    done_report: "Foi feito a historia us14",
-    undone_report: "Não foi feito a historia us24",
+    done_report: ["Foi feito a historia us14"],
+    undone_report: ["Não foi feito a historia us24"],
     sprint_id: "4"
   )
 ]

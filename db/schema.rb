@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(version: 20171104121652) do
   end
 
   create_table "revisions", force: :cascade do |t|
-    t.text "done_report"
-    t.text "undone_report"
+    t.text "done_report", array: true
+    t.text "undone_report", array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "sprint_id"
