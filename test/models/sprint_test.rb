@@ -12,7 +12,7 @@ class SprintTest < ActiveSupport::TestCase
 
     @project = Project.create(
       name: "Falko",
-      description: "Esse projeto faz parte da disciplina MDS.",
+      description: "Some project description.",
       check_project: true,
       user_id: @user.id
     )

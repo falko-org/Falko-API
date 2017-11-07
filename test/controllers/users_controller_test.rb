@@ -151,7 +151,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should authenticate user with github" do
-    RestClient.stub :post, "access_token=token123&outra_coisa=outrosvalores" do
+    RestClient.stub :post, "access_token=token123&something_else=anothervalue" do
       post "/request_github_token", params: {
         "code": "code123",
         "id": "#{@user.id}"
@@ -163,7 +163,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not authenticate with bad verification code" do
-    RestClient.stub :post, "access_token=bad_verification_code&outra_coisa=outrosvalores" do
+    RestClient.stub :post, "access_token=bad_verification_code&something_else=anothervalue" do
       post "/request_github_token", params: {
         "code": "code123",
         "id": "#{@user.id}"
@@ -174,7 +174,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not authenticate with another id" do
-    RestClient.stub :post, "access_token=token123&outra_coisa=outrosvalores" do
+    RestClient.stub :post, "access_token=token123&something_else=anothervalue" do
 
       exception = assert_raises ActiveRecord::RecordNotFound do
         post "/request_github_token", params: {
@@ -189,7 +189,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should render unprocessable entity" do
-    RestClient.stub :post, "access_token=&outra_coisa=outrosvalores" do
+    RestClient.stub :post, "access_token=&something_else=anothervalue" do
       post "/request_github_token", params: {
         "code": "code123",
         "id": "#{@user.id}"

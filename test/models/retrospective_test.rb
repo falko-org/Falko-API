@@ -12,7 +12,7 @@ class RetrospectiveTest < ActiveSupport::TestCase
 
     @project = Project.create(
       name: "Falko",
-      description: "Esse projeto faz parte da disciplina MDS.",
+      description: "Some project description.",
       check_project: true,
       user_id: @user.id
     )
@@ -27,7 +27,7 @@ class RetrospectiveTest < ActiveSupport::TestCase
 
     @sprint = Sprint.create(
       name: "Sprint1",
-      description: "Essa sprint",
+      description: "Some sprint",
       initial_date: "23/04/1993",
       final_date: "23/04/2003",
       release_id: @release.id
