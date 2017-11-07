@@ -55,12 +55,12 @@ class RevisionTest < ActiveSupport::TestCase
   end
 
   test "Revision should have done_report less than 500 caracters" do
-    @revision.done_report = ["b" * 501]
+    @revision.done_report = "b" * 501
     assert_not @revision.save
   end
 
   test "Revision should have undone_report less than 500 caracters" do
-    @revision.undone_report = ["b" * 501]
+    @revision.undone_report = "b" * 501
     assert_not @revision.save
   end
 end
