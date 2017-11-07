@@ -318,7 +318,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test "should create with story_points" do
+  test "should create a story with story points" do
     post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
@@ -334,7 +334,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
   end
 
-  test "should create without story_points and final_date" do
+  test "should create a story without story_points and final_date" do
     post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",

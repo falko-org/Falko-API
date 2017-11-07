@@ -48,7 +48,7 @@ class StoriesController < ApplicationController
   def destroy
     @story.destroy
   end
-  
+
   private
     def set_story
       @story = Story.find(params[:id])
