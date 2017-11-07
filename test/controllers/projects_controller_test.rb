@@ -14,14 +14,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       "name": "Falko",
       "description": "Some project description 1.",
       "user_id": @user.id,
-      "check_project": true
+      "is_project_from_github": true
     )
 
     @project2 = Project.create(
       "name": "Falko",
       "description": "Some project description 2.",
       "user_id": @user.id,
-      "check_project": false
+      "is_project_from_github": false
     )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
@@ -33,7 +33,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
           "name": "Falko",
           "description": "Some project description.",
           "user_id": @user.id,
-          "check_project": true
+          "is_project_from_github": true
         }
       }, headers: { Authorization: @token.result }
 
@@ -47,7 +47,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         "project": {
           "name": "",
           "description": "A" * 260,
-          "check_project": true
+          "is_project_from_github": true
         }
       }, headers: { Authorization: @token.result }
 
@@ -69,7 +69,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         project: {
           "name": "Falko BackEnd",
           "description": "Falko BackEnd!",
-          "check_project": "true"
+          "is_project_from_github": "true"
         }
       }, headers: { Authorization: @token.result }
       @project.reload
@@ -87,7 +87,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         project: {
           "name": "a",
           "description": "a",
-          "check_project": "false"
+          "is_project_from_github": "false"
         }
       }, headers: { Authorization: @token.result }
       @project.reload
@@ -221,7 +221,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should not import a project from github if the check_project is invalid" do
+  test "should not import a project from github if the is_project_from_github is invalid" do
       post "/users/#{@user.id}/projects", params: {
         "project": {
           "name": "Falko",

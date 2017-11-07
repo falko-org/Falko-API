@@ -14,7 +14,7 @@ class ReleaseTest < ActiveSupport::TestCase
       name: "Falko",
       description: "Some project description.",
       user_id: @user.id,
-      check_project: true
+      is_project_from_github: true
     )
 
     @release = Release.create(

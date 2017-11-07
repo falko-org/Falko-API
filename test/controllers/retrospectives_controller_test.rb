@@ -13,7 +13,7 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
     @project = Project.create(
       name: "Falko",
       description: "A Project.",
-      check_project: true,
+      is_project_from_github: true,
       user_id: @user.id
     )
 
@@ -63,7 +63,7 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
     @another_project = Project.create(
       name: "Falko",
       description: "Project Description.",
-      check_project: true,
+      is_project_from_github: true,
       user_id: @another_user.id
     )
 

@@ -80,6 +80,6 @@ class ProjectsController < ApplicationController
     end
 
     def project_params
-      params.require(:project).permit(:name, :description, :check_project, :user_id)
+      params.require(:project).permit(:name, :description, :is_project_from_github, :user_id)
     end
 end

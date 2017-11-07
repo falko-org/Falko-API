@@ -14,7 +14,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
       name: "Falko",
       description: "Description.",
       user_id: @user.id,
-      check_project: true
+      is_project_from_github: true
     )
 
     @release = Release.create(
@@ -39,7 +39,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
       name: "Futebol",
       description: "Description.",
       user_id: @user.id,
-      check_project: true
+      is_project_from_github: true
     )
 
     @another_release = Release.create(

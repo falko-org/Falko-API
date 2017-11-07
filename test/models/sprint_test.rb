@@ -13,7 +13,7 @@ class SprintTest < ActiveSupport::TestCase
     @project = Project.create(
       name: "Falko",
       description: "Some project description.",
-      check_project: true,
+      is_project_from_github: true,
       user_id: @user.id
     )
 
