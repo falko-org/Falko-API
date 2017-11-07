@@ -126,6 +126,23 @@ module ValidationsHelper
     end
   end
 
+  def create_sprint_dependencies(component_type, component_params)
+    if component_type == "revision" && @sprint.revision == nil
+      @component = Revision.create(component_params)
+    elsif component_type == "retrospective" && @sprint.retrospective == nil
+      @component = Retrospective.create(component_params)
+    else
+      render json: { error: "Cannot create multiple #{component_type}" }, status: 403
+    end
+
+    @component.sprint_id = @sprint.id
+    if @component.save
+      render json: @component, status: :created
+    else
+      render json: @component.errors, status: :unprocessable_entity
+    end
+  end
+
   def update_amount_of_sprints
     @release.amount_of_sprints = @release.sprints.count
     @release.save

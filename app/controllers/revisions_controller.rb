@@ -17,18 +17,7 @@ class RevisionsController < ApplicationController
   end
 
   def create
-    if @sprint.revision == nil
-      @revision = Revision.create(revision_params)
-      @revision.sprint_id = @sprint.id
-
-      if @revision.save
-        render json: @revision, status: :created
-      else
-        render json: @revision.errors, status: :unprocessable_entity
-      end
-    else
-      render json: { error: "Cannot create multiple revisions" }, status: 403
-    end
+    create_sprint_dependencies("revision", revision_params)
   end
 
   def show
