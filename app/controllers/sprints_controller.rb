@@ -7,7 +7,7 @@ class SprintsController < ApplicationController
     validate_release(0, :release_id)
   end
 
-  before_action only: [:show, :edit, :update, :destroy] do
+  before_action only: [:show, :update, :destroy] do
     validate_sprint(:id, 0)
   end
 

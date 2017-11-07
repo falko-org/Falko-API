@@ -1,6 +1,8 @@
 class ReleasesController < ApplicationController
   include ValidationsHelper
 
+  before_action :set_release, only: [:show, :update, :destroy]
+
   before_action only: [:index, :create] do
     validate_project(0, :project_id)
   end
@@ -15,22 +17,8 @@ class ReleasesController < ApplicationController
     render json: @releases
   end
 
-  def new
-    @project = Project.find(params[:project_id])
-    @release = Release.new
-    @release.project = @project
-
-    render json: @release
-  end
-
   def show
-    @release = Release.find(params[:id])
     update_amount_of_sprints
-    render json: @release
-  end
-
-  def edit
-    @release = Release.find(params[:id])
     render json: @release
   end
 
@@ -47,7 +35,6 @@ class ReleasesController < ApplicationController
   end
 
   def update
-    @release = Release.find(params[:id])
     if @release.update(release_params)
       render json: @release
     else
@@ -56,11 +43,14 @@ class ReleasesController < ApplicationController
   end
 
   def destroy
-    @release = Release.find(params[:id])
     @release.destroy
   end
 
   private
+    def set_release
+      @release = Release.find(params[:id])
+    end
+
     def release_params
       params.require(:release).permit(:name, :description, :amount_of_sprints, :initial_date, :final_date)
     end
