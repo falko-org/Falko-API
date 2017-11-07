@@ -13,7 +13,7 @@ class RetrospectiveTest < ActiveSupport::TestCase
     @project = Project.create(
       name: "Falko",
       description: "Esse projeto faz parte da disciplina MDS.",
-      check_project: true,
+      is_project_from_github: true,
       user_id: @user.id
     )
 

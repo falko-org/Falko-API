@@ -4,7 +4,7 @@ class StoryTest < ActiveSupport::TestCase
   def setup
     @user = User.create(name: "Gilberto", email: "gilbertin@teste.com", password: "1234567", password_confirmation: "1234567", github: "gilbertoCoder")
 
-    @project = Project.create(name: "Falko", description: "Esse projeto faz parte da disciplina MDS.", user_id: @user.id, check_project: true)
+    @project = Project.create(name: "Falko", description: "Esse projeto faz parte da disciplina MDS.", user_id: @user.id, is_project_from_github: true)
 
     @release = Release.create(name: "Release 1", description: "First Release.", initial_date: "01/01/2017", final_date: "02/02/2019", project_id: @project.id)
 

@@ -14,7 +14,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       name: "Falko",
       description: "Descrição do projeto.",
       user_id: @user.id,
-      check_project: true
+      is_project_from_github: true
     )
 
     @release = Release.create(
@@ -47,7 +47,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       name: "Falko 2",
       description: "Descrição do projeto 2.",
       user_id: @another_user.id,
-      check_project: true
+      is_project_from_github: true
     )
 
     @another_release = Release.create(
