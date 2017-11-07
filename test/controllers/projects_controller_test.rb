@@ -12,14 +12,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     @project = Project.create(
       "name": "Falko",
-      "description": "Descrição do projeto.",
+      "description": "Some project description 1.",
       "user_id": @user.id,
       "is_project_from_github": true
     )
 
     @project2 = Project.create(
       "name": "Falko",
-      "description": "Descrição do projeto.",
+      "description": "Some project description 2.",
       "user_id": @user.id,
       "is_project_from_github": false
     )
@@ -28,32 +28,32 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create project" do
-    post "/users/#{@user.id}/projects", params: {
-       "project": {
-         "name": "Falko",
-         "description": "Descrição do projeto.",
-         "user_id": @user.id,
-         "is_project_from_github": true
-       }
-     }, headers: { Authorization: @token.result }
+      post "/users/#{@user.id}/projects", params: {
+        "project": {
+          "name": "Falko",
+          "description": "Some project description.",
+          "user_id": @user.id,
+          "is_project_from_github": true
+        }
+      }, headers: { Authorization: @token.result }
 
-    assert_response :created
-  end
+      assert_response :created
+    end
 
   test "should not create project with invalid parameters" do
-    @old_count = Project.count
+      @old_count = Project.count
 
-    post "/users/#{@user.id}/projects", params: {
-       "project": {
-         "name": "",
-         "description": "A" * 260,
-         "is_project_from_github": true
-       }
-     }, headers: { Authorization: @token.result }
+      post "/users/#{@user.id}/projects", params: {
+        "project": {
+          "name": "",
+          "description": "A" * 260,
+          "is_project_from_github": true
+        }
+      }, headers: { Authorization: @token.result }
 
-    assert_response :unprocessable_entity
-    assert_equal @old_count, Project.count
-  end
+      assert_response :unprocessable_entity
+      assert_equal @old_count, Project.count
+    end
 
   test "should show project" do
     get "/projects/#{@project.id}", headers: { Authorization: @token.result }
@@ -62,40 +62,40 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update project" do
-    @old_name = @project.name
-    @old_description = @project.description
+      @old_name = @project.name
+      @old_description = @project.description
 
-    patch "/projects/#{@project.id}", params: {
-      project: {
-        "name": "Falko BackEnd",
-        "description": "Este é o BackEnd do Falko!",
-        "is_project_from_github": "true"
-      }
-    }, headers: { Authorization: @token.result }
-    @project.reload
+      patch "/projects/#{@project.id}", params: {
+        project: {
+          "name": "Falko BackEnd",
+          "description": "Falko BackEnd!",
+          "is_project_from_github": "true"
+        }
+      }, headers: { Authorization: @token.result }
+      @project.reload
 
-    assert_not_equal @old_name, @project.name
-    assert_not_equal @old_description, @project.description
-    assert_response :success
-  end
+      assert_not_equal @old_name, @project.name
+      assert_not_equal @old_description, @project.description
+      assert_response :success
+    end
 
   test "should not update project with invalid parameters" do
-    @old_name = @project.name
-    @old_description = @project.description
+      @old_name = @project.name
+      @old_description = @project.description
 
-    patch "/projects/#{@project.id}", params: {
-      project: {
-        "name": "a",
-        "description": "a",
-        "is_project_from_github": "false"
-      }
-    }, headers: { Authorization: @token.result }
-    @project.reload
+      patch "/projects/#{@project.id}", params: {
+        project: {
+          "name": "a",
+          "description": "a",
+          "is_project_from_github": "false"
+        }
+      }, headers: { Authorization: @token.result }
+      @project.reload
 
-    assert_response :unprocessable_entity
-    assert_equal @old_name, @project.name
-    assert_equal @old_description, @project.description
-  end
+      assert_response :unprocessable_entity
+      assert_equal @old_name, @project.name
+      assert_equal @old_description, @project.description
+    end
 
   test "should destroy project" do
     assert_difference("Project.count", -1) do
@@ -109,42 +109,42 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     mock = Minitest::Mock.new
 
     def mock.user
-      Sawyer::Resource.new(Sawyer::Agent.new("/teste"), login: "teste")
+      Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "test")
     end
 
     def mock.repositories
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test") ]
     end
 
     def mock.organizations
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "test") ]
     end
 
     def mock.organization_repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test1") ]
     end
 
     Octokit::Client.stub :new, mock do
       get "/repos", headers: { Authorization: @token.result }
-      assert response.parsed_body["user"] == [{ "login"=>"teste" }, { "repos" => ["teste"] }]
+      assert response.parsed_body["user"] == [{ "login" => "test" }, { "repos" => ["test"] }]
       assert_response :success
     end
   end
 
   test "should not see repositories if user email is wrong" do
-    @token = AuthenticateUser.call("testeerrado@teste.com", @user.password)
+    @token = AuthenticateUser.call("wrongtest@test.com", @user.password)
 
     mock = Minitest::Mock.new
     def mock.repositories
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test") ]
     end
 
     def mock.organizations
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "test") ]
     end
 
     def mock.organization_repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test1") ]
     end
 
     Octokit::Client.stub :new, mock do
@@ -155,19 +155,19 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not see repositories if user password is wrong" do
-    @token = AuthenticateUser.call(@user.email, "testeerrado")
+    @token = AuthenticateUser.call(@user.email, "wrongtest")
 
     mock = Minitest::Mock.new
     def mock.repositories
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test") ]
     end
 
     def mock.organizations
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "test") ]
     end
 
     def mock.organization_repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test1") ]
     end
 
     Octokit::Client.stub :new, mock do
@@ -178,19 +178,19 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not see repositories if user password and email are wrong" do
-    @token = AuthenticateUser.call("testeerrado2@teste.com", "testeerrado")
+    @token = AuthenticateUser.call("wrongtest2@test.com", "wrongtest")
 
     mock = Minitest::Mock.new
     def mock.repositories
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test") ]
     end
 
     def mock.organizations
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "test") ]
     end
 
     def mock.organization_repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test1") ]
     end
 
     Octokit::Client.stub :new, mock do
@@ -203,15 +203,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should not see repositories if user token is wrong" do
     mock = Minitest::Mock.new
     def mock.repositories
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test") ]
     end
 
     def mock.organizations
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "test") ]
     end
 
     def mock.organization_repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test1") ]
     end
 
     Octokit::Client.stub :new, mock do
@@ -222,14 +222,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not import a project from github if the is_project_from_github is invalid" do
-    post "/users/#{@user.id}/projects", params: {
-      "project": {
-        "name": "Falko",
-        "description": "Descrição do projeto.",
-        "user_id": @user.id
-      }
-    }, headers: { Authorization: @token.result }
+      post "/users/#{@user.id}/projects", params: {
+        "project": {
+          "name": "Falko",
+          "description": "Some project description.",
+          "user_id": @user.id
+        }
+      }, headers: { Authorization: @token.result }
 
-    assert_response :unprocessable_entity
-  end
+      assert_response :unprocessable_entity
+    end
 end
