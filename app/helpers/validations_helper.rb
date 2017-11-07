@@ -15,6 +15,14 @@ module ValidationsHelper
     @release = Release.find(@sprint.release_id)
   end
 
+  def sprint(component_type)
+    if component_type == "story"
+      @sprint = Sprint.find(@story.sprint_id)
+    elsif component_type == "revision"
+      @sprint = Sprint.find(@revision.sprint_id)
+    end
+  end
+
   def verifies_id(current_id, previous_id, component_type)
     if component_type == "project" && current_id != 0
       id = current_id
@@ -86,25 +94,15 @@ module ValidationsHelper
     end
   end
 
-  def validate_story(id)
+  def validate_sprint_dependencies(id, component_type)
     current_user
-    @story = Story.find(params[:id].to_i)
-    @sprint = Sprint.find(@story.sprint_id)
-    release
-    project
-    user
-
-    if @current_user.id == @user.id
-      return true
-    else
-      render json: { error: "Not Authorized" }, status: 401
+    if component_type == "story"
+      @story = Story.find(params[:id].to_i)
+      sprint("story")
+    elsif component_type == "revision"
+      @revision = Revision.find(params[:id].to_i)
+      sprint("revision")
     end
-  end
-
-  def validate_revision(id)
-    current_user
-    @revision = Revision.find(params[:id].to_i)
-    @sprint = Sprint.find(@revision.sprint_id)
     release
     project
     user

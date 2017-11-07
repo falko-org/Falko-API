@@ -8,7 +8,7 @@ class RevisionsController < ApplicationController
   end
 
   before_action only: [:show, :edit, :update, :destroy] do
-    validate_revision(:id)
+    validate_sprint_dependencies(:id, "revision")
   end
 
   def index
