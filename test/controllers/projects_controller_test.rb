@@ -110,20 +110,20 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
 
     def mock.repositories
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), name: "teste") ]
     end
 
     def mock.organizations
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), login: "teste") ]
     end
 
     def mock.organization_repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), name: "teste1") ]
     end
 
     Octokit::Client.stub :new, mock do
       get "/repos", headers: { Authorization: @token.result }
-      assert response.parsed_body["user"] == [{ "login"=>"teste" }, { "repos" => ["teste"] }]
+      assert response.parsed_body["user"] == [{ "login" => "teste" }, { "repos" => ["teste"] }]
       assert_response :success
     end
   end
@@ -133,15 +133,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
     def mock.repositories
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), name: "teste") ]
     end
 
     def mock.organizations
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), login: "teste") ]
     end
 
     def mock.organization_repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), name: "teste1") ]
     end
 
     Octokit::Client.stub :new, mock do
@@ -156,15 +156,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
     def mock.repositories
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), name: "teste") ]
     end
 
     def mock.organizations
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), login: "teste") ]
     end
 
     def mock.organization_repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), name: "teste1") ]
     end
 
     Octokit::Client.stub :new, mock do
@@ -179,15 +179,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
     def mock.repositories
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), name: "teste") ]
     end
 
     def mock.organizations
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), login: "teste") ]
     end
 
     def mock.organization_repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), name: "teste1") ]
     end
 
     Octokit::Client.stub :new, mock do
@@ -202,15 +202,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
     def mock.repositories
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), name: "teste") ]
     end
 
     def mock.organizations
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { login: "teste" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), login: "teste") ]
     end
 
     def mock.organization_repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), { name: "teste1" }) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/teste"), name: "teste1") ]
     end
 
     Octokit::Client.stub :new, mock do
