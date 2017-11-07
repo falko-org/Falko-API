@@ -2,7 +2,13 @@ require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.create(name: "Gilberto", email: "gilbertin@teste.com", password: "1234567", password_confirmation: "1234567", github: "gilbertoCoder")
+    @user = User.create(
+      name: "Gilberto",
+      email: "gilbertin@teste.com",
+      password: "1234567",
+      password_confirmation: "1234567",
+      github: "gilbertoCoder"
+    )
   end
 
   test "should save a valid user" do
@@ -44,35 +50,56 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "should save email with right validation format" do
-    valid_addresses = %w[testing@example.com user@foo.COM A_MEM-BER@foo.bar.org
-    first.last@foo.jp alice+bob@baz.cn]
-    valid_addresses.each do |valid_address|
-      @user.email = valid_address
-      assert @user.save, "#{valid_address.inspect} should be valid"
+      valid_addresses = %w[testing@example.com user@foo.COM A_MEM-BER@foo.bar.org
+        first.last@foo.jp alice+bob@baz.cn]
+      valid_addresses.each do |valid_address|
+        @user.email = valid_address
+        assert @user.save, "#{valid_address.inspect} should be valid"
+      end
     end
-  end
 
   test "should not save user with email in an invalid format" do
-    invalid_addresses = %w[testing@example,com user_at_foo.org user.name@example.
-    foo@bar_baz.com foo@bar+baz.com]
-    invalid_addresses.each do |invalid_address|
-      @user.email = invalid_address
-      assert_not @user.save, "#{invalid_address.inspect} should be invalid"
+      invalid_addresses = %w[testing@example,com user_at_foo.org user.name@example.
+        foo@bar_baz.com foo@bar+baz.com]
+      invalid_addresses.each do |invalid_address|
+        @user.email = invalid_address
+        assert_not @user.save, "#{invalid_address.inspect} should be invalid"
+      end
     end
-  end
 
   test "User should not have a blank password" do
-    @user_wrong = User.create(name: "Gilberto", email: "gilbertin@teste.com", password: "", password_confirmation: "", github: "gilbertoCoder")
+    @user_wrong = User.create(
+      name: "Gilberto",
+      email: "gilbertin@teste.com",
+      password: "",
+      password_confirmation: "",
+      github: "gilbertoCoder"
+    )
+
     assert_not @user_wrong.save
   end
 
   test "User password should not have less than 6 characters" do
-    @user_wrong = User.create(name: "Gilberto", email: "gilbertin@teste.com", password: "g", password_confirmation: "g", github: "gilbertoCoder")
+    @user_wrong = User.create(
+      name: "Gilberto",
+      email: "gilbertin@teste.com",
+      password: "g",
+      password_confirmation: "g",
+      github: "gilbertoCoder"
+    )
+
     assert_not @user_wrong.save
   end
 
   test "User password should not have more than 80 characters" do
-    @user_wrong = User.create(name: "Gilberto", email: "gilbertin@teste.com", password: "g" * 81, password_confirmation: "g" * 81, github: "gilbertoCoder")
+    @user_wrong = User.create(
+      name: "Gilberto",
+      email: "gilbertin@teste.com",
+      password: "g" * 81,
+      password_confirmation: "g" * 81,
+      github: "gilbertoCoder"
+    )
+
     assert_not @user_wrong.save
   end
 
@@ -82,6 +109,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "User should have a github" do
     @user.github = ""
+
     assert_not @user.save
   end
 end
