@@ -82,9 +82,9 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     )
 
     @another_revision = Revision.create(
-    done_report: ["Não foi feito nada"],
-    undone_report: ["Tudo"],
-    sprint_id: @sprint.id
+      done_report: ["Não foi feito nada"],
+      undone_report: ["Tudo"],
+      sprint_id: @sprint.id
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
@@ -94,7 +94,7 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     post "/sprints/#{@no_revision_sprint.id}/revisions", params: {
       "revision": {
         "done_report": ["US16"],
-        "undone_report": ["US17","US28"]
+        "undone_report": ["US17", "US28"]
       }
      }, headers: { Authorization: @token.result }
 
@@ -105,7 +105,7 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
   post "/sprints/#{@sprint.id}/revisions", params: {
      "revision": {
        "done_report": ["US16"],
-       "undone_report": ["US17","US28"]
+       "undone_report": ["US17", "US28"]
      }
    }, headers: { Authorization: @token.result }
 
@@ -127,7 +127,7 @@ end
     post "/sprints/#{@sprint.id}/revisions", params: {
       "revision": {
         "done_report": ["US16"],
-        "undone_report": ["US17","US28"]
+        "undone_report": ["US17", "US28"]
       }
     }
 
@@ -138,7 +138,7 @@ end
     post "/sprints/#{@sprint.id}/revisions", params: {
       "revision": {
         "done_report": ["US16"],
-        "undone_report": ["US17","US28"]
+        "undone_report": ["US17", "US28"]
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -188,7 +188,7 @@ end
     patch "/revisions/#{@revision.id}", params: {
       revision: {
         done_report: ["US05"],
-        undone_report: ["US03","us14"]
+        undone_report: ["US03", "us14"]
       }
     }, headers: { Authorization: @token.result }
 
@@ -206,7 +206,7 @@ end
     patch "/revisions/#{@revision.id}", params: {
       revision: {
         done_report: ["US05"],
-        undone_report: ["US03","us14"]
+        undone_report: ["US03", "us14"]
       }
     }
 
@@ -223,7 +223,7 @@ end
 
     patch "/revisions/#{@revision.id}", params: {
       revision: {
-        done_report:[ "a"]*1501,
+        done_report: [ "a"] * 1501,
       }
     }, headers: { Authorization: @token.result }
 
@@ -255,7 +255,7 @@ end
     patch "/revisions/#{@revision.id}", params: {
       revision: {
         done_report: ["US05"],
-        undone_report: ["US03","us14"]
+        undone_report: ["US03", "us14"]
       }
     }, headers: { Authorization: @another_token.result }
 

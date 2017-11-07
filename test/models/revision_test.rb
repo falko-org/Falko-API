@@ -1,13 +1,13 @@
-require 'test_helper'
+require "test_helper"
 
 class RevisionTest < ActiveSupport::TestCase
   def setup
     @user = User.create(
-      name: 'Ronaldo',
-      email: 'Ronaldofenomeno@gmail.com',
-      password: '123456789',
-      password_confirmation: '123456789',
-      github: 'ronaldobola'
+      name: "Ronaldo",
+      email: "Ronaldofenomeno@gmail.com",
+      password: "123456789",
+      password_confirmation: "123456789",
+      github: "ronaldobola"
     )
 
     @project = Project.create(
