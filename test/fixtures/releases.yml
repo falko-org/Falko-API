@@ -1,7 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  amount_of_sprints: 1
-
-two:
-  amount_of_sprints: 1

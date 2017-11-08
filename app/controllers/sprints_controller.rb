@@ -7,8 +7,8 @@ class SprintsController < ApplicationController
     validate_release(0, :release_id)
   end
 
-  before_action only: [:show, :edit, :update, :destroy] do
-    validate_sprint(:id)
+  before_action only: [:show, :update, :destroy] do
+    validate_sprint(:id, 0)
   end
 
   # GET /sprints
@@ -26,12 +26,13 @@ class SprintsController < ApplicationController
   # POST /sprints
   def create
     @sprint = Sprint.create(sprint_params)
-
-    # @release used from validate_previous_release(:release_id)
     @sprint.release = @release
-
+    update_amount_of_sprints
     if @sprint.save
       render json: @sprint, status: :created
+      # @release used from validate_release
+      @sprint.release = @release
+      update_amount_of_sprints
     else
       render json: @sprint.errors, status: :unprocessable_entity
     end
@@ -49,6 +50,7 @@ class SprintsController < ApplicationController
   # DELETE /sprints/1
   def destroy
     @sprint.destroy
+    update_amount_of_sprints
   end
 
   private

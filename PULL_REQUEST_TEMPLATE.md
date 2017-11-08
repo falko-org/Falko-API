@@ -19,6 +19,7 @@ _Marque um `x`ao que se aplicar. Se você não tiver certeza sobre algum dos tó
 - [ ] Não há erros no rubocop.
 - [ ] A build está passando (testes, code climate e codacy).
 - [ ] O pull request está linkado à uma issue existente.
+- [ ] Foram criados seeds para as novas User Stories.
 
 ## Outros Comentários
 Se for uma mudança relativamente grande/complexa e você tiver algum comentário/pergunta a fazer, explicação de sua escolha da sua solução ou qualquer coisa que ache relevante, não hesite em compartilhar.
