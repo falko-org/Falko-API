@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   get "repos", to: "projects#github_projects_list"
   get "projects/:id/contributors", to: "projects#get_contributors"
+  post "projects/:id/assignee", to: "projects#set_assignee"
 
   resources :users, shallow: true do
     resources :projects do
