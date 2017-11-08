@@ -37,10 +37,15 @@ notifications:
     slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
 
 script:
-  - docker-compose -f docker-compose.test.yml -p travis up -d
-  - docker logs -f falko-test
-  - test `docker wait falko-test | wc -l` == "1"
-
+  - docker-compose -f docker-compose.test.yml up -d
+  - docker-compose -f docker-compose.test.yml logs
+  - docker exec falko-test bundle install
+  - docker exec falko-test bundle exec rails db:create
+  - docker exec falko-test bundle exec rails db:migrate
+  - docker exec falko-test bundle exec rake db:test:prepare
+  - docker exec falko-test bundle exec rails test
+  - docker exec falko-test bash -c "CODECLIMATE_REPO_TOKEN=095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3 bundle exec codeclimate-test-reporter"
+ 
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-  - docker exec falko-server /bin/bash -lc "CODECLIMATE_REPO_TOKEN=095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3 bundle exec codeclimate-test-reporter"
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT --debug
+  - docker-compose down --remove-orphans
