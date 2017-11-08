@@ -14,14 +14,16 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       "name": "Falko",
       "description": "Some project description 1.",
       "user_id": @user.id,
-      "is_project_from_github": true
+      "is_project_from_github": true,
+      "github_slug": "alaxalves/Falko"
     )
 
     @project2 = Project.create(
       "name": "Falko",
       "description": "Some project description 2.",
       "user_id": @user.id,
-      "is_project_from_github": false
+      "is_project_from_github": false,
+      "github_slug": "alaxalves/LabBancos"
     )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
@@ -218,6 +220,32 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       get "/repos", headers: { Authorization: "hgfcjgcgfc" }
 
       assert_response :unauthorized
+    end
+  end
+
+  test "should receive an numeric score" do
+    @token = AuthenticateUser.call(@user.email, @user.password)
+    codeclimate_response = '{
+        "data": [{
+            "id": "696a76232df2736347000001",
+            "type": "repos",
+            "attributes": {
+              "analysis_version": 3385,
+              "badge_token": "16096d266f46b7c68dd4",
+              "branch": "master",
+              "created_at": "2017-07-15T20:08:03.732Z",
+              "github_slug": "twinpeaks\/ranchorosa",
+              "human_name": "ranchorosa",
+              "last_activity_at": "2017-07-15T20:09:41.846Z",
+              "score": 2.92
+            }
+          }]
+        }'
+
+    RestClient.stub :get, codeclimate_response do
+      get "/projects/#{@project.id}/gpa", headers: { Authorization: @token.result }
+      assert_response :success
+      assert response.parsed_body == 2.92
     end
   end
 
