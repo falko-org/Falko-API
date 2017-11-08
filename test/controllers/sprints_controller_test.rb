@@ -12,9 +12,9 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
 
     @project = Project.create(
       name: "Falko",
-      description: "Descrição do projeto.",
+      description: "Some project description.",
       user_id: @user.id,
-      check_project: true
+      is_project_from_github: true
     )
 
     @release = Release.create(
@@ -34,6 +34,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       release_id: @release.id
     )
 
+    @token = AuthenticateUser.call(@user.email, @user.password)
 
     @another_user = User.create(
       name: "Ronaldo 2",
@@ -45,9 +46,9 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
 
     @another_project = Project.create(
       name: "Falko 2",
-      description: "Descrição do projeto 2.",
+      description: "Some project description 2.",
       user_id: @another_user.id,
-      check_project: true
+      is_project_from_github: true
     )
 
     @another_release = Release.create(
@@ -67,7 +68,6 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       release_id: @another_release.id
     )
 
-    @token = AuthenticateUser.call(@user.email, @user.password)
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
   end
 

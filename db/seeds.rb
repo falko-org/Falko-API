@@ -32,13 +32,13 @@ projects = [
     name: "Owla",
     description: "This project helps improving classes",
     user_id: "1",
-    check_project: true
+    is_project_from_github: true
   ),
   Project.find_or_create_by(
     name: "Falko",
     description: "Agile Projects Manager",
     user_id: "2",
-    check_project: true
+    is_project_from_github: true
   )
 ]
 
@@ -181,23 +181,23 @@ stories = [
 puts "Creating Revisions"
 revisions = [
   Revision.find_or_create_by(
-    done_report: ["Foi feito a historia us11"],
-    undone_report: ["Não foi feito a historia us21"],
+    done_report: ["Story US11 was done."],
+    undone_report: ["Story US21 was not done."],
     sprint_id: "1"
   ),
   Revision.find_or_create_by(
-    done_report: ["Foi feito a historia us12"],
-    undone_report: ["Não foi feito a historia us22"],
+    done_report: ["Story US12 was done."],
+    undone_report: ["Story US22 was not done."],
     sprint_id: "2"
   ),
   Revision.find_or_create_by(
-    done_report: ["Foi feito a historia us13"],
-    undone_report: ["Não foi feito a historia us23"],
+    done_report: ["Story US13 was done."],
+    undone_report: ["Story US23 was not done."],
     sprint_id: "3"
   ),
   Revision.find_or_create_by(
-    done_report: ["Foi feito a historia us14"],
-    undone_report: ["Não foi feito a historia us24"],
+    done_report: ["Story US14 was done."],
+    undone_report: ["Story US24 was not done."],
     sprint_id: "4"
   )
 ]

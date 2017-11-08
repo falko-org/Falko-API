@@ -14,7 +14,7 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
       name: "Falko",
       description: "Deion.",
       user_id: @user.id,
-      check_project: true
+      is_project_from_github: true
     )
 
     @release = Release.create(
@@ -61,7 +61,7 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
       name: "Futebol",
       description: "Deion.",
       user_id: @user.id,
-      check_project: true
+      is_project_from_github: true
     )
 
     @another_release = Release.create(

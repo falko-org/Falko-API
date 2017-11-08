@@ -2,15 +2,45 @@ require "test_helper"
 
 class StoryTest < ActiveSupport::TestCase
   def setup
-    @user = User.create(name: "Gilberto", email: "gilbertin@teste.com", password: "1234567", password_confirmation: "1234567", github: "gilbertoCoder")
+    @user = User.create(
+      name: "Gilberto",
+      email: "gilbertin@teste.com",
+      password: "1234567",
+      password_confirmation: "1234567",
+      github: "gilbertoCoder"
+    )
 
-    @project = Project.create(name: "Falko", description: "Esse projeto faz parte da disciplina MDS.", user_id: @user.id, check_project: true)
+    @project = Project.create(
+      name: "Falko",
+      description: "Some project description.",
+      user_id: @user.id,
+      is_project_from_github: true
+    )
 
-    @release = Release.create(name: "Release 1", description: "First Release.", initial_date: "01/01/2017", final_date: "02/02/2019", project_id: @project.id)
+    @release = Release.create(
+      name: "Release 1",
+      description: "First Release.",
+      initial_date: "01/01/2017",
+      final_date: "02/02/2019",
+      project_id: @project.id
+    )
 
-    @sprint = Sprint.create(name: "Sprint 1", description: "Sprint 1 us10", initial_date: "06/10/2017", final_date: "13/10/2017", release_id: @release.id)
+    @sprint = Sprint.create(
+      name: "Sprint 1",
+      description: "Sprint 1 us10",
+      initial_date: "06/10/2017",
+      final_date: "13/10/2017",
+      release_id: @release.id
+    )
 
-    @story = Story.create(name: "Story 1", description: "Story 1 us14", assign: "Lucas", pipeline: "in progress", initial_date: "01/01/2017", sprint_id: @sprint.id)
+    @story = Story.create(
+      name: "Story 1",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "in progress",
+      initial_date: "01/01/2017",
+      sprint_id: @sprint.id
+    )
   end
 
   test "should save a valid story" do
