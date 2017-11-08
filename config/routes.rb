@@ -6,11 +6,21 @@ Rails.application.routes.draw do
   get "repos", to: "projects#github_projects_list"
   get "projects/:id/contributors", to: "projects#get_contributors"
   post "projects/:id/assignee", to: "projects#set_assignee"
+  get "projects/:id/gpa", to: "projects#get_gpa"
+
+  get "projects/:id/issues", to: "issues#index"
+  post "projects/:id/issues", to: "issues#create"
+  put "projects/:id/issues", to: "issues#update"
+  patch "projects/:id/issues", to: "issues#update"
+  delete "projects/:id/issues", to: "issues#close"
 
   resources :users, shallow: true do
     resources :projects do
       resources :releases do
-        resources :sprints
+        resources :sprints do
+          resources :stories
+          resources :retrospectives
+        end
       end
     end
   end
