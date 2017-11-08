@@ -1,13 +1,13 @@
 class RevisionsController < ApplicationController
   include ValidationsHelper
 
-  before_action :set_revision, only: [:show, :edit, :update]
+  before_action :set_revision, only: [:show, :update]
 
   before_action only: [:index, :create] do
     validate_sprint(0, :sprint_id)
   end
 
-  before_action only: [:show, :edit, :update, :destroy] do
+  before_action only: [:show, :update, :destroy] do
     validate_sprint_dependencies(:id, "revision")
   end
 

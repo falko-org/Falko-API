@@ -129,12 +129,17 @@ module ValidationsHelper
   def create_sprint_dependencies(component_type, component_params)
     if component_type == "revision" && @sprint.revision == nil
       @component = Revision.create(component_params)
+      save_component(@component)
     elsif component_type == "retrospective" && @sprint.retrospective == nil
       @component = Retrospective.create(component_params)
+      save_component(@component)
     else
       render json: { error: "Cannot create multiple #{component_type}" }, status: 403
     end
+  end
 
+  def save_component(component)
+    @component = component
     @component.sprint_id = @sprint.id
     if @component.save
       render json: @component, status: :created
