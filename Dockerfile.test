@@ -16,6 +16,7 @@ RUN mkdir Falko-2017.2-BackEnd
 WORKDIR /Falko-2017.2-BackEnd
 
 COPY . /Falko-2017.2-BackEnd
+COPY .git/ /Falko-2017.2-BackEnd/.git/
 
 COPY Gemfile /Falko-2017.2-BackEnd/Gemfile
 COPY wait-4-postgres.sh /Falko-2017.2-BackEnd/wait-4-postgres.sh
