@@ -5,7 +5,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.test
-    command: bash -c "./wait-4-postgres.sh && sleep infinity"
+    command: bash -c "sleep infinity"
     environment:
       - RAILS_ENV=test
     ports:
