@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::API
+  include ValidationsHelper
+
   before_action :authenticate_request, :set_default_request_format
   attr_reader :current_user
 
