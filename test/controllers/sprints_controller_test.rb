@@ -14,7 +14,8 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       name: "Falko",
       description: "Some project description.",
       user_id: @user.id,
-      is_project_from_github: true
+      is_project_from_github: true,
+      is_scoring: false
     )
 
     @release = Release.create(
