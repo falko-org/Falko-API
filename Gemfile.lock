@@ -40,6 +40,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
+    ansi (1.5.0)
     arel (8.0.0)
     bcrypt (3.1.11)
     builder (3.2.3)
@@ -91,6 +92,11 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.3.0)
     minitest (5.10.3)
+    minitest-reporters (1.1.18)
+      ansi
+      builder
+      minitest (>= 5.0)
+      ruby-progressbar
     multipart-post (2.0.0)
     netrc (0.11.0)
     nio4r (2.1.0)
@@ -145,6 +151,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    ruby-progressbar (1.9.0)
     ruby_dep (1.5.0)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
@@ -196,6 +203,8 @@ DEPENDENCIES
   codeclimate-test-reporter
   jwt (~> 1.5.6)
   listen (>= 3.0.5, < 3.2)
+  minitest (~> 5.8, >= 5.8.4)
+  minitest-reporters
   octokit (~> 4.0)
   pg (~> 0.18)
   puma (~> 3.7)

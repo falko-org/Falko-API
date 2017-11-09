@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   get "repos", to: "projects#github_projects_list"
   get "projects/:id/contributors", to: "projects#get_contributors"
-  post "projects/:id/assignee", to: "projects#set_assignee"
+  post "projects/:id/issues/assignees", to: "issues#update_assignees"
   get "projects/:id/gpa", to: "projects#get_gpa"
 
   get "projects/:id/issues", to: "issues#index"

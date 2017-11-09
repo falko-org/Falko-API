@@ -1,4 +1,5 @@
 require "rest-client"
+
 class ProjectsController < ApplicationController
   include ValidationsHelper
 
@@ -93,18 +94,11 @@ class ProjectsController < ApplicationController
 
     contributors = []
 
-    @client.contributors("fga-gpp-mds/Falko-2017.2-BackEnd").each do |contributor|
+    @client.contributors(@project.github_slug).each do |contributor|
       contributors.push(contributor.login)
     end
 
     render json: contributors
-  end
-
-  def set_assignee
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    @client = Octokit::Client.new(access_token: @current_user.access_token)
-
-    @client.add_assignees("fga-gpp-mds/Falko-2017.2-BackEnd", 66, ["MatheusRich", "drianne"])
   end
 
   private

@@ -32,8 +32,9 @@ ActiveRecord::Schema.define(version: 20171107172605) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
-    t.string "github_slug"
+    t.boolean "check_project"
     t.boolean "is_project_from_github"
+    t.string "github_slug"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 

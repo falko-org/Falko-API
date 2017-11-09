@@ -1,3 +1,5 @@
+require "rest-client"
+
 class IssuesController < ApplicationController
   before_action :set_authorization, :set_path
 
@@ -29,6 +31,15 @@ class IssuesController < ApplicationController
     @issue = @client.close_issue(@path, issue_params[:number])
 
     render status: 200
+  end
+
+  def update_assignees
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+
+    response = RestClient.patch("https://api.github.com/repos/#{@project.github_slug}/issues/#{params[:issue_number]}",
+      { assignees: params[:assignees] }.to_json,
+      Authorization: "token #{@current_user.access_token}"
+    )
   end
 
   private
