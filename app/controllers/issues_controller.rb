@@ -10,7 +10,7 @@ class IssuesController < ApplicationController
   end
 
   def create
-    @issue = @client.create_issue(@path, issue_params[:name], issue_params[:body], options = { assignee: issue_params[:assignee], labels: issue_params[:labels] })
+    @issue = @client.create_issue(@path, issue_params[:name], issue_params[:body])
 
     convert_form_params(@issue)
 
@@ -18,7 +18,7 @@ class IssuesController < ApplicationController
   end
 
   def update
-    @issue = @client.update_issue(@path, issue_params[:number], issue_params[:name], issue_params[:body], options = { assignee: issue_params[:assignee], labels: [issue_params[:labels]] })
+    @issue = @client.update_issue(@path, issue_params[:number], issue_params[:name], issue_params[:body])
 
     convert_form_params(@issue)
 
@@ -65,6 +65,6 @@ class IssuesController < ApplicationController
     end
 
     def issue_params
-      params.require(:issue).permit(:name, :body, :assignee, :labels, :number)
+      params.require(:issue).permit(:name, :body, :number)
     end
 end

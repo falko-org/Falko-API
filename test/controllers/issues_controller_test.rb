@@ -59,7 +59,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.create_issue(path, name, body, options)
+    def mock.create_issue(path, name, body)
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3")
     end
 
@@ -111,7 +111,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.update_issue(path, number, name, body, options)
+    def mock.update_issue(path, number, name, body)
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3")
     end
 
