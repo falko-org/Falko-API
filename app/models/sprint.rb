@@ -3,6 +3,7 @@ class Sprint < ApplicationRecord
 
   belongs_to :release
   has_many :stories, dependent: :destroy
+  has_one :revision, dependent: :destroy
   has_one :retrospective, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 128, minimum: 2 }

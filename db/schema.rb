@@ -60,6 +60,15 @@ ActiveRecord::Schema.define(version: 20171107172605) do
     t.index ["sprint_id"], name: "index_retrospectives_on_sprint_id"
   end
 
+  create_table "revisions", force: :cascade do |t|
+    t.text "done_report", array: true
+    t.text "undone_report", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "sprint_id"
+    t.index ["sprint_id"], name: "index_revisions_on_sprint_id"
+  end
+
   create_table "sprints", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -97,6 +106,7 @@ ActiveRecord::Schema.define(version: 20171107172605) do
   add_foreign_key "projects", "users"
   add_foreign_key "releases", "projects"
   add_foreign_key "retrospectives", "sprints"
+  add_foreign_key "revisions", "sprints"
   add_foreign_key "sprints", "releases"
   add_foreign_key "stories", "sprints"
 end

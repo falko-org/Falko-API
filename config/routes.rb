@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       resources :releases do
         resources :sprints do
           resources :stories
+          resources :revisions
           resources :retrospectives
         end
       end

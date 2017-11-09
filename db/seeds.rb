@@ -178,6 +178,30 @@ stories = [
   )
 ]
 
+puts "Creating Revisions"
+revisions = [
+  Revision.find_or_create_by(
+    done_report: ["Story US11 was done."],
+    undone_report: ["Story US21 was not done."],
+    sprint_id: "1"
+  ),
+  Revision.find_or_create_by(
+    done_report: ["Story US12 was done."],
+    undone_report: ["Story US22 was not done."],
+    sprint_id: "2"
+  ),
+  Revision.find_or_create_by(
+    done_report: ["Story US13 was done."],
+    undone_report: ["Story US23 was not done."],
+    sprint_id: "3"
+  ),
+  Revision.find_or_create_by(
+    done_report: ["Story US14 was done."],
+    undone_report: ["Story US24 was not done."],
+    sprint_id: "4"
+  )
+]
+
 puts "Creating Retrospective"
 retrospectives = [
   Retrospective.find_or_create_by(
@@ -208,5 +232,4 @@ retrospectives = [
     improvements: ["Improve front-end"],
     sprint_id: "4"
   ),
-
 ]
