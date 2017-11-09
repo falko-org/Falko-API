@@ -93,6 +93,6 @@ class ProjectsController < ApplicationController
     end
 
     def project_params
-      params.require(:project).permit(:name, :description, :user_id, :is_project_from_github, :github_slug)
+      params.require(:project).permit(:name, :description, :user_id, :is_project_from_github, :github_slug, :is_scoring)
     end
 end
