@@ -15,12 +15,24 @@ ActiveRecord::Schema.define(version: 20171107172605) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "issues", force: :cascade do |t|
+    t.string "title"
+    t.text "body"
+    t.string "assignee"
+    t.integer "milestone"
+    t.string "labels"
+    t.string "assignees"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.string "github_slug"
     t.boolean "is_project_from_github"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
@@ -46,6 +58,15 @@ ActiveRecord::Schema.define(version: 20171107172605) do
     t.datetime "updated_at", null: false
     t.bigint "sprint_id"
     t.index ["sprint_id"], name: "index_retrospectives_on_sprint_id"
+  end
+
+  create_table "revisions", force: :cascade do |t|
+    t.text "done_report", array: true
+    t.text "undone_report", array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "sprint_id"
+    t.index ["sprint_id"], name: "index_revisions_on_sprint_id"
   end
 
   create_table "sprints", force: :cascade do |t|
@@ -85,6 +106,7 @@ ActiveRecord::Schema.define(version: 20171107172605) do
   add_foreign_key "projects", "users"
   add_foreign_key "releases", "projects"
   add_foreign_key "retrospectives", "sprints"
+  add_foreign_key "revisions", "sprints"
   add_foreign_key "sprints", "releases"
   add_foreign_key "stories", "sprints"
 end

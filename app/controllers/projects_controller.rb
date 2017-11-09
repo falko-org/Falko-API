@@ -1,3 +1,4 @@
+require "rest-client"
 class ProjectsController < ApplicationController
   include ValidationsHelper
 
@@ -14,6 +15,16 @@ class ProjectsController < ApplicationController
   def index
     @projects = User.find(params[:user_id]).projects
     render json: @projects
+  end
+
+  def get_gpa
+    project = Project.find(params[:id])
+    github_slug = project.github_slug
+    result = RestClient.get("http://api.codeclimate.com/v1/repos?github_slug=#{github_slug}")
+    result_json = JSON.parse(result)
+    score = result_json["data"][0]["attributes"]["score"]
+
+    render json: score
   end
 
   def github_projects_list
@@ -55,6 +66,8 @@ class ProjectsController < ApplicationController
     @project = Project.create(project_params)
     @project.user_id = @current_user.id
 
+    puts @project.github_slug
+
     if @project.save
       render json: @project, status: :created
     else
@@ -80,6 +93,6 @@ class ProjectsController < ApplicationController
     end
 
     def project_params
-      params.require(:project).permit(:name, :description, :is_project_from_github, :user_id)
+      params.require(:project).permit(:name, :description, :is_project_from_github, :github_slug)
     end
 end
