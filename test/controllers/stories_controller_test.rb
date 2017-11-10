@@ -329,7 +329,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create a story with story points" do
-    post "/sprints/#{@sprint.id}/stories", params: {
+    post "/sprints/#{@another_sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -339,12 +339,12 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "final_date": "09/01/2018",
         "story_points": "10"
       }
-    }, headers: { Authorization: @token.result }
+    }, headers: { Authorization: @another_token.result }
 
     assert_response :created
   end
 
-  test "should create a story without story_points and final_date in a project that not pontue story" do
+  test "should create a story without final_date in a project that does not score story" do
     post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
@@ -358,7 +358,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
   end
 
-  test "should not create a story without story_points in a project that pontue story" do
+  test "should not create a story without story_points in a project that scores story" do
     post "/sprints/#{@another_sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
@@ -372,7 +372,22 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  test "should create a story with story_points and final_date in a project that pontue story" do
+  test "should not create a story with story_points in a project that does not score story" do
+    post "/sprints/#{@sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018",
+        "story_points": "10"
+      }
+    }, headers: { Authorization: @token.result }
+
+    assert_response :unprocessable_entity
+  end
+
+  test "should create a story with story_points and final_date in a project that scores story" do
     post "/sprints/#{@another_sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",

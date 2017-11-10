@@ -103,7 +103,7 @@ module ValidationsHelper
     end
   end
 
-  def validate_stories(points, id, sprint_id)
+  def validate_stories(story_points, id, sprint_id)
     current_user
     verifies_id(id, sprint_id, "sprint")
     release
@@ -111,13 +111,17 @@ module ValidationsHelper
     user
 
     if @project.is_scoring
-      if points
+      if story_points != nil
         return true
       else
         return false
       end
     else
-      return true
+      if story_points != nil
+        return false
+      else
+        return true
+      end
     end
   end
 
