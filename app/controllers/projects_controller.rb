@@ -1,8 +1,9 @@
 require "rest-client"
+
 class ProjectsController < ApplicationController
   include ValidationsHelper
 
-  before_action :set_project, only: [:destroy, :show]
+  before_action :set_project, only: [:destroy, :show, :get_contributors]
 
   before_action only: [:index, :create] do
     validate_user(0, :user_id)
@@ -87,9 +88,26 @@ class ProjectsController < ApplicationController
     @project.destroy
   end
 
+  def get_contributors
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @client = Octokit::Client.new(access_token: @current_user.access_token)
+
+    contributors = []
+
+    @client.contributors(@project.github_slug).each do |contributor|
+      contributors.push(contributor.login)
+    end
+
+    render json: contributors, status: :ok
+  end
+
   private
     def set_project
-      @project = Project.find(params[:id])
+      begin
+        @project = Project.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        render json: { errors: "Project not found" }, status: :not_found
+      end
     end
 
     def project_params
