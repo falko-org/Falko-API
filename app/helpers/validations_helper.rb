@@ -101,6 +101,24 @@ module ValidationsHelper
     end
   end
 
+  def validate_stories(points ,id, sprint_id)
+    current_user
+    verifies_id(id, sprint_id, "sprint")
+    release
+    project
+    user
+
+    if @project.is_scoring
+      if points
+        return true
+      else
+        return false
+      end
+    else
+      return true
+    end
+  end
+
   def validate_sprint_dependencies(id, component_type)
     current_user
     if component_type == "story"

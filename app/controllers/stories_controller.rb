@@ -7,6 +7,7 @@ class StoriesController < ApplicationController
     validate_sprint(0, :sprint_id)
   end
 
+
   before_action only: [:show, :edit, :update, :destroy] do
     validate_sprint_dependencies(:id, "story")
   end
@@ -29,11 +30,14 @@ class StoriesController < ApplicationController
   def create
     @story = Story.create(story_params)
     @story.sprint = @sprint
-
-    if @story.save
-      render json: @story, status: :created
+    if validate_stories(@story.story_points, 0, :sprint_id)
+      if @story.save
+        render json: @story, status: :created
+      else
+        render json: @story.errors, status: :unprocessable_entity
+      end
     else
-      render json: @story.errors, status: :unprocessable_entity
+      render json: { error: "Story points have to be set"}, status: :unprocessable_entity
     end
   end
 
