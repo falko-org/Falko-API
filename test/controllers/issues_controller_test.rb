@@ -4,8 +4,8 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
     @token = AuthenticateUser.call(@user.email, @user.password)
-    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, is_project_from_github: true)
-    @project2 = Project.create(name: "FalkoSolutions/Falko", description: "Descrição do projeto.", user_id: @user.id, is_project_from_github: true)
+    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, is_project_from_github: true, is_scoring: false)
+    @project2 = Project.create(name: "FalkoSolutions/Falko", description: "Descrição do projeto.", user_id: @user.id, is_project_from_github: false, is_scoring: false)
   end
 
   test "should see issues if user is loged in" do
@@ -202,5 +202,56 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :unauthorized
     end
+  end
+
+  test "should update issue assignees" do
+    mock = Minitest::Mock.new
+    def mock.code
+      200
+    end
+
+    RestClient.stub :patch, mock do
+      post "/projects/#{@project.id}/issues/assignees", params: {
+        issue_number: "1",
+        assignees: ["MatheusRich"]
+      }, headers: { Authorization: @token.result }
+
+      assert_response :ok
+    end
+  end
+
+  test "should not update issue assignees" do
+    mock = -> (path, payload, header) { raise RestClient::UnprocessableEntity }
+
+    RestClient.stub :patch, mock do
+      post "/projects/#{@project.id}/issues/assignees", params: {
+        issue_number: "1",
+        assignees: ["ThisUserIsNotOnTheRepo"]
+      }, headers: { Authorization: @token.result }
+
+      assert_response :unprocessable_entity
+    end
+  end
+
+  test "should not update issue assignees of an inexistent issue" do
+    mock = -> (path, payload, header) { raise RestClient::NotFound }
+
+    RestClient.stub :patch, mock do
+      post "/projects/#{@project.id}/issues/assignees", params: {
+        issue_number: "-1",
+        assignees: ["MatheusRich"]
+      }, headers: { Authorization: @token.result }
+
+      assert_response :not_found
+    end
+  end
+
+  test "should not update issue assignees without project" do
+    post "/projects/-1/issues/assignees", params: {
+      issue_number: "1",
+      assignees: ["MatheusRich"]
+    }, headers: { Authorization: @token.result }
+
+    assert_response :not_found
   end
 end

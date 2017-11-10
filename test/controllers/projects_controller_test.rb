@@ -15,7 +15,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       "description": "Some project description 1.",
       "user_id": @user.id,
       "is_project_from_github": true,
-      "github_slug": "alaxalves/Falko"
+      "github_slug": "alaxalves/Falko",
+      "is_scoring": false
     )
 
     @project2 = Project.create(
@@ -23,7 +24,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       "description": "Some project description 2.",
       "user_id": @user.id,
       "is_project_from_github": false,
-      "github_slug": "alaxalves/LabBancos"
+      "github_slug": "alaxalves/LabBancos",
+      "is_scoring": false
     )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
@@ -35,7 +37,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
           "name": "Falko",
           "description": "Some project description.",
           "user_id": @user.id,
-          "is_project_from_github": true
+          "is_project_from_github": true,
+          "is_scoring": false
         }
       }, headers: { Authorization: @token.result }
 
@@ -250,14 +253,38 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not import a project from github if the is_project_from_github is invalid" do
-      post "/users/#{@user.id}/projects", params: {
-        "project": {
-          "name": "Falko",
-          "description": "Some project description.",
-          "user_id": @user.id
-        }
-      }, headers: { Authorization: @token.result }
+    post "/users/#{@user.id}/projects", params: {
+      "project": {
+        "name": "Falko",
+        "description": "Some project description.",
+        "user_id": @user.id
+      }
+    }, headers: { Authorization: @token.result }
 
-      assert_response :unprocessable_entity
+    assert_response :unprocessable_entity
+  end
+
+  test "should get contributors" do
+    mock = Minitest::Mock.new
+
+    def mock.contributors(github_slug)
+      [
+        Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "MatheusRich"),
+        Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "ThalissonMelo")
+      ]
     end
+
+    Octokit::Client.stub :new, mock do
+      get "/projects/#{@project.id}/contributors", headers: { Authorization: @token.result }
+    end
+
+    assert_response :ok
+    assert_equal response.parsed_body, ["MatheusRich", "ThalissonMelo"]
+  end
+
+  test "should not get contributors with invalid repository" do
+    get "/projects/-1/contributors", headers: { Authorization: @token.result }
+
+    assert_response :not_found
+  end
 end

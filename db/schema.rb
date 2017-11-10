@@ -32,8 +32,9 @@ ActiveRecord::Schema.define(version: 20171107172605) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
-    t.string "github_slug"
+    t.boolean "check_project"
     t.boolean "is_project_from_github"
+    t.string "github_slug"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
@@ -90,6 +91,7 @@ ActiveRecord::Schema.define(version: 20171107172605) do
     t.bigint "sprint_id"
     t.date "initial_date"
     t.date "final_date"
+    t.integer "story_points"
     t.index ["sprint_id"], name: "index_stories_on_sprint_id"
   end
 

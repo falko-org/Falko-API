@@ -14,7 +14,8 @@ class SprintTest < ActiveSupport::TestCase
       name: "Falko",
       description: "Some project description.",
       is_project_from_github: true,
-      user_id: @user.id
+      user_id: @user.id,
+      is_scoring: false
     )
 
     @release = Release.create(

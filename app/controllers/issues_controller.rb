@@ -1,5 +1,8 @@
+require "rest-client"
+
 class IssuesController < ApplicationController
-  before_action :set_authorization, :set_path
+  before_action :set_authorization, except: [:update_assignees]
+  before_action :set_path, except: [:update_assignees]
 
   def index
     @issues = @client.list_issues(@path)
@@ -31,6 +34,27 @@ class IssuesController < ApplicationController
     render status: 200
   end
 
+  def update_assignees
+    begin
+      set_project
+
+      @current_user = AuthorizeApiRequest.call(request.headers).result
+
+      response = RestClient.patch("https://api.github.com/repos/#{@project.github_slug}/issues/#{params[:issue_number]}",
+        { assignees: params[:assignees] }.to_json,
+        Authorization: "token #{@current_user.access_token}"
+      )
+
+      render status: :ok
+    rescue RestClient::UnprocessableEntity
+      render json: { errors: "Cannot update assignees" }, status: :unprocessable_entity
+    rescue RestClient::NotFound
+      render json: { errors: "Content not found" }, status: :not_found
+    rescue ActiveRecord::RecordNotFound
+      render json: { errors: "Project not found" }, status: :not_found
+    end
+  end
+
   private
 
     def set_authorization
@@ -38,8 +62,12 @@ class IssuesController < ApplicationController
       @client = Octokit::Client.new(access_token: @current_user.access_token)
     end
 
-    def set_path
+    def set_project
       @project = Project.find(params[:id])
+    end
+
+    def set_path
+      set_project
 
       if @project.name.include? "/"
         @path = @project.name

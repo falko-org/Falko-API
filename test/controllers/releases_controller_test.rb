@@ -14,7 +14,8 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
       name: "Falko",
       description: "Description.",
       user_id: @user.id,
-      is_project_from_github: true
+      is_project_from_github: true,
+      is_scoring: false
     )
 
     @release = Release.create(
