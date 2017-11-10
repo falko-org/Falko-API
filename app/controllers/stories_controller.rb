@@ -37,7 +37,7 @@ class StoriesController < ApplicationController
         render json: @story.errors, status: :unprocessable_entity
       end
     else
-      render json: { error: "Story points have to be set"}, status: :unprocessable_entity
+      render json: { error: "Story points have to be set" }, status: :unprocessable_entity
     end
   end
 

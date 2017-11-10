@@ -101,7 +101,7 @@ module ValidationsHelper
     end
   end
 
-  def validate_stories(points ,id, sprint_id)
+  def validate_stories(points, id, sprint_id)
     current_user
     verifies_id(id, sprint_id, "sprint")
     release
