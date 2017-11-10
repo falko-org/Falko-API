@@ -14,7 +14,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       name: "Falko",
       description: "Description.",
       user_id: @user.id,
-      is_project_from_github: true
+      is_project_from_github: true,
+      is_scoring: false
     )
 
     @release = Release.create(
@@ -56,8 +57,9 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     @another_project = Project.create(
       name: "Futebol",
       description: "Description.",
-      user_id: @user.id,
-      is_project_from_github: true
+      user_id: @another_user.id,
+      is_project_from_github: true,
+      is_scoring: true
     )
 
     @another_release = Release.create(
@@ -66,7 +68,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       initial_date: "01/01/2018",
       final_date: "01/01/2019",
       amount_of_sprints: "20",
-      project_id: @project.id
+      project_id: @another_project.id
     )
 
     @another_sprint = Sprint.create(
@@ -74,7 +76,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       description: "Sprint 2 us10",
       initial_date: "06/10/2017",
       final_date: "13/10/2017",
-      release_id: @release.id
+      release_id: @another_release.id
     )
 
     @another_story = Story.create(
@@ -84,7 +86,15 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       pipeline: "Done",
       initial_date: "01/01/2017",
       final_date: "07/01/2017",
-      sprint_id: @sprint.id
+      sprint_id: @another_sprint.id
+    )
+
+    @another_user = User.create(
+      name: "Ronaldo",
+      email: "ronaldo@email.com",
+      password: "123123",
+      password_confirmation: "123123",
+      github: "ronaldoGit"
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
@@ -316,5 +326,79 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     delete "/stories/#{@story.id}", headers: { Authorization: @another_token.result }
 
     assert_response :unauthorized
+  end
+
+  test "should create a story with story points" do
+    post "/sprints/#{@another_sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018",
+        "final_date": "09/01/2018",
+        "story_points": "10"
+      }
+    }, headers: { Authorization: @another_token.result }
+
+    assert_response :created
+  end
+
+  test "should create a story without final_date in a project that does not score story" do
+    post "/sprints/#{@sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018"
+      }
+    }, headers: { Authorization: @token.result }
+
+    assert_response :created
+  end
+
+  test "should not create a story without story_points in a project that scores story" do
+    post "/sprints/#{@another_sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018"
+      }
+    }, headers: { Authorization: @another_token.result }
+
+    assert_response :unprocessable_entity
+  end
+
+  test "should not create a story with story_points in a project that does not score story" do
+    post "/sprints/#{@sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018",
+        "story_points": "10"
+      }
+    }, headers: { Authorization: @token.result }
+
+    assert_response :unprocessable_entity
+  end
+
+  test "should create a story with story_points and final_date in a project that scores story" do
+    post "/sprints/#{@another_sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018",
+        "story_points": "10"
+      }
+    }, headers: { Authorization: @another_token.result }
+
+    assert_response :created
   end
 end

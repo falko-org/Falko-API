@@ -14,7 +14,8 @@ class RevisionTest < ActiveSupport::TestCase
       name: "Falko",
       description: "Esse projeto faz parte da disciplina MDS.",
       is_project_from_github: true,
-      user_id: @user.id
+      user_id: @user.id,
+      is_scoring: false
     )
 
     @release = Release.create(

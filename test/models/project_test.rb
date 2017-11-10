@@ -14,7 +14,8 @@ class ProjectTest < ActiveSupport::TestCase
       name: "Falko",
       description: "Some project description.",
       user_id: @user.id,
-      is_project_from_github: true
+      is_project_from_github: true,
+      is_scoring: false
     )
 
     @project2 = Project.create(

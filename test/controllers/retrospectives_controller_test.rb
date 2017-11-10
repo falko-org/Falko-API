@@ -14,7 +14,8 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
       name: "Falko",
       description: "A Project.",
       is_project_from_github: true,
-      user_id: @user.id
+      user_id: @user.id,
+      is_scoring: false
     )
 
     @release = Release.create(

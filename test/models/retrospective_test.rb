@@ -13,8 +13,9 @@ class RetrospectiveTest < ActiveSupport::TestCase
     @project = Project.create(
       name: "Falko",
       description: "Some project description.",
+      user_id: @user.id,
       is_project_from_github: true,
-      user_id: @user.id
+      is_scoring: false
     )
 
     @release = Release.create(

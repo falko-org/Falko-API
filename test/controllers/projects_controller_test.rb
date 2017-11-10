@@ -15,7 +15,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       "description": "Some project description 1.",
       "user_id": @user.id,
       "is_project_from_github": true,
-      "github_slug": "alaxalves/Falko"
+      "github_slug": "alaxalves/Falko",
+      "is_scoring": false
     )
 
     @project2 = Project.create(
@@ -23,7 +24,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       "description": "Some project description 2.",
       "user_id": @user.id,
       "is_project_from_github": false,
-      "github_slug": "alaxalves/LabBancos"
+      "github_slug": "alaxalves/LabBancos",
+      "is_scoring": false
     )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
@@ -35,7 +37,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
           "name": "Falko",
           "description": "Some project description.",
           "user_id": @user.id,
-          "is_project_from_github": true
+          "is_project_from_github": true,
+          "is_scoring": false
         }
       }, headers: { Authorization: @token.result }
 

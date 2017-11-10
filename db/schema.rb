@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 20171107172605) do
     t.bigint "sprint_id"
     t.date "initial_date"
     t.date "final_date"
+    t.integer "story_points"
     t.index ["sprint_id"], name: "index_stories_on_sprint_id"
   end
 
