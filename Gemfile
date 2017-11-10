@@ -21,6 +21,8 @@ gem "jwt", "~> 1.5.6"
 gem "simple_command"
 gem "rest-client"
 
+gem 'travis', '~> 1.8', '>= 1.8.8'
+
 gem "codeclimate-test-reporter", group: :test, require: nil
 
 gem "carrierwave", "~> 1.1"
