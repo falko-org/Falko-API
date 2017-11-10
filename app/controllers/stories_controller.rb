@@ -22,11 +22,7 @@ class StoriesController < ApplicationController
     @story = Story.find(params[:id])
     render json: @story
   end
-
-  def edit
-    render json: @story
-  end
-
+  
   def create
     @story = Story.create(story_params)
     @story.sprint = @sprint
