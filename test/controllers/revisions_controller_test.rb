@@ -61,7 +61,7 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     @another_project = Project.create(
       name: "Futebol",
       description: "Deion.",
-      user_id: @user.id,
+      user_id: @another_user.id,
       is_project_from_github: true
     )
 
@@ -71,7 +71,7 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
       initial_date: "01/01/2018",
       final_date: "01/01/2019",
       amount_of_sprints: "20",
-      project_id: @project.id
+      project_id: @another_project.id
     )
 
     @another_sprint = Sprint.create(
@@ -79,13 +79,13 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
       description: "Sprint 2 us10",
       initial_date: "06/10/2017",
       final_date: "13/10/2017",
-      release_id: @release.id
+      release_id: @another_release.id
     )
 
     @another_revision = Revision.create(
       done_report: ["Não foi feito nada"],
       undone_report: ["Tudo"],
-      sprint_id: @sprint.id
+      sprint_id: @another_sprint.id
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
