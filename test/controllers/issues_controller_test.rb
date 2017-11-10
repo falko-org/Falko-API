@@ -5,7 +5,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
     @token = AuthenticateUser.call(@user.email, @user.password)
     @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, is_project_from_github: true)
-    @project2 = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, is_project_from_github: false)
+    @project2 = Project.create(name: "FalkoSolutions/Falko", description: "Descrição do projeto.", user_id: @user.id, is_project_from_github: true)
   end
 
   test "should see issues if user is loged in" do
@@ -65,7 +65,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
 
     Octokit::Client.stub :new, mock do
-      post "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }, params: {
+      post "/projects/#{@project2.id}/issues", headers: { Authorization: @token.result }, params: {
         issue: {
           "name": "New Issue",
           "body": "New Body"
