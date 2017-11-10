@@ -247,9 +247,9 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not update issue assignees without project" do
-    post "/projects/#{-1}/issues/assignees", params: {
+    post "/projects/-1/issues/assignees", params: {
       issue_number: "1",
-      assignees: ["ThisUserIsNotOnTheRepo"]
+      assignees: ["MatheusRich"]
     }, headers: { Authorization: @token.result }
 
     assert_response :not_found

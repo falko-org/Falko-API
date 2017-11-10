@@ -98,12 +98,16 @@ class ProjectsController < ApplicationController
       contributors.push(contributor.login)
     end
 
-    render json: contributors
+    render json: contributors, status: :ok
   end
 
   private
     def set_project
-      @project = Project.find(params[:id])
+      begin
+        @project = Project.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        render json: { errors: "Project not found" }, status: :not_found
+      end
     end
 
     def project_params
