@@ -12,7 +12,6 @@ class ReleasesController < ApplicationController
   end
 
   def index
-    @project = Project.find(params[:project_id])
     @releases = @project.releases.reverse
     render json: @releases
   end
@@ -23,7 +22,6 @@ class ReleasesController < ApplicationController
   end
 
   def create
-    @project = Project.find(params[:project_id])
     @release = Release.create(release_params)
     @release.project = @project
     update_amount_of_sprints

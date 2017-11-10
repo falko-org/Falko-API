@@ -23,18 +23,7 @@ class RetrospectivesController < ApplicationController
   end
 
   def create
-    if @sprint.retrospective == nil
-      @retrospective = Retrospective.create(retrospective_params)
-      @retrospective.sprint_id = @sprint.id
-
-      if @retrospective.save
-        render json: @retrospective, status: :created
-      else
-        render json: @retrospective.errors, status: :unprocessable_entity
-      end
-    else
-      render json: { error: "Cannot create multiple retrospectives" }, status: 403
-    end
+    create_sprint_dependencies("retrospective", retrospective_params)
   end
 
   def show

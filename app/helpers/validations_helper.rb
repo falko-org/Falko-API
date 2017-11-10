@@ -18,6 +18,8 @@ module ValidationsHelper
   def sprint(component_type)
     if component_type == "story"
       @sprint = Sprint.find(@story.sprint_id)
+    elsif component_type == "revision"
+      @sprint = Sprint.find(@revision.sprint_id)
     elsif component_type == "retrospective"
       @sprint = Sprint.find(@retrospective.sprint_id)
     end
@@ -124,6 +126,9 @@ module ValidationsHelper
     if component_type == "story"
       @story = Story.find(params[:id].to_i)
       sprint("story")
+    elsif component_type == "revision"
+      @revision = Revision.find(params[:id].to_i)
+      sprint("revision")
     elsif component_type == "retrospective"
       @retrospective = Retrospective.find(params[:id].to_i)
       sprint("retrospective")
@@ -136,6 +141,28 @@ module ValidationsHelper
       return true
     else
       render json: { error: "Not Authorized" }, status: 401
+    end
+  end
+
+  def create_sprint_dependencies(component_type, component_params)
+    if component_type == "revision" && @sprint.revision == nil
+      @component = Revision.create(component_params)
+      save_component(@component)
+    elsif component_type == "retrospective" && @sprint.retrospective == nil
+      @component = Retrospective.create(component_params)
+      save_component(@component)
+    else
+      render json: { error: "Cannot create multiple #{component_type}" }, status: 403
+    end
+  end
+
+  def save_component(component)
+    @component = component
+    @component.sprint_id = @sprint.id
+    if @component.save
+      render json: @component, status: :created
+    else
+      render json: @component.errors, status: :unprocessable_entity
     end
   end
 
