@@ -15,7 +15,7 @@ services:
     container_name: falko-server
     build: 
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile.homolog
     environment: 
       - RAILS_ENV=production
     volumes:

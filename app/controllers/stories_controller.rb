@@ -22,7 +22,7 @@ class StoriesController < ApplicationController
     @story = Story.find(params[:id])
     render json: @story
   end
- 
+
   def create
     @story = Story.create(story_params)
     @story.sprint = @sprint
@@ -35,7 +35,7 @@ class StoriesController < ApplicationController
     else
       render json: { error: "Story points have to be set" }, status: :unprocessable_entity
     end
-  end
+    end
 
   def update
     if @story.update(story_params)
