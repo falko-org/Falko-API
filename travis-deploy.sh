@@ -1,4 +1,4 @@
-# !/bin/sh
+#!/bin/sh
 # Pushing updated scripts only if its devel branch 
 
 if [[ "$TRAVIS_BRANCH" != "devel" ]]; then
