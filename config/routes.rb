@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   post "authenticate", to: "authentication#authenticate"
   post "request_github_token", to: "users#request_github_token"
 
+  get "sprints/:id/burndown", to: "sprints#burndown"
+
   get "repos", to: "projects#github_projects_list"
   get "projects/:id/contributors", to: "projects#get_contributors"
   post "projects/:id/issues/assignees", to: "issues#update_assignees"
