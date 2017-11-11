@@ -120,7 +120,8 @@ stories = [
     pipeline: "Backlog",
     initial_date: "01/01/2017",
     final_date: "02/01/2017",
-    sprint_id: "1"
+    sprint_id: "1",
+    issue_number: "4"
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -129,7 +130,8 @@ stories = [
     pipeline: "Done",
     initial_date: "01/01/2017",
     final_date: "08/01/2017",
-    sprint_id: "1"
+    sprint_id: "1",
+    issue_number: "4"
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -137,7 +139,8 @@ stories = [
     assign: "Matheus B",
     pipeline: "In Progress",
     initial_date: "03/01/2017",
-    sprint_id: "2"
+    sprint_id: "2",
+    issue_number: "4"
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -145,7 +148,8 @@ stories = [
     assign: "Matheus R",
     pipeline: "Backlog",
     initial_date: "01/01/2017",
-    sprint_id: "2"
+    sprint_id: "2",
+    issue_number: "4"
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -153,7 +157,8 @@ stories = [
     assign: "Matheus Roberto",
     pipeline: "In Progress",
     initial_date: "01/01/2017",
-    sprint_id: "3"
+    sprint_id: "3",
+    issue_number: "4"
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -162,7 +167,8 @@ stories = [
     pipeline: "Done",
     initial_date: "07/01/2017",
     final_date: "15/01/2017",
-    sprint_id: "3"
+    sprint_id: "3",
+    issue_number: "4"
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -170,7 +176,8 @@ stories = [
     assign: "Vinícius",
     pipeline: "In Progress",
     initial_date: "01/01/2017",
-    sprint_id: "4"
+    sprint_id: "4",
+    issue_number: "4"
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -178,7 +185,8 @@ stories = [
     assign: "Adrianne",
     pipeline: "In Progress",
     initial_date: "01/01/2017",
-    sprint_id: "4"
+    sprint_id: "4",
+    issue_number: "4"
   )
 ]
 
