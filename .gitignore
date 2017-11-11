@@ -1,6 +1,7 @@
 # Ignore my Continuous Deploy Keys/Credentials
 .travis/*.key
 .travis/*.key.pub
+.travis/*.pem
 
 # Ignore bundler config.
 /.bundle
