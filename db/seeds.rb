@@ -31,14 +31,18 @@ projects = [
   Project.find_or_create_by(
     name: "Owla",
     description: "This project helps improving classes",
-    user_id: "1",
-    is_project_from_github: true
+    is_project_from_github: true,
+    github_slug: nil,
+    is_scoring: false,
+    user_id: "1"
   ),
   Project.find_or_create_by(
     name: "Falko",
     description: "Agile Projects Manager",
-    user_id: "2",
-    is_project_from_github: true
+    is_project_from_github: true,
+    github_slug: nil,
+    is_scoring: false,
+    user_id: "2"
   )
 ]
 
