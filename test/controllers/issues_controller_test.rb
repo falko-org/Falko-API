@@ -4,8 +4,8 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
     @token = AuthenticateUser.call(@user.email, @user.password)
-    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, is_project_from_github: true, is_scoring: false)
-    @project2 = Project.create(name: "FalkoSolutions/Falko", description: "Descrição do projeto.", user_id: @user.id, is_project_from_github: false, is_scoring: false)
+    @project = Project.create(name: "Falko", description: "Project description.", user_id: @user.id, is_project_from_github: true, is_scoring: false)
+    @project2 = Project.create(name: "FalkoSolutions/Falko", description: "Project description.", user_id: @user.id, is_project_from_github: false, is_scoring: false)
   end
 
   test "should see issues if user is loged in" do
