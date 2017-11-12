@@ -96,7 +96,9 @@ module ValidationsHelper
     project
     user
 
-    if @current_user.id == @user.id
+    if @current_user.id == @user.id &&
+      @sprint.release.initial_date <= @sprint.initial_date &&
+      @sprint.release.final_date >= @sprint.final_date
       return true
     else
       render json: { error: "Not Authorized" }, status: 401
@@ -110,6 +112,10 @@ module ValidationsHelper
     project
     user
 
+    if @story.sprint.initial_date > @story.initial_date &&
+       @story.sprint.final_date < @story.final_date
+      return false
+    end
     if @project.is_scoring
       if story_points != nil
         return true
