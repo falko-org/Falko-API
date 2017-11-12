@@ -114,7 +114,7 @@ module ValidationsHelper
 
     if @story.sprint.initial_date > @story.initial_date &&
        @story.sprint.final_date < @story.final_date
-       return false
+      return false
     end
     if @project.is_scoring
       if story_points != nil
