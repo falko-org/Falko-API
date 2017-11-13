@@ -25,7 +25,7 @@ class SprintsController < ApplicationController
 
   # POST /sprints
   def create
-    @sprint = Sprint.create(sprint_params)
+    @sprint = Sprint.new(sprint_params)
     if validate_sprints_date("sprint", sprint_params)
       @sprint.release = @release
       update_amount_of_sprints
