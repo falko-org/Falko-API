@@ -96,14 +96,38 @@ module ValidationsHelper
     project
     user
 
-    if @current_user.id == @user.id &&
-      @sprint.release.initial_date <= @sprint.initial_date &&
-      @sprint.release.final_date >= @sprint.final_date
+    if @current_user.id == @user.id
       return true
     else
       render json: { error: "Not Authorized" }, status: 401
     end
   end
+
+  def validate_stories_date(component_type, component_params)
+    if @story.final_date != nil
+      if @sprint.final_date < @story.final_date ||
+         @sprint.initial_date > @story.final_date
+        false
+      else
+        return true
+      end
+    else
+      return true
+    end
+  end
+
+  def validate_sprints_date(component_type, component_params)
+    if @release.initial_date > @sprint.initial_date ||
+       @release.final_date < @sprint.initial_date
+      false
+    elsif @sprint.final_date != nil && (@release.final_date < @sprint.final_date ||
+          @release.initial_date > @sprint.final_date)
+      false
+    else
+      return true
+    end
+  end
+
 
   def validate_stories(story_points, id, sprint_id)
     current_user
@@ -112,10 +136,6 @@ module ValidationsHelper
     project
     user
 
-    if @story.sprint.initial_date > @story.initial_date &&
-       @story.sprint.final_date < @story.final_date
-      return false
-    end
     if @project.is_scoring
       if story_points != nil
         return true
