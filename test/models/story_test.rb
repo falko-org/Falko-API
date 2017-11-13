@@ -40,6 +40,8 @@ class StoryTest < ActiveSupport::TestCase
       assign: "Lucas",
       pipeline: "in progress",
       initial_date: "01/01/2017",
+      issue_number: "10",
+      is_close: false,
       sprint_id: @sprint.id
     )
   end
