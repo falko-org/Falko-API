@@ -30,15 +30,15 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     @sprint = Sprint.create(
       name: "Sprint 1",
       description: "Sprint 1 us10",
-      initial_date: "06/10/2017",
-      final_date: "13/10/2017",
+      initial_date: "06/10/2018",
+      final_date: "13/10/2018",
       release_id: @release.id
     )
     @no_revision_sprint = Sprint.create(
       name: "Sprint 2",
       description: "A Sprint",
-      initial_date: "23-04-1993",
-      final_date: "23-04-2003",
+      initial_date: "06/10/2018",
+      final_date: "13/10/2018",
       release_id: @release.id
     )
 
@@ -77,8 +77,8 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     @another_sprint = Sprint.create(
       name: "Sprint 2",
       description: "Sprint 2 us10",
-      initial_date: "06/10/2017",
-      final_date: "13/10/2017",
+      initial_date: "06/10/2018",
+      final_date: "13/10/2018",
       release_id: @release.id
     )
 

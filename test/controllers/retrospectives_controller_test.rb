@@ -30,8 +30,8 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
     @sprint = Sprint.create(
       name: "Sprint 1",
       description: "A Sprint",
-      initial_date: "23-04-1993",
-      final_date: "23-04-2003",
+      initial_date: "23-04-2018",
+      final_date: "23-05-2018",
       release_id: @release.id
     )
 
@@ -80,8 +80,8 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
     @another_sprint = Sprint.create(
       name: "Sprint 1",
       description: "A sprint",
-      initial_date: "23-04-1993",
-      final_date: "23-04-2003",
+      initial_date: "23-04-2018",
+      final_date: "23-05-2018",
       release_id: @another_release.id
     )
 
