@@ -76,8 +76,8 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
   test "should create a sprint with valids params" do
     post "/releases/#{@release.id}/sprints", params: {
       "sprint": {
-        "name": "Saaaaa",
-        "description": "Descrição da sprint",
+        "name": "Sprint Name",
+        "description": "Description of sprint",
         "initial_date": "25/06/2018",
         "final_date": "13/10/2018"
       }
@@ -90,7 +90,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     post "/releases/#{@release.id}/sprints", params: {
       "sprint": {
         "name": "S",
-        "description": "Descrição da sprint",
+        "description": "Description of sprint",
         "initial_date": "25/06/2018",
         "final_date": "13/10/2018"
       }
@@ -103,7 +103,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     post "/releases/#{@release.id}/sprints", params: {
       "sprint": {
         "name": "S" * 129,
-        "description": "Descrição da sprint",
+        "description": "Description of sprint",
         "initial_date": "25/06/2018",
         "final_date": "13/10/2018"
       }
@@ -129,7 +129,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     post "/releases/#{@release.id}/sprints", params: {
       "sprint": {
         "name": "Sprint",
-        "description": "Descrição",
+        "description": "Description of sprint",
         "initial_date": "13/10/2018",
         "final_date": "25/06/2018"
       }
@@ -142,7 +142,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     put "/sprints/#{@sprint.id}", params: {
       "sprint": {
         "name": "Sprint 02",
-        "description": "Descrição de uma sprint",
+        "description": "Description of sprint",
         "initial_date": "13/10/2018",
         "final_date": "25/12/2018"
       }
@@ -155,7 +155,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     put "/sprints/#{@sprint.id}", params: {
       "sprint": {
         "name": "S",
-        "description": "Descrição da sprint",
+        "description": "Description of sprint",
         "initial_date": "25/06/2018",
         "final_date": "13/10/2017"
       }
@@ -168,7 +168,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     put "/sprints/#{@sprint.id}", params: {
       "sprint": {
         "name": "S" * 129,
-        "description": "Descrição da sprint",
+        "description": "Description of sprint",
         "initial_date": "25/06/2018",
         "final_date": "13/10/2018"
       }
@@ -194,7 +194,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     put "/sprints/#{@sprint.id}", params: {
       "sprint": {
         "name": "Sprint",
-        "description": "Descrição",
+        "description": "Description of sprint",
         "initial_date": "13/10/2018",
         "final_date": "25/06/2018"
       }
@@ -257,8 +257,8 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
   test "should not create a sprint with a final date outside the release interval" do
     post "/releases/#{@release.id}/sprints", params: {
       "sprint": {
-        "name": "Saaaaa",
-        "description": "Descrição da sprint",
+        "name": "Sprint Name",
+        "description": "Description of sprint",
         "initial_date": "25/06/2018",
         "final_date": "13/10/2060"
       }
@@ -270,8 +270,8 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
   test "should not create a sprint with a initial date outside the release interval" do
     post "/releases/#{@release.id}/sprints", params: {
       "sprint": {
-        "name": "Saaaaa",
-        "description": "Descrição da sprint",
+        "name": "Sprint Name",
+        "description": "Description of sprint",
         "initial_date": "25/06/1990",
         "final_date": "13/10/2018"
       }

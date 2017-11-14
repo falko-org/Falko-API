@@ -83,8 +83,8 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     )
 
     @another_revision = Revision.create(
-      done_report: ["Não foi feito nada"],
-      undone_report: ["Tudo"],
+      done_report: ["A us14 story was made"],
+      undone_report: ["History was not made us22"],
       sprint_id: @another_sprint.id
     )
 
