@@ -264,7 +264,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       }
     }, headers: { Authorization: @token.result }
 
-    assert_response :not_acceptable
+    assert_response :unprocessable_entity
   end
 
   test "should not create a sprint with a initial date outside the release interval" do
@@ -277,7 +277,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       }
     }, headers: { Authorization: @token.result }
 
-    assert_response :not_acceptable
+    assert_response :unprocessable_entity
   end
 
 end

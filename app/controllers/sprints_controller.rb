@@ -38,7 +38,7 @@ class SprintsController < ApplicationController
         render json: @sprint.errors, status: :unprocessable_entity
       end
     else
-      render json: { error: "Can not create a sprint outside the range of a release" }, status: 406
+      render json: { error: "Can not create a sprint outside the range of a release" }, status: :unprocessable_entity
     end
   end
 
@@ -51,7 +51,7 @@ class SprintsController < ApplicationController
         render json: @sprint.errors, status: :unprocessable_entity
       end
     else
-      render json: { error: "Can not create a story outside the range of a sprint" }, status: 406
+      render json: { error: "Can not create a story outside the range of a sprint" }, status: :unprocessable_entity
     end
   end
 
