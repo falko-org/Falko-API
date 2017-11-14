@@ -8,16 +8,15 @@ ruby: 2.4.1
 
 env:
   global:
-    - CC_TEST_REPORTER_ID=095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3
-    - DB=pgsql
+  - CC_TEST_REPORTER_ID=095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3
+  - DB=pgsql
 
 services:
   - docker
   - postgresql
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_16fe788254fd_key -iv $encrypted_16fe788254fd_iv
-    -in .travis/deploy.key.enc -out .travis/deploy.key -d
+  - openssl aes-256-cbc -K $encrypted_16fe788254fd_key -iv $encrypted_16fe788254fd_iv -in .travis/alax-digitalocean-key.enc -out .travis/alax-digitalocean-key -d
 
 install: true
 
@@ -40,8 +39,7 @@ notifications:
 script:
   - docker-compose -f docker-compose.test.yml up -d
   - docker exec falko-test bash -c "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
-  - docker exec falko-test bash -c "chmod +x ./cc-test-reporter"
-  - chmod +x ./travis-deploy.sh
+  - docker exec falko-test bash -c "chmod +x cc-test-reporter"
   - docker exec falko-test bash -c "./cc-test-reporter before-build"
   - docker exec falko-test bash -c "./wait-4-postgres.sh"
   - docker exec falko-test bundle install
@@ -55,16 +53,17 @@ after_script:
   - docker-compose down --remove-orphans
 
 after_success:
-  - ./travis-deploy.sh
   - eval "$(ssh-agent -s)"
-  - ssh-add .travis/deploy.key
+  - chmod 600 .travis/alax-digitalocean-key
+  - ssh-add .travis/alax-digitalocean-key
   - ssh-keyscan 45.55.176.99 >> ~/.ssh/known_hosts
   - git remote add dokku dokku@45.55.176.99:falko-backend
+  - git remote -v
   - git config --global push.default simple
   - |
     if [ "${TRAVIS_BRANCH}" == "devel" ]; then
       echo "Deploying to homolog environment..."
       git push dokku devel:master
-    else 
+    else
       echo "Skipping homolog deploy..."
     fi
