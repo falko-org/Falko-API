@@ -42,7 +42,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       pipeline: "In Progress",
       initial_date: "01/01/2017",
       issue_number: "10",
-      is_close: false,
+      is_closed: false,
       sprint_id: @sprint.id
     )
 
@@ -89,7 +89,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       initial_date: "01/01/2017",
       final_date: "07/01/2017",
       issue_number: "9",
-      is_close: false,
+      is_closed: false,
       sprint_id: @another_sprint.id
     )
 
@@ -114,7 +114,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "initial_date": "01/01/2018",
         "final_date": "09/01/2018",
         "issue_number": "10",
-        "is_close": false
+        "is_closed": false
       }
     }, headers: { Authorization: @token.result }
 
@@ -131,7 +131,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "a" * 60,
         "initial_date": "01/01/2018",
         "issue_number": "10",
-        "is_close": false
+        "is_closed": false
       }
     }, headers: { Authorization: @token.result }
 
@@ -148,7 +148,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "In Progress",
         "initial_date": "01/01/2018",
         "issue_number": "10",
-        "is_close": false
+        "is_closed": false
       }
     }
 
@@ -164,7 +164,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "In Progress",
         "initial_date": "01/01/2018",
         "issue_number": "10",
-        "is_close": false
+        "is_closed": false
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -181,7 +181,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "initial_date": "2018-01-02",
         "final_date": "01/01/2018",
         "issue_number": "10",
-        "is_close": false
+        "is_closed": false
       }
     }
 
@@ -353,7 +353,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "final_date": "09/01/2018",
         "story_points": "10",
         "issue_number": "10",
-        "is_close": false
+        "is_closed": false
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -369,7 +369,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "Done",
         "initial_date": "01/01/2018",
         "issue_number": "10",
-        "is_close": false
+        "is_closed": false
       }
     }, headers: { Authorization: @token.result }
 
@@ -400,7 +400,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "initial_date": "01/01/2018",
         "story_points": "10",
         "issue_number": "10",
-        "is_close": false
+        "is_closed": false
       }
     }, headers: { Authorization: @token.result }
 
@@ -417,7 +417,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "initial_date": "01/01/2018",
         "story_points": "10",
         "issue_number": "10",
-        "is_close": false
+        "is_closed": false
       }
     }, headers: { Authorization: @another_token.result }
 

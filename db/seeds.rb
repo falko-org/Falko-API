@@ -122,7 +122,7 @@ stories = [
     final_date: "02/01/2017",
     sprint_id: "1",
     issue_number: "4",
-    is_close: false
+    is_closed: false
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -133,7 +133,7 @@ stories = [
     final_date: "08/01/2017",
     sprint_id: "1",
     issue_number: "4",
-    is_close: false
+    is_closed: false
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -143,7 +143,7 @@ stories = [
     initial_date: "03/01/2017",
     sprint_id: "2",
     issue_number: "4",
-    is_close: false
+    is_closed: false
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -153,7 +153,7 @@ stories = [
     initial_date: "01/01/2017",
     sprint_id: "2",
     issue_number: "4",
-    is_close: false
+    is_closed: false
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -163,7 +163,7 @@ stories = [
     initial_date: "01/01/2017",
     sprint_id: "3",
     issue_number: "4",
-    is_close: false
+    is_closed: false
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -174,7 +174,7 @@ stories = [
     final_date: "15/01/2017",
     sprint_id: "3",
     issue_number: "4",
-    is_close: false
+    is_closed: false
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -184,7 +184,7 @@ stories = [
     initial_date: "01/01/2017",
     sprint_id: "4",
     issue_number: "4",
-    is_close: false
+    is_closed: false
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -194,7 +194,7 @@ stories = [
     initial_date: "01/01/2017",
     sprint_id: "4",
     issue_number: "4",
-    is_close: false
+    is_closed: false
   )
 ]
 
