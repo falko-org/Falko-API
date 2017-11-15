@@ -7,18 +7,21 @@ language: ruby
 ruby: 2.4.1
 
 env:
-    global:
-      - CC_TEST_REPORTER_ID=095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3
-      - DB=pgsql
+  global:
+  - CC_TEST_REPORTER_ID=095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3
+  - DB=pgsql
 
 services:
   - docker
   - postgresql
 
+before_install:
+  - openssl aes-256-cbc -K $encrypted_16fe788254fd_key -iv $encrypted_16fe788254fd_iv -in .travis/alax-digitalocean-key.enc -out .travis/alax-digitalocean-key -d
+
 install: true
 
 before_script:
-  - psql -c 'create database travis_ci_test;' -U postgres
+  - psql -c "create database travis_ci_test;" -U postgres
   - sudo service postgresql stop
   - while sudo lsof -Pi :5432 -sTCP:LISTEN -t; do sleep 1; done
 
@@ -27,16 +30,16 @@ test:
   database: travis_ci_test
 
 addons:
-    code_climate:
-            repo_token: 095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3
+  code_climate:
+    repo_token: "095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3"
 
 notifications:
-    slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
+  slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
 
 script:
   - docker-compose -f docker-compose.test.yml up -d
   - docker exec falko-test bash -c "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
-  - docker exec falko-test bash -c "chmod +x ./cc-test-reporter"
+  - docker exec falko-test bash -c "chmod +x cc-test-reporter"
   - docker exec falko-test bash -c "./cc-test-reporter before-build"
   - docker exec falko-test bash -c "./wait-4-postgres.sh"
   - docker exec falko-test bundle install
@@ -44,7 +47,23 @@ script:
   - docker exec falko-test bundle exec rails db:migrate
   - docker exec falko-test bundle exec rake db:test:prepare
   - docker exec falko-test bundle exec rails test
- 
+
 after_script:
   - docker exec falko-test bash -c "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT --coverage-input-type simplecov --id $CC_TEST_REPORTER_ID"
   - docker-compose down --remove-orphans
+
+after_success:
+  - eval "$(ssh-agent -s)"
+  - chmod 600 .travis/alax-digitalocean-key
+  - ssh-add .travis/alax-digitalocean-key
+  - ssh-keyscan 45.55.176.99 >> ~/.ssh/known_hosts
+  - git remote add dokku dokku@45.55.176.99:falko-backend
+  - git remote -v
+  - git config --global push.default simple
+  - |
+    if [ "${TRAVIS_BRANCH}" == "devel" ]; then
+      echo "Deploying to homolog environment..."
+      git push dokku devel:master
+    else
+      echo "Skipping homolog deploy..."
+    fi
