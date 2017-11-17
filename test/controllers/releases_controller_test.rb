@@ -39,7 +39,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     @another_project = Project.create(
       name: "Futebol",
       description: "Description.",
-      user_id: @user.id,
+      user_id: @another_user.id,
       is_project_from_github: true
     )
 
@@ -49,7 +49,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
       initial_date: "2018-01-01",
       final_date: "2019-01-01",
       amount_of_sprints: "20",
-      project_id: @project.id
+      project_id: @another_project.id
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
