@@ -25,25 +25,33 @@ class SprintsController < ApplicationController
 
   # POST /sprints
   def create
-    @sprint = Sprint.create(sprint_params)
-    @sprint.release = @release
-    update_amount_of_sprints
-    if @sprint.save
-      render json: @sprint, status: :created
-      # @release used from validate_release
+    @sprint = Sprint.new(sprint_params)
+    if validate_sprints_date("sprint", sprint_params)
       @sprint.release = @release
       update_amount_of_sprints
+      if @sprint.save
+        render json: @sprint, status: :created
+        # @release used from validate_release
+        @sprint.release = @release
+        update_amount_of_sprints
+      else
+        render json: @sprint.errors, status: :unprocessable_entity
+      end
     else
-      render json: @sprint.errors, status: :unprocessable_entity
+      render json: { error: "Can not create a sprint outside the range of a release" }, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /sprints/1
   def update
-    if @sprint.update(sprint_params)
-      render json: @sprint
+    if validate_sprints_date("sprint", sprint_params)
+      if @sprint.update(sprint_params)
+        render json: @sprint
+      else
+        render json: @sprint.errors, status: :unprocessable_entity
+      end
     else
-      render json: @sprint.errors, status: :unprocessable_entity
+      render json: { error: "Can not create a story outside the range of a sprint" }, status: :unprocessable_entity
     end
   end
 

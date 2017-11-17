@@ -30,8 +30,8 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     @sprint = Sprint.create(
       name: "Sprint 1",
       description: "Sprint 1 us10",
-      initial_date: "06/10/2017",
-      final_date: "13/10/2017",
+      initial_date: "06/10/2018",
+      final_date: "13/10/2018",
       release_id: @release.id
     )
 
@@ -64,8 +64,8 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     @another_sprint = Sprint.create(
       name: "Sprint 2",
       description: "Sprint 2 us10",
-      initial_date: "06/10/2017",
-      final_date: "13/10/2017",
+      initial_date: "06/10/2018",
+      final_date: "13/10/2018",
       release_id: @another_release.id
     )
 
@@ -76,10 +76,10 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
   test "should create a sprint with valids params" do
     post "/releases/#{@release.id}/sprints", params: {
       "sprint": {
-        "name": "Saaaaa",
-        "description": "Descrição da sprint",
-        "initial_date": "25/06/1996",
-        "final_date": "13/10/2017"
+        "name": "Sprint Name",
+        "description": "Description of sprint",
+        "initial_date": "25/06/2018",
+        "final_date": "13/10/2018"
       }
     }, headers: { Authorization: @token.result }
 
@@ -90,9 +90,9 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     post "/releases/#{@release.id}/sprints", params: {
       "sprint": {
         "name": "S",
-        "description": "Descrição da sprint",
-        "initial_date": "25/06/1996",
-        "final_date": "13/10/2017"
+        "description": "Description of sprint",
+        "initial_date": "25/06/2018",
+        "final_date": "13/10/2018"
       }
     }, headers: { Authorization: @token.result }
 
@@ -103,9 +103,9 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     post "/releases/#{@release.id}/sprints", params: {
       "sprint": {
         "name": "S" * 129,
-        "description": "Descrição da sprint",
-        "initial_date": "25/06/1996",
-        "final_date": "13/10/2017"
+        "description": "Description of sprint",
+        "initial_date": "25/06/2018",
+        "final_date": "13/10/2018"
       }
     }, headers: { Authorization: @token.result }
 
@@ -117,8 +117,8 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       "sprint": {
         "name": "Sprint",
         "description": "D" * 257,
-        "initial_date": "25/06/1996",
-        "final_date": "13/10/2017"
+        "initial_date": "25/06/2018",
+        "final_date": "13/10/2018"
       }
     }, headers: { Authorization: @token.result }
 
@@ -129,9 +129,9 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     post "/releases/#{@release.id}/sprints", params: {
       "sprint": {
         "name": "Sprint",
-        "description": "Descrição",
-        "initial_date": "13/10/2017",
-        "final_date": "25/06/1996"
+        "description": "Description of sprint",
+        "initial_date": "13/10/2018",
+        "final_date": "25/06/2018"
       }
     }, headers: { Authorization: @token.result }
 
@@ -142,9 +142,9 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     put "/sprints/#{@sprint.id}", params: {
       "sprint": {
         "name": "Sprint 02",
-        "description": "Descrição de uma sprint",
-        "initial_date": "13/10/2017",
-        "final_date": "25/12/2017"
+        "description": "Description of sprint",
+        "initial_date": "13/10/2018",
+        "final_date": "25/12/2018"
       }
     }, headers: { Authorization: @token.result }
 
@@ -155,8 +155,8 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     put "/sprints/#{@sprint.id}", params: {
       "sprint": {
         "name": "S",
-        "description": "Descrição da sprint",
-        "initial_date": "25/06/1996",
+        "description": "Description of sprint",
+        "initial_date": "25/06/2018",
         "final_date": "13/10/2017"
       }
     }, headers: { Authorization: @token.result }
@@ -168,9 +168,9 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     put "/sprints/#{@sprint.id}", params: {
       "sprint": {
         "name": "S" * 129,
-        "description": "Descrição da sprint",
-        "initial_date": "25/06/1996",
-        "final_date": "13/10/2017"
+        "description": "Description of sprint",
+        "initial_date": "25/06/2018",
+        "final_date": "13/10/2018"
       }
     }, headers: { Authorization: @token.result }
 
@@ -182,8 +182,8 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       "sprint": {
         "name": "Sprint",
         "description": "D" * 257,
-        "initial_date": "25/06/1996",
-        "final_date": "13/10/2017"
+        "initial_date": "25/06/2018",
+        "final_date": "13/10/2018"
       }
     }, headers: { Authorization: @token.result }
 
@@ -194,9 +194,9 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     put "/sprints/#{@sprint.id}", params: {
       "sprint": {
         "name": "Sprint",
-        "description": "Descrição",
-        "initial_date": "13/10/2017",
-        "final_date": "25/06/1996"
+        "description": "Description of sprint",
+        "initial_date": "13/10/2018",
+        "final_date": "25/06/2018"
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -253,4 +253,31 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  test "should not create a sprint with a final date outside the release interval" do
+    post "/releases/#{@release.id}/sprints", params: {
+      "sprint": {
+        "name": "Sprint Name",
+        "description": "Description of sprint",
+        "initial_date": "25/06/2018",
+        "final_date": "13/10/2060"
+      }
+    }, headers: { Authorization: @token.result }
+
+    assert_response :unprocessable_entity
+  end
+
+  test "should not create a sprint with a initial date outside the release interval" do
+    post "/releases/#{@release.id}/sprints", params: {
+      "sprint": {
+        "name": "Sprint Name",
+        "description": "Description of sprint",
+        "initial_date": "25/06/1990",
+        "final_date": "13/10/2018"
+      }
+    }, headers: { Authorization: @token.result }
+
+    assert_response :unprocessable_entity
+  end
+
 end
