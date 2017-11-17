@@ -297,7 +297,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "should not show issue with same number as story" do
+  test "should not show issues in Backlog already allocated" do
     mock = Minitest::Mock.new
 
     def mock.user()
