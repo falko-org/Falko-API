@@ -57,13 +57,18 @@ after_success:
   - chmod 600 .travis/alax-digitalocean-key
   - ssh-add .travis/alax-digitalocean-key
   - ssh-keyscan 45.55.176.99 >> ~/.ssh/known_hosts
-  - git remote add dokku dokku@45.55.176.99:falko-backend
+  - ssh-keyscan 104.236.12.198 >> ~/.ssh/known_hosts
+  - git remote add dokku dokku@45.55.176.99:falko-backend #Homolog IP
+  - git remote add dokkuprod dokku@104.236.12.198:falko-backend #Production IP
   - git remote -v
   - git config --global push.default simple
   - |
     if [ "${TRAVIS_BRANCH}" == "devel" ]; then
       echo "Deploying to homolog environment..."
       git push dokku devel:master
+    else if [ "${TRAVIS_BRANCH}" == "master" ]; then
+      echo "Deploying to production environment..."
+      git push dokkuprod master:master
     else
       echo "Skipping homolog deploy..."
     fi
