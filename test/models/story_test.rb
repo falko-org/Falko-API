@@ -122,4 +122,12 @@ class StoryTest < ActiveSupport::TestCase
     @story.pipeline = "s" * 16
     assert @story.save
   end
+
+  test "should note create a story with duplicate issue_number" do
+    duplicate_story = @story.dup
+    duplicate_story.issue_number = @story.issue_number
+    @story.save
+    assert_not duplicate_story.save
+  end
+
 end
