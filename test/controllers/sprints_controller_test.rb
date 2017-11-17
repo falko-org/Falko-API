@@ -15,7 +15,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       description: "Some project description.",
       user_id: @user.id,
       is_project_from_github: true,
-      is_scoring: false
+      is_scoring: true
     )
 
     @release = Release.create(
@@ -30,10 +30,44 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     @sprint = Sprint.create(
       name: "Sprint 1",
       description: "Sprint 1 us10",
-      initial_date: "06/10/2017",
-      final_date: "13/10/2017",
+      initial_date: "01/01/2017",
+      final_date: "08/01/2017",
       release_id: @release.id
     )
+
+    @story = Story.create(
+      name: "Story 1",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "In progress",
+      initial_date: "01/01/2017",
+      story_points: "10",
+      sprint_id: @sprint.id
+    )
+
+    @story = Story.create(
+      name: "Story 2",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "Done",
+      initial_date: "01/01/2017",
+      final_date: "07/01/2017",
+      story_points: "10",
+      sprint_id: @sprint.id
+    )
+
+
+    @story = Story.create(
+      name: "Story 3",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "Done",
+      initial_date: "01/01/2017",
+      final_date: "07/01/2017",
+      story_points: "10",
+      sprint_id: @sprint.id
+    )
+
 
     @token = AuthenticateUser.call(@user.email, @user.password)
 
@@ -253,4 +287,13 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  test "Should get Burndown data if project is scored" do
+    get "/sprints/#{@sprint.id}/burndown", headers: { Authorization: @token.result }
+
+    assert_response :success
+  end
+
+
+
 end
