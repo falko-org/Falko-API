@@ -129,5 +129,4 @@ class StoryTest < ActiveSupport::TestCase
     @story.save
     assert_not duplicate_story.save
   end
-
 end
