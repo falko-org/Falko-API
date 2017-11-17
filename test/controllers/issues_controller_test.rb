@@ -44,7 +44,6 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
                           initial_date: "07/10/2017",
                           final_date: "12/10/2017",
                           issue_number: "9",
-                          is_closed: false,
                           sprint_id: @sprint.id,
                           story_points: 5
                           )
