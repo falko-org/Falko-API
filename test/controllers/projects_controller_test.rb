@@ -117,11 +117,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "test")
     end
 
-    def mock.repositories
+    def mock.repositories(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test") ]
     end
 
-    def mock.organizations
+    def mock.organizations(login)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "test") ]
     end
 
