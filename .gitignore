@@ -1,3 +1,8 @@
+# Ignore my Continuous Deploy Keys/Credentials
+.travis/*.key
+.travis/*.key.pub
+.travis/*.pem
+
 # Ignore bundler config.
 /.bundle
 
@@ -17,6 +22,8 @@ tmp/
 *.sw*
 *.swp*
 
+#Ignore code editor configurantion files
+.vscode/
 
 vendor/bundle
 coverage/

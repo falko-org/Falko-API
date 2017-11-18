@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :projects
+  has_many :projects, dependent: :destroy
 
   validates :name, presence: true, length: { in: 3..80 }
   validates :email, confirmation: true, presence: true, uniqueness: true

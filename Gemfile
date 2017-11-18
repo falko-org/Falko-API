@@ -21,6 +21,8 @@ gem "jwt", "~> 1.5.6"
 gem "simple_command"
 gem "rest-client"
 
+gem "travis", "~> 1.8", ">= 1.8.8"
+
 gem "codeclimate-test-reporter", group: :test, require: nil
 
 gem "carrierwave", "~> 1.1"
@@ -32,11 +34,13 @@ gem "simple_token_authentication", "~> 1.0"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem "rack-cors"
-
+gem "octokit", "~> 4.0"
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+  gem "minitest", "~> 5.8", ">= 5.8.4"
   gem "simplecov", require: false
+  gem "minitest-reporters"
 end
 
 group :development do
@@ -47,7 +51,8 @@ group :development do
 end
 
 group :production do
-  gem "rails_12factor", "~> 0.0.3"
+  gem "rails_12factor"
+  gem "activesupport", "~> 5.1", ">= 5.1.4"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
