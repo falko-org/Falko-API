@@ -29,27 +29,27 @@ class ProjectsController < ApplicationController
   end
 
   def github_projects_list
-		client = Adapter::GitHubProject.new()
-		
-		client.github_login
-    user_repos = []
-		
+		client = Adapter::GitHubProject.new(request)
+
 		client.get_github_repos
+
     @form_params_user = { user: [] }
-    @form_params_user[:user].push(login: user_login)
+    @form_params_user[:user].push(login: @user_login)
+    puts @form_params_user
+    user_repos = []
 
     (client.get_github_repos).each do |repo|
       user_repos.push(repo.name)
     end
 
-    @form_params[:user].push(repos: user_repos)
-		
+    @form_params_user[:user].push(repos: user_repos)
+
 		client.get_github_orgs
-		
+
     @form_params_orgs = { orgs: [] }
 
-    (client.get_github.orgs).each do |org|
-			client.get_github_orgs_repos
+    (client.get_github_orgs).each do |org|
+	    client.get_github_orgs_repos
       repos_names = []
       (client.get_github_orgs_repos).each do |repo|
         repos_names.push(repo.name)
@@ -69,8 +69,6 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.create(project_params)
     @project.user_id = @current_user.id
-
-    puts @project.github_slug
 
     if @project.save
       render json: @project, status: :created
@@ -92,11 +90,11 @@ class ProjectsController < ApplicationController
   end
 
   def get_contributors
-		client = Adapter::GitHubProject.new()
+		client = Adapter::GitHubProject.new(request)
 
     contributors = []
 
-    client.contributors(@project.github_slug).each do |contributor|
+    (client.contributors(@project.github_slug)).each do |contributor|
       contributors.push(contributor.login)
     end
 
