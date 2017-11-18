@@ -4,8 +4,8 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
     @token = AuthenticateUser.call(@user.email, @user.password)
-    @project = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, is_project_from_github: true, is_scoring: false)
-    @project2 = Project.create(name: "Falko", description: "Descrição do projeto.", user_id: @user.id, is_project_from_github: false, is_scoring: false)
+    @project = Project.create(name: "Falko", description: "Project description.", user_id: @user.id, is_project_from_github: true, is_scoring: false)
+    @project2 = Project.create(name: "FalkoSolutions/Falko", description: "Project description.", user_id: @user.id, is_project_from_github: false, is_scoring: false)
   end
 
   test "should see issues if user is loged in" do
@@ -59,13 +59,13 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.create_issue(path, name, body, options)
+    def mock.create_issue(path, name, body)
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3")
     end
 
 
     Octokit::Client.stub :new, mock do
-      post "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }, params: {
+      post "/projects/#{@project2.id}/issues", headers: { Authorization: @token.result }, params: {
         issue: {
           "name": "New Issue",
           "body": "New Body"
@@ -111,7 +111,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.update_issue(path, number, name, body, options)
+    def mock.update_issue(path, number, name, body)
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3")
     end
 
