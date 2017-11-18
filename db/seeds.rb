@@ -120,6 +120,7 @@ stories = [
     final_date: "02/01/2017",
     story_points: "10",
     sprint_id: "1"
+    issue_number: "1",
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -130,6 +131,7 @@ stories = [
     final_date: "08/01/2017",
     story_points: "10",
     sprint_id: "1"
+    issue_number: "2",
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -140,6 +142,7 @@ stories = [
     final_date: "04/01/2017",
     story_points: "10",
     sprint_id: "2"
+    issue_number: "3",
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -151,6 +154,7 @@ stories = [
     sprint_id: "2",
     story_points: "10",
     sprint_id: "2"
+    issue_number: "4",
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -160,6 +164,7 @@ stories = [
     initial_date: "01/01/2017",
     story_points: "10",
     sprint_id: "3"
+    issue_number: "5",
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -170,6 +175,7 @@ stories = [
     final_date: "15/01/2017",
     story_points: "10",
     sprint_id: "3"
+    issue_number: "6",
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -180,6 +186,7 @@ stories = [
     final_date: "04/01/2017",
     story_points: "10",
     sprint_id: "4"
+    issue_number: "7",
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -189,7 +196,7 @@ stories = [
     initial_date: "01/01/2017",
     final_date: "04/01/2017",
     story_points: "10",
-    sprint_id: "4"
+    issue_number: "8",
   )
 ]
 

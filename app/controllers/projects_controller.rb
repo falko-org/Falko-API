@@ -34,15 +34,16 @@ class ProjectsController < ApplicationController
 
     user_login = @client.user.login
     user_repos = []
-    @repos = @client.repositories
+    @repos = @client.repositories(user_login)
     @form_params = { user: [] }
     @form_params[:user].push(login: user_login)
+
     @repos.each do |repo|
       user_repos.push(repo.name)
     end
     @form_params[:user].push(repos: user_repos)
 
-    @orgs = @client.organizations
+    @orgs = @client.organizations(user_login)
     @form_params2 = { orgs: [] }
     @orgs.each do |org|
       repos = @client.organization_repositories(org.login)

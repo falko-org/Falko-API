@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171108135629) do
+ActiveRecord::Schema.define(version: 20171111174534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20171108135629) do
     t.date "initial_date"
     t.date "final_date"
     t.integer "story_points"
+    t.string "issue_number"
     t.index ["sprint_id"], name: "index_stories_on_sprint_id"
   end
 
