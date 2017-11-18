@@ -31,7 +31,7 @@ projects = [
   Project.find_or_create_by(
     name: "Owla",
     description: "This project helps improving classes",
-    is_project_from_github: true,
+    is_project_from_github: false,
     github_slug: nil,
     is_scoring: false,
     user_id: "1"
@@ -39,7 +39,7 @@ projects = [
   Project.find_or_create_by(
     name: "Falko",
     description: "Agile Projects Manager",
-    is_project_from_github: true,
+    is_project_from_github: false,
     github_slug: nil,
     is_scoring: false,
     user_id: "2"
