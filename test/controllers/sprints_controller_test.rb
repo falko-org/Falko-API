@@ -15,7 +15,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       description: "Some project description.",
       user_id: @user.id,
       is_project_from_github: true,
-      is_scoring: false
+      is_scoring: true
     )
 
     @release = Release.create(
@@ -34,6 +34,29 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       final_date: "13/10/2018",
       release_id: @release.id
     )
+
+    @story = Story.create(
+      name: "Story 1",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "Done",
+      initial_date: "01/01/2017",
+      issue_number: "10",
+      sprint_id: @sprint.id,
+      story_points: 13
+    )
+
+    @another_story = Story.create(
+      name: "Story 1",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "Done",
+      initial_date: "01/01/2017",
+      issue_number: "10",
+      sprint_id: @sprint.id,
+      story_points: 5
+    )
+
 
     @token = AuthenticateUser.call(@user.email, @user.password)
 
@@ -280,4 +303,9 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "should get velocity data if project is scored" do
+    get "/sprints/#{@sprint.id}/velocity", headers: { Authorization: @token.result }
+
+    assert_response :success
+  end
 end
