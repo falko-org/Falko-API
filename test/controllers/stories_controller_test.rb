@@ -41,6 +41,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       assign: "Lucas",
       pipeline: "In Progress",
       initial_date: "01/01/2017",
+      issue_number: "10",
       sprint_id: @sprint.id
     )
 
@@ -86,6 +87,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       pipeline: "Done",
       initial_date: "01/01/2017",
       final_date: "07/01/2017",
+      issue_number: "9",
       sprint_id: @another_sprint.id
     )
 
@@ -108,7 +110,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "assign": "Mateus",
         "pipeline": "Done",
         "initial_date": "01/01/2018",
-        "final_date": "09/01/2018"
+        "final_date": "09/01/2018",
+        "issue_number": "8",
       }
     }, headers: { Authorization: @token.result }
 
@@ -123,7 +126,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "description": "First Story",
         "assign": "Mateus",
         "pipeline": "a" * 60,
-        "initial_date": "01/01/2018"
+        "initial_date": "01/01/2018",
+        "issue_number": "8",
       }
     }, headers: { Authorization: @token.result }
 
@@ -138,7 +142,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "description": "First Story",
         "assign": "Mateus",
         "pipeline": "In Progress",
-        "initial_date": "01/01/2018"
+        "initial_date": "01/01/2018",
+        "issue_number": "8",
       }
     }
 
@@ -152,7 +157,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "description": "First Story",
         "assign": "Mateus",
         "pipeline": "In Progress",
-        "initial_date": "01/01/2018"
+        "initial_date": "01/01/2018",
+        "issue_number": "8",
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -167,7 +173,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "assign": "Mateus",
         "pipeline": "Done",
         "initial_date": "2018-01-02",
-        "final_date": "01/01/2018"
+        "final_date": "01/01/2018",
+        "issue_number": "8",
       }
     }
 
@@ -337,7 +344,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "Done",
         "initial_date": "01/01/2018",
         "final_date": "09/01/2018",
-        "story_points": "10"
+        "story_points": "10",
+        "issue_number": "8",
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -351,7 +359,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "description": "First Story",
         "assign": "Mateus",
         "pipeline": "Done",
-        "initial_date": "01/01/2018"
+        "initial_date": "01/01/2018",
+        "issue_number": "8",
       }
     }, headers: { Authorization: @token.result }
 
@@ -380,7 +389,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "assign": "Mateus",
         "pipeline": "Done",
         "initial_date": "01/01/2018",
-        "story_points": "10"
+        "story_points": "10",
+        "issue_number": "10",
       }
     }, headers: { Authorization: @token.result }
 
@@ -395,7 +405,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "assign": "Mateus",
         "pipeline": "Done",
         "initial_date": "01/01/2018",
-        "story_points": "10"
+        "story_points": "10",
+        "issue_number": "8",
       }
     }, headers: { Authorization: @another_token.result }
 
