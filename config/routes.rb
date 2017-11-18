@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   patch "projects/:id/issues", to: "issues#update"
   delete "projects/:id/issues", to: "issues#close"
 
+  get "sprints/:id/velocity", to: "sprints#get_velocity"
+
+
   resources :users, shallow: true do
     resources :projects do
       resources :releases do
