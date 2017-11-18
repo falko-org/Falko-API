@@ -1,5 +1,6 @@
 class SprintsController < ApplicationController
   include ValidationsHelper
+  include VelocityHelper
 
   before_action :set_sprint, only: [:show, :update, :destroy]
 
@@ -7,9 +8,10 @@ class SprintsController < ApplicationController
     validate_release(0, :release_id)
   end
 
-  before_action only: [:show, :update, :destroy] do
+  before_action only: [:show, :update, :destroy, :get_velocity] do
     validate_sprint(:id, 0)
   end
+
 
   # GET /sprints
   def index
@@ -59,6 +61,36 @@ class SprintsController < ApplicationController
   def destroy
     @sprint.destroy
     update_amount_of_sprints
+  end
+
+  def get_velocity
+     release = @sprint.release
+     total_points = []
+     completed_points = []
+     names = []
+     velocities = []
+
+     release.sprints.each do |sprint|
+       names.push(sprint.name)
+
+       sprint_total_points = 0
+       sprint_completed_points = 0
+
+       sprint.stories.each do |story|
+         sprint_total_points += story.story_points
+
+         if story.pipeline == "Done"
+           sprint_completed_points += story.story_points
+         end
+       end
+
+       total_points.push(sprint_total_points)
+       completed_points.push(sprint_completed_points)
+       velocities.push(calculate_velocity(completed_points))
+     end
+
+     velocity = { total_points: total_points, completed_points: completed_points, names: names, velocities: velocities }
+     render json: velocity
   end
 
   private
