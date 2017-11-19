@@ -2,13 +2,29 @@ require "test_helper"
 
 class ReleaseTest < ActiveSupport::TestCase
   def setup
-    @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com",
-                        password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
-    @project = Project.create(name: "Falko", description: "Esse projeto faz parte da disciplina MDS.",
-                              user_id: @user.id, check_project: true)
-    @release = Release.create(name: "Release 1", description: "First Release.",
-                              initial_date: "01/01/2017", final_date: "02/02/2019",
-                              project_id: @project.id)
+    @user = User.create(
+      name: "Ronaldo",
+      email: "Ronaldofenomeno@gmail.com",
+      password: "123456789",
+      password_confirmation: "123456789",
+      github: "ronaldobola"
+    )
+
+    @project = Project.create(
+      name: "Falko",
+      description: "Some project description.",
+      user_id: @user.id,
+      is_project_from_github: true,
+      is_scoring: false
+    )
+
+    @release = Release.create(
+      name: "Release 1",
+      description: "First Release.",
+      initial_date: "01/01/2017",
+      final_date: "02/02/2019",
+      project_id: @project.id
+    )
   end
 
   test "should save a valid release" do

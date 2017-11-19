@@ -1,96 +1,55 @@
 class ReleasesController < ApplicationController
-  def index
-    if validate_project
-      @project = Project.find(params[:project_id])
-      @releases = @project.releases.reverse
-      render json: @releases
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+  include ValidationsHelper
+
+  before_action :set_release, only: [:show, :update, :destroy]
+
+  before_action only: [:index, :create] do
+    validate_project(0, :project_id)
   end
 
-  def new
-    @project = Project.find(params[:project_id])
-    @release = Release.new
-    @release.project = @project
+  before_action only: [:show, :edit, :update, :destroy] do
+    validate_release(:id, 0)
+  end
 
-    render json: @release
+  def index
+    @releases = @project.releases.reverse
+    render json: @releases
   end
 
   def show
-    if validate_releases
-      @release = Release.find(params[:id])
-      render json: @release
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
-  end
-
-  def edit
-    if validate_releases
-      @release = Release.find(params[:id])
-      render json: @release
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    update_amount_of_sprints
+    render json: @release
   end
 
   def create
-    if validate_project
-      @project = Project.find(params[:project_id])
-      @release = Release.create(release_params)
-      @release.project = @project
-
-      if @release.save
-        render json: @release, status: :created
-      else
-        render json: @release.errors, status: :unprocessable_entity
-      end
+    @release = Release.create(release_params)
+    @release.project = @project
+    update_amount_of_sprints
+    if @release.save
+      render json: @release, status: :created
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: @release.errors, status: :unprocessable_entity
     end
   end
 
   def update
-    if validate_releases
-      @release = Release.find(params[:id])
-      if @release.update(release_params)
-        render json: @release
-      else
-        render json: @release.errors, status: :unprocessable_entity
-      end
+    if @release.update(release_params)
+      render json: @release
     else
-      render json: { error: "Not Authorized" }, status: 401
+      render json: @release.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if validate_releases
-      @release = Release.find(params[:id])
-      @release.destroy
-    else
-      render json: { error: "Not Authorized" }, status: 401
-    end
+    @release.destroy
   end
 
   private
+    def set_release
+      @release = Release.find(params[:id])
+    end
 
     def release_params
       params.require(:release).permit(:name, :description, :amount_of_sprints, :initial_date, :final_date)
-    end
-
-    def validate_project
-      @current_user = AuthorizeApiRequest.call(request.headers).result
-      @project = Project.find(params[:project_id].to_i)
-      (@project.user_id).to_i == @current_user.id
-    end
-
-    def validate_releases
-      @current_user = AuthorizeApiRequest.call(request.headers).result
-      @release = Release.find(params[:id])
-      @project = Project.find(@release.project_id)
-      @user = User.find(@project.user_id)
-
-      @current_user.id == @user.id
     end
 end

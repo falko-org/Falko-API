@@ -10,58 +10,238 @@ puts "Creating Users"
 users = User.create(
   [
     {
-      name: "Vitor Barbosa", email: "barbosa@gmail.com", password: "123456789",
-      password_confirmation: "123456789", github: "vituuGit"
+      name: "Vitor Barbosa",
+      email: "barbosa@gmail.com",
+      password: "123456789",
+      password_confirmation: "123456789",
+      github: "vituuGit"
     },
     {
-      name: "Carla", email: "carla@gmail.com", password: "123456789",
-      password_confirmation: "123456789", github: "carlaGit"
+      name: "Carla",
+      email: "carla@gmail.com",
+      password: "123456789",
+      password_confirmation: "123456789",
+      github: "carlaGit"
     }
   ]
 )
 
 puts "Creating Projects"
-projects = Project.create(
-  [
-    {
-      name: "Owla", description: "This project helps improving classes",
-      user_id: User.find_by(name: "Vitor Barbosa").id
-    },
-    {
-      name: "Falko", description: "Agile Projects Manager",
-      user_id: User.find_by(name: "Carla").id
-    }
-  ]
-)
+projects = [
+  Project.find_or_create_by(
+    name: "Owla",
+    description: "This project helps improving classes",
+    is_project_from_github: false,
+    github_slug: nil,
+    is_scoring: false,
+    user_id: "1"
+  ),
+  Project.find_or_create_by(
+    name: "Falko",
+    description: "Agile Projects Manager",
+    is_project_from_github: false,
+    github_slug: nil,
+    is_scoring: false,
+    user_id: "2"
+  )
+]
 
-puts "Creating Sprints"
-releases = Sprint.create(
-  [
-    {
-      name: "Sprint 01", description: "First Sprint", initial_date: "01-08-2016",
-      final_date: "01-10-2016", project_id: Project.find_by(name: "Owla").id
-    },
-    {
-      name: "S1", description: "First Sprint", initial_date: "01-10-2016",
-      final_date: "01-12-2016", project_id: Project.find_by(name: "Falko").id
-    }
-  ]
-)
 
 puts "Creating Releases"
-releases = Release.create(
-  [
-    {
-      name: "R1", description: "RUP Release", initial_date: "01-08-2016",
-      final_date: "01-10-2016", project_id: Project.find_by(name: "Owla").id
-    },
-    {
-      name: "R2", description: "Agile Release", initial_date: "01-10-2016",
-      final_date: "01-12-2016", project_id: Project.find_by(name: "Owla").id
-    },
-    {
-      name: "R - 01", description: "First Release", initial_date: "01-08-2017",
-      final_date: "01-10-2016", project_id: Project.find_by(name: "Falko").id
-    }
-  ]
-)
+releases = [
+  Release.find_or_create_by(
+    name: "R1",
+    description: "RUP Release",
+    initial_date: "01-08-2016",
+    final_date: "01-10-2016",
+    project_id: "1"
+  ),
+  Release.find_or_create_by(
+    name: "R2",
+    description: "Agile Release",
+    initial_date: "01-10-2016",
+    final_date: "01-12-2016",
+    project_id: "1"
+  ),
+  Release.find_or_create_by(
+    name: "R - 01",
+    description: "First Release",
+    initial_date: "01-08-2016",
+    final_date: "01-10-2016",
+    project_id: "2"
+  ),
+  Release.find_or_create_by(
+    name: "R - 02",
+    description: "Second Release",
+    initial_date: "01-10-2016",
+    final_date: "01-12-2016",
+    project_id: "2"
+  )
+]
+
+puts "Creating Sprints"
+sprints = [
+  Sprint.find_or_create_by(
+    name: "Sprint 1 - P1",
+    description: "First Sprint",
+    initial_date: "01-08-2016",
+    final_date: "01-10-2016",
+    release_id: "1"
+  ),
+  Sprint.find_or_create_by(
+    name: "Sprint 2 - P1",
+    description: "Second Sprint",
+    initial_date: "01-10-2016",
+    final_date: "01-12-2016",
+    release_id: "1"
+  ),
+  Sprint.find_or_create_by(
+    name: "Sprint 1 - P2",
+    description: "First Sprint",
+    initial_date: "01-08-2016",
+    final_date: "01-10-2016",
+    release_id: "2"
+  ),
+  Sprint.find_or_create_by(
+    name: "Sprint 2 - P2",
+    description: "Second Sprint",
+    initial_date: "01-10-2016",
+    final_date: "01-12-2016",
+    release_id: "2"
+  )
+]
+
+puts "Creating Stories"
+stories = [
+  Story.find_or_create_by(
+    name: "Story 1",
+    description: "Story 1 us14",
+    assign: "Lucas",
+    pipeline: "Backlog",
+    initial_date: "01/01/2017",
+    final_date: "02/01/2017",
+    sprint_id: "1",
+    issue_number: "1",
+  ),
+  Story.find_or_create_by(
+    name: "Story 2",
+    description: "Story 2 us14",
+    assign: "Alax",
+    pipeline: "Done",
+    initial_date: "01/01/2017",
+    final_date: "08/01/2017",
+    sprint_id: "1",
+    issue_number: "2",
+  ),
+  Story.find_or_create_by(
+    name: "Story 1",
+    description: "Story 1 us14",
+    assign: "Matheus B",
+    pipeline: "In Progress",
+    initial_date: "03/01/2017",
+    sprint_id: "2",
+    issue_number: "3",
+  ),
+  Story.find_or_create_by(
+    name: "Story 2",
+    description: "Story 2 us14",
+    assign: "Matheus R",
+    pipeline: "Backlog",
+    initial_date: "01/01/2017",
+    sprint_id: "2",
+    issue_number: "4",
+  ),
+  Story.find_or_create_by(
+    name: "Story 1",
+    description: "Story 1 us14",
+    assign: "Matheus Roberto",
+    pipeline: "In Progress",
+    initial_date: "01/01/2017",
+    sprint_id: "3",
+    issue_number: "5",
+  ),
+  Story.find_or_create_by(
+    name: "Story 2",
+    description: "Story 2 us14",
+    assign: "Thalisson",
+    pipeline: "Done",
+    initial_date: "07/01/2017",
+    final_date: "15/01/2017",
+    sprint_id: "3",
+    issue_number: "6",
+  ),
+  Story.find_or_create_by(
+    name: "Story 1",
+    description: "Story 1 us14",
+    assign: "Vinícius",
+    pipeline: "In Progress",
+    initial_date: "01/01/2017",
+    sprint_id: "4",
+    issue_number: "7",
+  ),
+  Story.find_or_create_by(
+    name: "Story 2",
+    description: "Story 2 us14",
+    assign: "Adrianne",
+    pipeline: "In Progress",
+    initial_date: "01/01/2017",
+    sprint_id: "4",
+    issue_number: "8",
+  )
+]
+
+puts "Creating Revisions"
+revisions = [
+  Revision.find_or_create_by(
+    done_report: ["Story US11 was done."],
+    undone_report: ["Story US21 was not done."],
+    sprint_id: "1"
+  ),
+  Revision.find_or_create_by(
+    done_report: ["Story US12 was done."],
+    undone_report: ["Story US22 was not done."],
+    sprint_id: "2"
+  ),
+  Revision.find_or_create_by(
+    done_report: ["Story US13 was done."],
+    undone_report: ["Story US23 was not done."],
+    sprint_id: "3"
+  ),
+  Revision.find_or_create_by(
+    done_report: ["Story US14 was done."],
+    undone_report: ["Story US24 was not done."],
+    sprint_id: "4"
+  )
+]
+
+puts "Creating Retrospective"
+retrospectives = [
+  Retrospective.find_or_create_by(
+    sprint_report: "Sprint description",
+    positive_points: ["Very good"],
+    negative_points: ["No tests"],
+    improvements: ["Improve front-end"],
+    sprint_id: "1"
+  ),
+  Retrospective.find_or_create_by(
+    sprint_report: "Sprint description",
+    positive_points: ["Very good"],
+    negative_points: ["No tests"],
+    improvements: ["Improve back-end"],
+    sprint_id: "2"
+  ),
+  Retrospective.find_or_create_by(
+    sprint_report: "Sprint description",
+    positive_points: ["Very good"],
+    negative_points: ["No tests"],
+    improvements: ["Improve back-end"],
+    sprint_id: "3"
+  ),
+  Retrospective.find_or_create_by(
+    sprint_report: "Sprint description",
+    positive_points: ["Very good"],
+    negative_points: ["No tests"],
+    improvements: ["Improve front-end"],
+    sprint_id: "4"
+  ),
+]

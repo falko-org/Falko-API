@@ -50,6 +50,8 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "Falko-2017_2_#{Rails.env}"
   config.action_mailer.perform_caching = false
 
+  config.secret_key_base = ENV["SECRET_KEY_BASE"]
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false

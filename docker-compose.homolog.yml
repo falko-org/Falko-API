@@ -1,0 +1,32 @@
+version: '3'
+services:
+
+  falko-database:
+    container_name: dokku.postgres.falko
+    image: postgres:9.6
+    environment:
+      - PG_HOST=falko-database
+      - PG_USERNAME=postgres
+    volumes:
+      - ./tmp/data/postgresql:/postgresql
+      - ./tmp/data/postgresql:/var/lib/postgresql
+
+  falko-server:
+    container_name: falko-server
+    build: 
+      context: .
+      dockerfile: Dockerfile.homolog
+    environment: 
+      - RAILS_ENV=production
+    volumes:
+      - .:/Falko-2017.2-BackEnd
+      - bundle-cache:/bundle-cache
+    ports:
+      - 3000
+    depends_on:
+      - falko-database
+
+volumes:
+  bundle-cache:
+
+
