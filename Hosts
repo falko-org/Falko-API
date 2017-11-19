@@ -1,0 +1,11 @@
+Homolog Environment
+host 45.55.176.99
+  HostName 45.55.176.99
+  IdentityFile your/ssh-key/path
+  User root
+
+Production Environment
+host 104.236.12.198
+  HostName 104.236.12.198
+  IdentityFile your/ssh-key/path
+  User root

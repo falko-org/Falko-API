@@ -1,7 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  amount_of_sprints: 1
+  title: MyString
+  body: MyText
 
 two:
-  amount_of_sprints: 1
+  title: MyString
+  body: MyText

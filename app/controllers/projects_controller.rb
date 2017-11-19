@@ -1,14 +1,15 @@
 require "rest-client"
+
 class ProjectsController < ApplicationController
   include ValidationsHelper
 
-  before_action :set_project, only: [:destroy, :show]
+  before_action :set_project, only: [:destroy, :show, :get_contributors]
 
   before_action only: [:index, :create] do
-    validate_user(:user_id)
+    validate_user(0, :user_id)
   end
 
-  before_action only: [:show, :edit, :update, :destroy] do
+  before_action only: [:show, :update, :destroy] do
     validate_project(:id, 0)
   end
 
@@ -31,17 +32,18 @@ class ProjectsController < ApplicationController
     @current_user = AuthorizeApiRequest.call(request.headers).result
     @client = Octokit::Client.new(access_token: @current_user.access_token)
 
-    user = @client.user.login
+    user_login = @client.user.login
     user_repos = []
-    @repos = @client.repositories
+    @repos = @client.repositories(user_login)
     @form_params = { user: [] }
-    @form_params[:user].push(login: user)
+    @form_params[:user].push(login: user_login)
+
     @repos.each do |repo|
       user_repos.push(repo.name)
     end
     @form_params[:user].push(repos: user_repos)
 
-    @orgs = @client.organizations
+    @orgs = @client.organizations(user_login)
     @form_params2 = { orgs: [] }
     @orgs.each do |org|
       repos = @client.organization_repositories(org.login)
@@ -62,13 +64,9 @@ class ProjectsController < ApplicationController
     render json: @project
   end
 
-  def edit
-    render json: @project
-  end
-
-  def create    
+  def create
     @project = Project.create(project_params)
-    @project.user_id = @current_user.id   
+    @project.user_id = @current_user.id
 
     puts @project.github_slug
 
@@ -88,16 +86,32 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    @project = Project.find(params[:id])
     @project.destroy
+  end
+
+  def get_contributors
+    @current_user = AuthorizeApiRequest.call(request.headers).result
+    @client = Octokit::Client.new(access_token: @current_user.access_token)
+
+    contributors = []
+
+    @client.contributors(@project.github_slug).each do |contributor|
+      contributors.push(contributor.login)
+    end
+
+    render json: contributors, status: :ok
   end
 
   private
     def set_project
-      @project = Project.find(params[:id])
+      begin
+        @project = Project.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        render json: { errors: "Project not found" }, status: :not_found
+      end
     end
 
     def project_params
-      params.require(:project).permit(:name, :description, :user_id, :check_project, :github_slug)
+      params.require(:project).permit(:name, :description, :user_id, :is_project_from_github, :github_slug, :is_scoring)
     end
 end
