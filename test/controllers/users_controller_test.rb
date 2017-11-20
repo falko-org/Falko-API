@@ -198,4 +198,20 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       assert_response :bad_request
     end
   end
+
+  test "should remove github token" do
+    post "/remove_github_token", params: {
+      "id": "#{@user.id}"
+    }, headers: { Authorization: @token.result }
+
+    assert_response :success
+  end
+
+  test "should not remove github token without authentication" do
+    post "/remove_github_token", params: {
+      "id": "#{@user.id}"
+    }
+
+    assert_response :unauthorized
+  end
 end

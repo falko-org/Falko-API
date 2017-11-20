@@ -57,6 +57,16 @@ class UsersController < ApplicationController
     end
   end
 
+  def remove_github_token
+    @user = User.find(params[:id])
+    @user.access_token = nil
+    if @user.update_column(:access_token, nil)
+      render json: @user
+    else
+      render json: @user.errors, status: :unprocessable_entity
+    end
+  end
+
   # PATCH/PUT /users/1
   def update
     if @user.update(user_params)

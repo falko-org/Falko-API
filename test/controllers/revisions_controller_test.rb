@@ -30,21 +30,21 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     @sprint = Sprint.create(
       name: "Sprint 1",
       description: "Sprint 1 us10",
-      initial_date: "06/10/2017",
-      final_date: "13/10/2017",
+      initial_date: "06/10/2018",
+      final_date: "13/10/2018",
       release_id: @release.id
     )
     @no_revision_sprint = Sprint.create(
       name: "Sprint 2",
       description: "A Sprint",
-      initial_date: "23-04-1993",
-      final_date: "23-04-2003",
+      initial_date: "06/10/2018",
+      final_date: "13/10/2018",
       release_id: @release.id
     )
 
     @revision = Revision.create(
-      done_report: ["Foi feito a historia us14"],
-      undone_report: ["Não foi feito a historia us22"],
+      done_report: ["Us14 was made"],
+      undone_report: ["Story was not made"],
       sprint_id: @sprint.id
     )
 
@@ -61,7 +61,7 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
     @another_project = Project.create(
       name: "Futebol",
       description: "Deion.",
-      user_id: @user.id,
+      user_id: @another_user.id,
       is_project_from_github: true
     )
 
@@ -71,21 +71,21 @@ class RevisionsControllerTest < ActionDispatch::IntegrationTest
       initial_date: "01/01/2018",
       final_date: "01/01/2019",
       amount_of_sprints: "20",
-      project_id: @project.id
+      project_id: @another_project.id
     )
 
     @another_sprint = Sprint.create(
       name: "Sprint 2",
       description: "Sprint 2 us10",
-      initial_date: "06/10/2017",
-      final_date: "13/10/2017",
-      release_id: @release.id
+      initial_date: "06/10/2018",
+      final_date: "13/10/2018",
+      release_id: @another_release.id
     )
 
     @another_revision = Revision.create(
-      done_report: ["Não foi feito nada"],
-      undone_report: ["Tudo"],
-      sprint_id: @sprint.id
+      done_report: ["Us14 was made"],
+      undone_report: ["Story was not made"],
+      sprint_id: @another_sprint.id
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
