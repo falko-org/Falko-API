@@ -52,14 +52,14 @@ releases = [
   Release.find_or_create_by(
     name: "R1",
     description: "RUP Release",
-    initial_date: "01-08-2016",
+    initial_date: "01-01-2016",
     final_date: "01-10-2016",
     project_id: "1"
   ),
   Release.find_or_create_by(
     name: "R2",
     description: "Agile Release",
-    initial_date: "01-10-2016",
+    initial_date: "01-01-2016",
     final_date: "01-12-2016",
     project_id: "1"
   ),
@@ -100,14 +100,14 @@ sprints = [
     description: "First Sprint",
     initial_date: "01-08-2016",
     final_date: "01-10-2016",
-    release_id: "2"
+    release_id: "3"
   ),
   Sprint.find_or_create_by(
     name: "Sprint 2 - P2",
     description: "Second Sprint",
     initial_date: "01-10-2016",
     final_date: "01-12-2016",
-    release_id: "2"
+    release_id: "3"
   )
 ]
 
