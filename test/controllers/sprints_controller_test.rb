@@ -21,8 +21,8 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     @release = Release.create(
       name: "R1",
       description: "Description",
-      initial_date: "01/01/2018",
-      final_date: "01/01/2019",
+      initial_date: "01/01/2017",
+      final_date: "01/01/2020",
       amount_of_sprints: "20",
       project_id: @project.id
     )
@@ -178,7 +178,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
         "name": "Sprint 02",
         "description": "Description of sprint",
         "initial_date": "13/10/2018",
-        "final_date": "25/12/2018"
+        "final_date": "17/10/2018"
       }
     }, headers: { Authorization: @token.result }
 

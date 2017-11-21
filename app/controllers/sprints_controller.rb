@@ -1,7 +1,7 @@
 class SprintsController < ApplicationController
   include ValidationsHelper
 
-  before_action :set_sprint, only: [:show, :update, :destroy, :burndown]
+  before_action :set_sprint, only: [:show, :update, :destroy, :get_burndown]
 
   before_action only: [:index, :create] do
     validate_release(0, :release_id)
@@ -61,7 +61,7 @@ class SprintsController < ApplicationController
     update_amount_of_sprints
   end
 
-  def burndown
+  def get_burndown
     total_points = 0
     burned_stories = {}
     coordenates = []
