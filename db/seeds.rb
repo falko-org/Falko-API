@@ -71,7 +71,7 @@ releases = [
   Release.find_or_create_by(
     name: "R - 02",
     description: "Second Release",
-    initial_date: "01-10-2016",
+    initial_date: "01-01-2016",
     final_date: "01-12-2016",
     project_id: "2"
   )
@@ -119,8 +119,8 @@ stories = [
     initial_date: "01/01/2017",
     final_date: "02/01/2017",
     story_points: "10",
-    sprint_id: "1"
     issue_number: "1",
+    sprint_id: "1"
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -130,8 +130,8 @@ stories = [
     initial_date: "01/01/2017",
     final_date: "08/01/2017",
     story_points: "10",
-    sprint_id: "1"
     issue_number: "2",
+    sprint_id: "1"
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -141,8 +141,8 @@ stories = [
     initial_date: "01/01/2017",
     final_date: "04/01/2017",
     story_points: "10",
-    sprint_id: "2"
     issue_number: "3",
+    sprint_id: "2"
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -153,8 +153,8 @@ stories = [
     final_date: "04/01/2017",
     sprint_id: "2",
     story_points: "10",
-    sprint_id: "2"
     issue_number: "4",
+    sprint_id: "2"
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -163,8 +163,8 @@ stories = [
     pipeline: "In Progress",
     initial_date: "01/01/2017",
     story_points: "10",
-    sprint_id: "3"
     issue_number: "5",
+    sprint_id: "3"
   ),
   Story.find_or_create_by(
     name: "Story 2",
@@ -174,8 +174,8 @@ stories = [
     initial_date: "07/01/2017",
     final_date: "15/01/2017",
     story_points: "10",
-    sprint_id: "3"
     issue_number: "6",
+    sprint_id: "3"
   ),
   Story.find_or_create_by(
     name: "Story 1",
@@ -184,8 +184,8 @@ stories = [
     pipeline: "In Progress",
     initial_date: "01/01/2017",
     story_points: "10",
-    sprint_id: "4"
     issue_number: "7",
+    sprint_id: "4"
   ),
   Story.find_or_create_by(
     name: "Story 2",
