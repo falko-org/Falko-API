@@ -15,14 +15,14 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       description: "Some project description.",
       user_id: @user.id,
       is_project_from_github: true,
-      is_scoring: false
+      is_scoring: true
     )
 
     @release = Release.create(
       name: "R1",
       description: "Description",
-      initial_date: "01/01/2018",
-      final_date: "01/01/2019",
+      initial_date: "01/01/2017",
+      final_date: "01/01/2020",
       amount_of_sprints: "20",
       project_id: @project.id
     )
@@ -30,10 +30,44 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     @sprint = Sprint.create(
       name: "Sprint 1",
       description: "Sprint 1 us10",
-      initial_date: "06/10/2018",
-      final_date: "13/10/2018",
+      initial_date: "01/01/2017",
+      final_date: "08/01/2017",
       release_id: @release.id
     )
+
+    @story = Story.create(
+      name: "Story 1",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "In progress",
+      initial_date: "01/01/2017",
+      story_points: "10",
+      sprint_id: @sprint.id
+    )
+
+    @story = Story.create(
+      name: "Story 2",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "Done",
+      initial_date: "01/01/2017",
+      final_date: "07/01/2017",
+      story_points: "10",
+      sprint_id: @sprint.id
+    )
+
+
+    @story = Story.create(
+      name: "Story 3",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "Done",
+      initial_date: "01/01/2017",
+      final_date: "07/01/2017",
+      story_points: "10",
+      sprint_id: @sprint.id
+    )
+
 
     @token = AuthenticateUser.call(@user.email, @user.password)
 
@@ -67,6 +101,40 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       initial_date: "06/10/2018",
       final_date: "13/10/2018",
       release_id: @another_release.id
+    )
+
+    @project_without_score = Project.create(
+      name: "Falko",
+      description: "Some project description.",
+      user_id: @user.id,
+      is_project_from_github: true,
+      is_scoring: false
+    )
+
+    @release_without_score = Release.create(
+      name: "R1",
+      description: "Description",
+      initial_date: "01/01/2017",
+      final_date: "01/01/2020",
+      amount_of_sprints: "20",
+      project_id: @project_without_score.id
+    )
+
+    @sprint_without_score = Sprint.create(
+      name: "Sprint 1",
+      description: "Sprint 1 us10",
+      initial_date: "01/01/2017",
+      final_date: "08/01/2017",
+      release_id: @release_without_score.id
+    )
+
+    @story_without_score = Story.create(
+      name: "Story 1",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "In progress",
+      initial_date: "01/01/2017",
+      sprint_id: @sprint_without_score.id
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
@@ -144,7 +212,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
         "name": "Sprint 02",
         "description": "Description of sprint",
         "initial_date": "13/10/2018",
-        "final_date": "25/12/2018"
+        "final_date": "17/10/2018"
       }
     }, headers: { Authorization: @token.result }
 
@@ -254,6 +322,18 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "Should get Burndown data if project is scored" do
+    get "/sprints/#{@sprint.id}/burndown", headers: { Authorization: @token.result }
+
+    assert_response :success
+  end
+
+  test "Should not get Burndown data if project is not scored" do
+    get "/sprints/#{@sprint_without_score.id}/burndown", headers: { Authorization: @token.result }
+
+    assert_response :unprocessable_entity
+  end
+
   test "should not create a sprint with a final date outside the release interval" do
     post "/releases/#{@release.id}/sprints", params: {
       "sprint": {
@@ -279,5 +359,4 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
   end
-
 end
