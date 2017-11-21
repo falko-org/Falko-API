@@ -103,6 +103,40 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       release_id: @another_release.id
     )
 
+    @project_without_score = Project.create(
+      name: "Falko",
+      description: "Some project description.",
+      user_id: @user.id,
+      is_project_from_github: true,
+      is_scoring: false
+    )
+
+    @release_without_score = Release.create(
+      name: "R1",
+      description: "Description",
+      initial_date: "01/01/2017",
+      final_date: "01/01/2020",
+      amount_of_sprints: "20",
+      project_id: @project_without_score.id
+    )
+
+    @sprint_without_score = Sprint.create(
+      name: "Sprint 1",
+      description: "Sprint 1 us10",
+      initial_date: "01/01/2017",
+      final_date: "08/01/2017",
+      release_id: @release_without_score.id
+    )
+
+    @story_without_score = Story.create(
+      name: "Story 1",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "In progress",
+      initial_date: "01/01/2017",
+      sprint_id: @sprint_without_score.id
+    )
+
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
   end
 
@@ -292,6 +326,12 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     get "/sprints/#{@sprint.id}/burndown", headers: { Authorization: @token.result }
 
     assert_response :success
+  end
+
+  test "Should not get Burndown data if project is not scored" do
+    get "/sprints/#{@sprint_without_score.id}/burndown", headers: { Authorization: @token.result }
+
+    assert_response :unprocessable_entity
   end
 
   test "should not create a sprint with a final date outside the release interval" do
