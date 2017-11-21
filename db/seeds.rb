@@ -183,7 +183,6 @@ stories = [
     assign: "Vinícius",
     pipeline: "In Progress",
     initial_date: "01/01/2017",
-    final_date: "04/01/2017",
     story_points: "10",
     sprint_id: "4"
     issue_number: "7",
@@ -194,7 +193,6 @@ stories = [
     assign: "Adrianne",
     pipeline: "In Progress",
     initial_date: "01/01/2017",
-    final_date: "04/01/2017",
     story_points: "10",
     issue_number: "8",
   )
