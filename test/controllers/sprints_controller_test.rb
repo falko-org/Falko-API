@@ -15,6 +15,14 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       description: "Some project description.",
       user_id: @user.id,
       is_project_from_github: true,
+      is_scoring: true
+    )
+
+    @project_scoring_false = Project.create(
+      name: "Falko",
+      description: "Some project description.",
+      user_id: @user.id,
+      is_project_from_github: true,
       is_scoring: false
     )
 
@@ -27,12 +35,29 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       project_id: @project.id
     )
 
+    @release_scoring_false = Release.create(
+      name: "R1",
+      description: "Description",
+      initial_date: "01/01/2018",
+      final_date: "01/01/2019",
+      amount_of_sprints: "20",
+      project_id: @project_scoring_false.id
+    )
+
     @sprint = Sprint.create(
       name: "Sprint 1",
       description: "Sprint 1 us10",
       initial_date: "06/10/2018",
       final_date: "13/10/2018",
       release_id: @release.id
+    )
+
+    @sprint_scoring_false = Sprint.create(
+      name: "Sprint 1",
+      description: "Sprint 1 us10",
+      initial_date: "06/10/2018",
+      final_date: "13/10/2018",
+      release_id: @release_scoring_false.id
     )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
@@ -278,6 +303,19 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     }, headers: { Authorization: @token.result }
 
     assert_response :unprocessable_entity
+  end
+
+  test "should get velocity data if project is scoring" do
+    get "/sprints/#{@sprint.id}/velocity", headers: { Authorization: @token.result }
+
+    assert_response :success
+  end
+
+  test "should not get velocity data if project is not scoring" do
+    get "/sprints/#{@sprint_scoring_false.id}/velocity", headers: { Authorization: @token.result }
+
+    assert_response :unprocessable_entity
+    assert response.parsed_body["error"] == "The Velocity is only available in projects that use Story Points"
   end
 
 end
