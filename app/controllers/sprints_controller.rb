@@ -66,28 +66,8 @@ class SprintsController < ApplicationController
   def get_velocity
     release = @sprint.release
     unless release.project.is_scoring == false
-      names = []
-      total_points = []
-      completed_points = []
-      velocities = []
+      velocity = get_sprints_informations(release.sprints)
 
-      release.sprints.each do |sprint|
-        names.push(sprint.name)
-        sprint_total_points = sprint_completed_points = 0
-
-        sprint.stories.each do |story|
-          sprint_total_points += story.story_points
-          if story.pipeline == "Done"
-            sprint_completed_points += story.story_points
-          end
-        end
-
-        total_points.push(sprint_total_points)
-        completed_points.push(sprint_completed_points)
-        velocities.push(calculate_velocity(completed_points))
-      end
-
-      velocity = { total_points: total_points, completed_points: completed_points, names: names, velocities: velocities }
       render json: velocity
     else
       render json: { error: "The Velocity is only available in projects that use Story Points" }, status: :unprocessable_entity
