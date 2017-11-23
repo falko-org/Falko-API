@@ -66,7 +66,7 @@ class SprintsController < ApplicationController
   def get_velocity
     release = @sprint.release
     unless release.project.is_scoring == false
-      velocity = get_sprints_informations(release.sprints)
+      velocity = get_sprints_informations(release.sprints, @sprint)
 
       render json: velocity
     else

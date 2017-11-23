@@ -111,7 +111,7 @@ class VelocityHelperTest < ActiveSupport::TestCase
     sprints = []
     sprints.push(@first_sprint)
 
-    velocity = get_sprints_informations(sprints)
+    velocity = get_sprints_informations(sprints, @first_sprint)
 
     total_points = @first_story.story_points +  @second_story.story_points + @third_story.story_points
 
