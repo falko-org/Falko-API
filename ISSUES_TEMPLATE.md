@@ -17,5 +17,5 @@ Em caso de bugs, cite quais passos foram executados para chegar no problema.
 ## Checklist
 
 - [ ] A issue possui Labels.
-- [ ] A issue possui prints de tela.
+- [ ] A issue possui prints de tela quando necessário.
 - [ ] A issue possui nome significativo.
