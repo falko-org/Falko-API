@@ -113,25 +113,27 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should see repositories if user is logged in" do
     mock = Minitest::Mock.new
 
-    def mock.initialize(request)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "test") ]
+    def mock.get_github_user
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/project_test"), login: "username") ]
     end
 
-    def mock.get_github_repos
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test") ]
+    def mock.get_github_repos(user_login)
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/project_test"), name: "repository_name") ]
     end
 
-    def mock.get_github_orgs
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test") ]
+    def mock.get_github_orgs(user_login)
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/project_test"), name: "organization_name") ]
     end
 
-    def mock.get_github_orgs_repos
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test") ]
+    def mock.get_github_orgs_repos(org)
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/project_test"), name: "organization_repository") ]
     end
 
     Adapter::GitHubProject.stub :new, mock do
       get "/repos", headers: { Authorization: @token.result }
+      puts "*****"
       puts response.parsed_body["user"]
+      puts "*****"
       assert response.parsed_body["user"] == [{ "login" => "test" }, { "repos" => ["test"] }]
       assert_response :success
     end

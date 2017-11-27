@@ -8,7 +8,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     @project2 = Project.create(name: "FalkoSolutions/Falko", description: "Project description.", user_id: @user.id, is_project_from_github: false, is_scoring: false)
   end
 
-  test "should see issues if user is loged in" do
+  test "should see issues if user is logged in" do
 
     mock = Minitest::Mock.new
 
@@ -21,7 +21,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       get "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }
 
       assert response.parsed_body["issues_infos"][0]["name"] == "issue"
@@ -31,7 +31,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should not see issues if user is not loged in" do
+  test "should not see issues if user is not logged in" do
 
     mock = Minitest::Mock.new
 
@@ -44,14 +44,14 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       get "/projects/#{@project.id}/issues"
 
       assert_response :unauthorized
     end
   end
 
-  test "should create issues if user is loged in" do
+  test "should create issues if user is logged in" do
 
     mock = Minitest::Mock.new
 
@@ -64,7 +64,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       post "/projects/#{@project2.id}/issues", headers: { Authorization: @token.result }, params: {
         issue: {
           "name": "New Issue",
@@ -78,7 +78,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should not create issues if user is not loged in" do
+  test "should not create issues if user is not logged in" do
 
     mock = Minitest::Mock.new
 
@@ -91,7 +91,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       post "/projects/#{@project.id}/issues", params: {
         issue: {
           "name": "New Issue",
@@ -103,7 +103,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should update issues if user is loged in" do
+  test "should update issues if user is logged in" do
 
     mock = Minitest::Mock.new
 
@@ -116,7 +116,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       put "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }, params: {
         issue: {
           "number": "3",
@@ -130,7 +130,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should not update issues if user is not loged in" do
+  test "should not update issues if user is not logged in" do
 
     mock = Minitest::Mock.new
 
@@ -143,7 +143,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       put "/projects/#{@project.id}/issues", params: {
         issue: {
           "number": "3",
@@ -156,7 +156,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should close issue if user is loged in" do
+  test "should close issue if user is logged in" do
 
     mock = Minitest::Mock.new
 
@@ -169,7 +169,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       delete "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }, params: {
         issue: {
           "number": "3"
@@ -180,7 +180,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should not close issue if user is not loged in" do
+  test "should not close issue if user is not logged in" do
 
     mock = Minitest::Mock.new
 
@@ -193,7 +193,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       delete "/projects/#{@project.id}/issues", params: {
         issue: {
           "number": "3"
