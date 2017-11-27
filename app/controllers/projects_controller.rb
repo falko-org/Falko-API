@@ -31,27 +31,24 @@ class ProjectsController < ApplicationController
   def github_projects_list
 		client = Adapter::GitHubProject.new(request)
 
-		client.get_github_repos
+    user_login = client.get_github_user
 
     @form_params_user = { user: [] }
-    @form_params_user[:user].push(login: @user_login)
-    puts @form_params_user
+    @form_params_user[:user].push(login: user_login)
+
     user_repos = []
 
-    (client.get_github_repos).each do |repo|
+    (client.get_github_repos(user_login)).each do |repo|
       user_repos.push(repo.name)
     end
 
     @form_params_user[:user].push(repos: user_repos)
 
-		client.get_github_orgs
-
     @form_params_orgs = { orgs: [] }
 
-    (client.get_github_orgs).each do |org|
-	    client.get_github_orgs_repos
+    (client.get_github_orgs(user_login)).each do |org|
       repos_names = []
-      (client.get_github_orgs_repos).each do |repo|
+      (client.get_github_orgs_repos(org)).each do |repo|
         repos_names.push(repo.name)
       end
       @form_params_orgs[:orgs].push(name: org.login, repos: repos_names)
@@ -94,7 +91,7 @@ class ProjectsController < ApplicationController
 
     contributors = []
 
-    (client.contributors(@project.github_slug)).each do |contributor|
+    (client.get_contributors(@project.github_slug)).each do |contributor|
       contributors.push(contributor.login)
     end
 
