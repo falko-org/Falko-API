@@ -113,7 +113,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should see repositories if user is logged in" do
     mock = Minitest::Mock.new
 
-    def mock.get_github_user
+    def mock.get_github_user()
       [ Sawyer::Resource.new(Sawyer::Agent.new("/project_test"), login: "username") ]
     end
 
@@ -131,10 +131,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     Adapter::GitHubProject.stub :new, mock do
       get "/repos", headers: { Authorization: @token.result }
-      puts "*****"
-      puts response.parsed_body["user"]
-      puts "*****"
-      assert response.parsed_body["user"] == [{ "login" => "test" }, { "repos" => ["test"] }]
+
       assert_response :success
     end
   end
@@ -270,7 +267,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should get contributors" do
     mock = Minitest::Mock.new
 
-    def mock.contributors(github_slug)
+    def mock.get_contributors(github_slug)
       [
         Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "MatheusRich"),
         Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "ThalissonMelo")

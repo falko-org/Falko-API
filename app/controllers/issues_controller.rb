@@ -17,7 +17,7 @@ class IssuesController < ApplicationController
   def create
     client = Adapter::GitHubIssue.new(request)
 
-    @issue = client.create_issue(@path, issue_params)
+    @issue = client.create_issue(@project.github_slug, issue_params)
 
     convert_form_params(@issue)
 
@@ -27,11 +27,11 @@ class IssuesController < ApplicationController
   def update
     client = Adapter::GitHubIssue.new(request)
 
-    @issue = client.update_issue(@path, issue_params)
+    @issue = client.update_issue(@project.github_slug, issue_params)
 
     convert_form_params(@issue)
 
-    render json: @form_params, status: :updated
+    render json: @form_params
   end
 
   def close
@@ -82,7 +82,7 @@ class IssuesController < ApplicationController
         client = Adapter::GitHubIssue.new(request)
         @name = client.get_github_user
         @repo = @project.name
-        @path = @name + "/" + @repo
+        @path = @name.to_s + "/" + @repo
       end
 
       @path

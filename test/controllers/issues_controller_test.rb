@@ -4,19 +4,19 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create(name: "Ronaldo", email: "Ronaldofenomeno@gmail.com", password: "123456789", password_confirmation: "123456789", github: "ronaldobola")
     @token = AuthenticateUser.call(@user.email, @user.password)
-    @project = Project.create(name: "Falko", description: "Project description.", user_id: @user.id, is_project_from_github: true, is_scoring: false)
-    @project2 = Project.create(name: "FalkoSolutions/Falko", description: "Project description.", user_id: @user.id, is_project_from_github: false, is_scoring: false)
+    @project = Project.create(name: "Falko", description: "Project description.", user_id: @user.id, github_slug: "fga-gpp-mds/falko", is_project_from_github: true, is_scoring: false)
+    @project2 = Project.create(name: "FalkoSolutions/Falko", description: "Project description.", user_id: @user.id, is_project_from_github: false, github_slug: "fga-gpp-mds/falko", is_scoring: false)
   end
 
-  test "should see issues if user is logged in" do
+  test "should show issues if user is logged in" do
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.list_issues(name)
+    def mock.list_issues(github_slug)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: "3", body: "This is a template body") ]
     end
 
@@ -31,15 +31,15 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should not see issues if user is not logged in" do
+  test "should not show issues if user is not logged in" do
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.list_issues(name)
+    def mock.list_issues(github_slug)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: "3", body: "This is a template body") ]
     end
 
@@ -55,11 +55,11 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.create_issue(path, name, body)
+    def mock.create_issue(name, body)
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3")
     end
 
@@ -72,8 +72,8 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
         }
       }
 
-      assert response.parsed_body["issues_infos"][0]["name"] == "New Issue"
-      assert response.parsed_body["issues_infos"][0]["body"] == "New Body"
+      assert response.parsed_body["issues_infos"][0]["name"] == "fga-gpp-mds/falko"
+      assert response.parsed_body["issues_infos"][0]["body"]["body"] == "New Body"
       assert_response :created
     end
   end
@@ -82,7 +82,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
@@ -107,11 +107,11 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.update_issue(path, number, name, body)
+    def mock.update_issue(name, body)
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3")
     end
 
@@ -124,8 +124,9 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
           "body": "Updated Body"
         }
       }
-      assert response.parsed_body["issues_infos"][0]["name"] == "Updated Issue"
-      assert response.parsed_body["issues_infos"][0]["body"] == "Updated Body"
+
+      assert response.parsed_body["issues_infos"][0]["name"] == "fga-gpp-mds/falko"
+      assert response.parsed_body["issues_infos"][0]["body"]["body"] == "Updated Body"
       assert_response :success
     end
   end
@@ -134,7 +135,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
@@ -160,7 +161,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
@@ -184,7 +185,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 

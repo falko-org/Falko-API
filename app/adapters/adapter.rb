@@ -9,6 +9,8 @@ module Adapter
 
 		def get_github_user
 			user_login = @client.user.login
+			p user_login
+			return user_login
 		end
 
     def get_github_repos(user_login)
@@ -40,16 +42,16 @@ module Adapter
 			user_login = @client.user.login
 		end
 
-		def list_issues(path)
-			@client.list_issues(path)
+		def list_issues(github_slug)
+			@client.list_issues(github_slug)
 		end
 
-		def create_issue(path, issue_params)
-			@client.create_issue(path, issue_params[:name], issue_params[:body])
+		def create_issue(github_slug, issue_params)
+			@client.create_issue(github_slug, issue_params[:name], issue_params[:body])
 		end
 
-		def update_issue(path, issue_params)
-			@client.update_issue(path, issue_params[:name], issue_params[:body], issue_params[:number])
+		def update_issue(github_slug, issue_params)
+			@client.update_issue(github_slug, issue_params[:number], issue_params[:name], issue_params[:body])
 		end
 
 		def close_issue(path, issue_params)
