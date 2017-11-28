@@ -2,6 +2,7 @@ class Story < ApplicationRecord
   include DateValidationHelper
 
   belongs_to :sprint
+  belongs_to :feature
 
   validates :name, presence: true, length: { maximum: 128, minimum: 2 }
   validates :description, length: { maximum: 256 }

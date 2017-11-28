@@ -15,6 +15,10 @@ module ValidationsHelper
     @release = Release.find(@sprint.release_id)
   end
 
+  def feature
+    @feature = Feature.find(@story.feature_id)
+  end
+
   def sprint(component_type)
     if component_type == "story"
       @sprint = Sprint.find(@story.sprint_id)
@@ -52,7 +56,7 @@ module ValidationsHelper
       @feature = Feature.find(params[:id].to_i)
     elsif component_type == "feature" && previous_id != 0
       feature_id = previous_id
-      @release = Feature.find(params[:release_id].to_i)
+      @release = Feature.find(params[:feature_id].to_i)
 
     elsif component_type == "sprint" && current_id != 0
       id = current_id
@@ -99,9 +103,9 @@ module ValidationsHelper
     end
   end
 
-  def validate_feature(id, sprint)
+  def validate_feature(id, feature_id)
     current_user
-    verifies_id(id, release_id, "feature")
+    verifies_id(id, feature_id, "feature")
     project
     user
 
