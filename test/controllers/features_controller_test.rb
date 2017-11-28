@@ -50,39 +50,39 @@ class FeaturesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create feature" do
-    post "/projects/#{@project.id}/features", params: {
-      "feature": {
-        "title": "Feature 01",
-        "description": "First Feature"
-      }
-    }, headers: { Authorization: @token.result }
+      post "/projects/#{@project.id}/features", params: {
+        "feature": {
+          "title": "Feature 01",
+          "description": "First Feature"
+        }
+      }, headers: { Authorization: @token.result }
 
-    assert_response :created
-  end
+      assert_response :created
+    end
 
   test "should not create feature without correct title" do
-    # Final date before initial date
-    post "/projects/#{@project.id}/features", params: {
-      "feature": {
-        "title": "F",
-        "description": "First Feature"
-      }
-    }, headers: { Authorization: @token.result }
+      # Final date before initial date
+      post "/projects/#{@project.id}/features", params: {
+        "feature": {
+          "title": "F",
+          "description": "First Feature"
+        }
+      }, headers: { Authorization: @token.result }
 
-    assert_response :unprocessable_entity
+      assert_response :unprocessable_entity
   end
 
   test "should not create feature without correct description" do
-    # Final date before initial date
-    post "/projects/#{@project.id}/features", params: {
-      "feature": {
-        "title": "Feature 111",
-        "description": "a" * 257
-      }
-    }, headers: { Authorization: @token.result }
+      # Final date before initial date
+      post "/projects/#{@project.id}/features", params: {
+        "feature": {
+          "title": "Feature 111",
+          "description": "a"*257
+        }
+      }, headers: { Authorization: @token.result }
 
-    assert_response :unprocessable_entity
-  end
+      assert_response :unprocessable_entity
+    end
 
   test "should not create feature without authentication" do
     post "/projects/#{@project.id}/features", params: {
@@ -116,22 +116,22 @@ class FeaturesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should edit features" do
-    @old_title_feature = @feature.title
-    @old_description_feature = @feature.description
+      @old_title_feature = @feature.title
+      @old_description_feature = @feature.description
 
-    patch "/features/#{@feature.id}", params: {
-      feature: {
-        title: "Daniboy",
-        description: "CBlacku"
-      }
-    }, headers: { Authorization: @token.result }
+      patch "/features/#{@feature.id}", params: {
+        feature: {
+          title: "Daniboy",
+          description: "CBlacku"
+        }
+      }, headers: { Authorization: @token.result }
 
-    @feature.reload
+      @feature.reload
 
-    assert_response :ok
-    assert_not_equal @old_title_feature, @feature.title
-    assert_not_equal @old_description_feature, @feature.description
-  end
+      assert_response :ok
+      assert_not_equal @old_title_feature, @feature.title
+      assert_not_equal @old_description_feature, @feature.description
+    end
 
   test "should not edit features without authenticantion" do
     @old_title_feature = @feature.title
@@ -152,22 +152,22 @@ class FeaturesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not edit features with blank title" do
-    @old_title_feature = @feature.title
-    @old_description_feature = @feature.description
+      @old_title_feature = @feature.title
+      @old_description_feature = @feature.description
 
-    patch "/features/#{@feature.id}", params: {
-      feature: {
-        title: "",
-        description: ""
-      }
-    }, headers: { Authorization: @token.result }
+      patch "/features/#{@feature.id}", params: {
+        feature: {
+          title: "",
+          description: ""
+        }
+      }, headers: { Authorization: @token.result }
 
-    @feature.reload
+      @feature.reload
 
-    assert_response :unprocessable_entity
-    assert_equal @old_title_feature, @feature.title
-    assert_equal @old_description_feature, @feature.description
-  end
+      assert_response :unprocessable_entity
+      assert_equal @old_title_feature, @feature.title
+      assert_equal @old_description_feature, @feature.description
+    end
 
   test "should destroy feature" do
     assert_difference("Feature.count", -1) do

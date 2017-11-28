@@ -27,12 +27,6 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       project_id: @project.id
     )
 
-    @feature = Feature.create(
-      title: "F1",
-      description: "Description F1",
-      project_id: @project.id
-    )
-
     @sprint = Sprint.create(
       name: "Sprint 1",
       description: "Sprint 1 us10",
@@ -48,7 +42,6 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       pipeline: "In Progress",
       initial_date: "01/01/2017",
       issue_number: "10",
-      feature_id: @feature.id,
       sprint_id: @sprint.id
     )
 
@@ -79,12 +72,6 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       project_id: @another_project.id
     )
 
-    @another_feature = Feature.create(
-      title: "Euro 1",
-      description: "Description Euro 1",
-      project_id: @another_project.id
-    )
-
     @another_sprint = Sprint.create(
       name: "Sprint 2",
       description: "Sprint 2 us10",
@@ -101,7 +88,6 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       initial_date: "01/01/2017",
       final_date: "07/01/2017",
       issue_number: "9",
-      feature_id: @another_feature.id,
       sprint_id: @another_sprint.id
     )
 
@@ -117,7 +103,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create story" do
-    post "/features/#{@feature.id}/sprints/#{@sprint.id}/stories", params: {
+    post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -134,7 +120,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
 
   test "should not create story without correct params" do
     # Final date before initial date
-    post "/features/#{@feature.id}/sprints/#{@sprint.id}/stories", params: {
+    post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -150,7 +136,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
 
 
   test "should not create story without authentication" do
-    post "/features/#{@feature.id}/sprints/#{@sprint.id}/stories", params: {
+    post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -165,7 +151,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not create story in another user" do
-    post "/features/#{@feature.id}/sprints/#{@sprint.id}/stories", params: {
+    post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -180,7 +166,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not create story with invalid dates" do
-    post "/features/#{@feature.id}/sprints/#{@sprint.id}/stories", params: {
+    post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -196,19 +182,19 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not get stories index without authentication" do
-    get "/features/#{@feature.id}/sprints/#{@sprint.id}/stories"
+    get "/sprints/#{@sprint.id}/stories"
 
     assert_response :unauthorized
   end
 
   test "should get stories index" do
-    get "/features/#{@feature.id}/sprints/#{@sprint.id}/stories", headers: { Authorization: @token.result }
+    get "/sprints/#{@sprint.id}/stories", headers: { Authorization: @token.result }
 
     assert_response :success
   end
 
   test "should not get stories of other user" do
-    get "/features/#{@feature.id}/sprints/#{@sprint.id}/stories", headers: { Authorization: @another_token.result }
+    get "/sprints/#{@sprint.id}/stories", headers: { Authorization: @another_token.result }
 
     assert_response :unauthorized
   end
@@ -350,7 +336,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create a story with story points" do
-    post "/features/#{@another_feature.id}/sprints/#{@another_sprint.id}/stories", params: {
+    post "/sprints/#{@another_sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -367,7 +353,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create a story without final_date in a project that does not score story" do
-    post "/features/#{@feature.id}/sprints/#{@sprint.id}/stories", params: {
+    post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -382,7 +368,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not create a story without story_points in a project that scores story" do
-    post "/features/#{@another_feature.id}/sprints/#{@another_sprint.id}/stories", params: {
+    post "/sprints/#{@another_sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -396,7 +382,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not create a story with story_points in a project that does not score story" do
-    post "/features/#{@feature.id}/sprints/#{@sprint.id}/stories", params: {
+    post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",
@@ -412,7 +398,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create a story with story_points and final_date in a project that scores story" do
-    post "/features/#{@another_feature.id}/sprints/#{@another_sprint.id}/stories", params: {
+    post "/sprints/#{@another_sprint.id}/stories", params: {
       "story": {
         "name": "Story 01",
         "description": "First Story",

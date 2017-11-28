@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171128133300) do
+ActiveRecord::Schema.define(version: 20171128014447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,8 +102,6 @@ ActiveRecord::Schema.define(version: 20171128133300) do
     t.date "final_date"
     t.integer "story_points"
     t.string "issue_number"
-    t.bigint "feature_id"
-    t.index ["feature_id"], name: "index_stories_on_feature_id"
     t.index ["sprint_id"], name: "index_stories_on_sprint_id"
   end
 
@@ -123,6 +121,5 @@ ActiveRecord::Schema.define(version: 20171128133300) do
   add_foreign_key "retrospectives", "sprints"
   add_foreign_key "revisions", "sprints"
   add_foreign_key "sprints", "releases"
-  add_foreign_key "stories", "features"
   add_foreign_key "stories", "sprints"
 end
