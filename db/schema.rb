@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171111174534) do
+ActiveRecord::Schema.define(version: 20171128014447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "features", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_features_on_project_id"
+  end
 
   create_table "issues", force: :cascade do |t|
     t.string "title"
@@ -106,6 +115,7 @@ ActiveRecord::Schema.define(version: 20171111174534) do
     t.string "access_token"
   end
 
+  add_foreign_key "features", "projects"
   add_foreign_key "projects", "users"
   add_foreign_key "releases", "projects"
   add_foreign_key "retrospectives", "sprints"

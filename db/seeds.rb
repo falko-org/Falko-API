@@ -44,7 +44,6 @@ projects = [
   )
 ]
 
-
 puts "Creating Releases"
 releases = [
   Release.find_or_create_by(
@@ -73,6 +72,30 @@ releases = [
     description: "Second Release",
     initial_date: "01-01-2016",
     final_date: "01-12-2016",
+    project_id: "2"
+  )
+]
+
+puts "Creating Features"
+features = [
+  Feature.find_or_create_by(
+    title: "F1",
+    description: "Feature description",
+    project_id: "1"
+  ),
+  Feature.find_or_create_by(
+    title: "F2",
+    description: "Feature description",
+    project_id: "1"
+  ),
+  Feature.find_or_create_by(
+    title: "F - 01",
+    description: "Feature description",
+    project_id: "2"
+  ),
+  Feature.find_or_create_by(
+    title: "F - 02",
+    description: "Feature description",
     project_id: "2"
   )
 ]
@@ -151,7 +174,6 @@ stories = [
     pipeline: "Done",
     initial_date: "01/01/2017",
     final_date: "04/01/2017",
-    sprint_id: "2",
     story_points: "10",
     issue_number: "4",
     sprint_id: "2"
@@ -195,6 +217,7 @@ stories = [
     initial_date: "01/01/2017",
     story_points: "10",
     issue_number: "8",
+    sprint_id: "4",
   )
 ]
 
