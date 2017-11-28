@@ -2,51 +2,31 @@ require "test_helper"
 
 class IssuesControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @user = User.create(name: "Ronaldo",
-                        email: "Ronaldofenomeno@gmail.com",
-                        password: "123456789",
-                        password_confirmation: "123456789",
-                        github: "ronaldobola")
-
-    @token = AuthenticateUser.call(@user.email,
-                                   @user.password)
-
-    @project = Project.create(name: "Falko",
-                              description: "Project description.",
-                              user_id: @user.id,
-                              is_project_from_github: true,
-                              is_scoring: false)
-
-    @another_project = Project.create(name: "FalkoSolutions/Falko",
-                                      description: "Project description.",
-                                      user_id: @user.id,
-                                      is_project_from_github: false,
-                                      is_scoring: false)
-
-    @release = Release.create(name: "Real Madrid",
-                              description: "Descriptions",
-                              initial_date: "01/01/2016",
-                              final_date: "01/01/2019",
-                              amount_of_sprints: "20",
-                              project_id: @project.id
+    @user = User.create(
+      name: "Ronaldo",
+      email: "Ronaldofenomeno@gmail.com",
+      password: "123456789",
+      password_confirmation: "123456789",
+      github: "ronaldobola"
     )
 
-    @sprint = Sprint.create(name: "Sprint 1",
-                            description: "Sprint 1 US16",
-                            initial_date: "06/10/2017",
-                            final_date: "13/10/2017",
-                            release_id: @release.id
+    @project = Project.create(
+      name: "Falko",
+      description: "Project description.",
+      user_id: @user.id,
+      is_project_from_github: true,
+      is_scoring: false
     )
-    @story = Story.create(name: "US16",
-                          description: "Story description",
-                          assign: "github_user",
-                          pipeline: "In Progress",
-                          initial_date: "07/10/2017",
-                          final_date: "12/10/2017",
-                          issue_number: "9",
-                          sprint_id: @sprint.id,
-                          story_points: 5
-                          )
+
+    @another_project = Project.create(
+      name: "FalkoSolutions/Falko",
+      description: "Project description.",
+      user_id: @user.id,
+      is_project_from_github: false,
+      is_scoring: false
+    )
+
+    @token = AuthenticateUser.call(@user.email, @user.password)
   end
 
   test "should show issues if user is logged in" do
