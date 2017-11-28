@@ -32,18 +32,28 @@ module ValidationsHelper
     elsif component_type == "user" && previous_id != 0
       user_id = previous_id
       @user = User.find(params[:user_id].to_i)
+
     elsif component_type == "project" && current_id != 0
       id = current_id
       @project = Project.find(params[:id].to_i)
     elsif component_type == "project" && previous_id != 0
       project_id = previous_id
       @project = Project.find(params[:project_id].to_i)
+
     elsif component_type == "release" && current_id != 0
       id = current_id
       @release = Release.find(params[:id].to_i)
     elsif component_type == "release" && previous_id != 0
       release_id = previous_id
       @release = Release.find(params[:release_id].to_i)
+
+    elsif component_type == "feature" && current_id != 0
+      id = current_id
+      @feature = Feature.find(params[:id].to_i)
+    elsif component_type == "feature" && previous_id != 0
+      feature_id = previous_id
+      @release = Feature.find(params[:release_id].to_i)
+
     elsif component_type == "sprint" && current_id != 0
       id = current_id
       @sprint = Sprint.find(params[:id].to_i)
@@ -79,6 +89,19 @@ module ValidationsHelper
   def validate_release(id, release_id)
     current_user
     verifies_id(id, release_id, "release")
+    project
+    user
+
+    if @current_user.id == @user.id
+      return true
+    else
+      render json: { error: "Not Authorized" }, status: 401
+    end
+  end
+
+  def validate_feature(id, sprint)
+    current_user
+    verifies_id(id, release_id, "feature")
     project
     user
 
