@@ -1,0 +1,8 @@
+README.md
+
+.dockerignore
+
+log/*
+tmp/*
+.rake_tasks*
+coverage/
