@@ -6,6 +6,10 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+if RUBY_VERSION =~ /2.4.1/ # assuming you're running Ruby ~1.9
+  Encoding.default_external = Encoding::UTF_8
+  Encoding.default_internal = Encoding::UTF_8
+end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 5.1.3"
@@ -20,6 +24,7 @@ gem "bcrypt", "~> 3.1.7"
 gem "jwt", "~> 1.5.6"
 gem "simple_command"
 gem "rest-client"
+gem "rubycritic"
 
 gem "codeclimate-test-reporter", group: :test, require: nil
 
