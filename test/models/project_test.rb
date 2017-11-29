@@ -1,9 +1,29 @@
-require 'test_helper'
+require "test_helper"
 
 class ProjectTest < ActiveSupport::TestCase
-
   def setup
-    @project = Project.create(name: "Falko", description: "Esse projeto faz parte da disciplina MDS.")
+    @user = User.create(
+      name: "Ronaldo",
+      email: "Ronaldofenomeno@gmail.com",
+      password: "123456789",
+      password_confirmation: "123456789",
+      github: "ronaldobola"
+    )
+
+    @project = Project.create(
+      name: "Falko",
+      description: "Some project description.",
+      user_id: @user.id,
+      is_project_from_github: true,
+      is_scoring: false
+    )
+
+    @project2 = Project.create(
+      name: "Falko",
+      description: "Some project description.",
+      user_id: @user.id,
+      is_project_from_github: false
+    )
   end
 
   test "should save valid project" do
@@ -51,5 +71,4 @@ class ProjectTest < ActiveSupport::TestCase
     @project.description = ""
     assert @project.save
   end
-
 end

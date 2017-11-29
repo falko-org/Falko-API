@@ -1,13 +1,19 @@
+# Ignore my Continuous Deploy Keys/Credentials
+.travis/*.key
+.travis/*.key.pub
+.travis/*.pem
+
 # Ignore bundler config.
 /.bundle
-Gemfile.lock
 
 # Ignore all logfiles and tempfiles.
-/log/*
-/tmp/*
+log/*
+tmp/*
 !/log/.keep
 !/tmp/.keep
 *.log
+log/
+tmp/
 
 #Ignore databases
 *.sql
@@ -16,8 +22,8 @@ Gemfile.lock
 *.sw*
 *.swp*
 
-#Ignore development.rb file
-config/environments/development.rb
+#Ignore code editor configurantion files
+.vscode/
 
 vendor/bundle
-db/schema.rb
+coverage/
