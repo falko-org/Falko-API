@@ -29,7 +29,7 @@ class ProjectsController < ApplicationController
   end
 
   def github_projects_list
-		client = Adapter::GitHubProject.new(request)
+    client = Adapter::GitHubProject.new(request)
 
     user_login = client.get_github_user
 
@@ -87,7 +87,7 @@ class ProjectsController < ApplicationController
   end
 
   def get_contributors
-		client = Adapter::GitHubProject.new(request)
+    client = Adapter::GitHubProject.new(request)
 
     contributors = []
 
