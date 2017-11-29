@@ -11,7 +11,19 @@ class IssuesController < ApplicationController
 
     convert_form_params(@issues)
 
-    render json: @form_params
+    all_stories = Story.all
+
+    all_stories_number = []
+
+    all_stories.each do |story|
+      all_stories_number.push(story.issue_number.to_i)
+    end
+
+    @filter_form = { issues_infos: [] }
+
+    @filter_form[:issues_infos] = @form_params[:issues_infos].reject { |h| all_stories_number.include? h[:number] }
+
+    render json: @filter_form
   end
 
   def create

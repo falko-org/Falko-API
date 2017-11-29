@@ -39,6 +39,9 @@ class StoriesController < ApplicationController
 
   def update
     if @story.update(story_params)
+      if @story.pipeline == "Done"
+        @story.final_date = Date.today
+      end
       render json: @story
     else
       render json: @story.errors, status: :unprocessable_entity
@@ -55,6 +58,6 @@ class StoriesController < ApplicationController
     end
 
     def story_params
-      params.require(:story).permit(:name, :description, :assign, :pipeline, :initial_date, :story_points)
+      params.require(:story).permit(:name, :description, :assign, :pipeline, :initial_date, :story_points, :final_date, :issue_number)
     end
 end
