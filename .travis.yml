@@ -64,11 +64,11 @@ after_success:
   - git config --global push.default simple
   - |
     if [ "${TRAVIS_BRANCH}" == "devel" ]; then
-      echo "Deploying to homolog environment..."
-      git push dokku devel:master
+      echo "Deploying to homolog environment...";
+      git push dokku devel:master;
     else if [ "${TRAVIS_BRANCH}" == "master" ]; then
-      echo "Deploying to production environment..."
-      git push dokkuprod master:master
+      echo "Deploying to production environment...";
+      git push dokkuprod master:master;
     else
-      echo "Skipping homolog deploy..."
-    fi
+      echo "Skipping homolog deploy...";
+    fi;
