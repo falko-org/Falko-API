@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   patch "projects/:id/issues", to: "issues#update"
   delete "projects/:id/issues", to: "issues#close"
 
+  post "projects/:id/reopen_issue", to: "issues#reopen_issue"
+
   resources :users, shallow: true do
     resources :projects do
       resources :releases do

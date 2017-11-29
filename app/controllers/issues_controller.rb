@@ -46,6 +46,12 @@ class IssuesController < ApplicationController
     render status: 200
   end
 
+  def reopen_issue
+    @issue = @client.reopen_issue(@path, issue_params[:number])
+
+    render status: 200
+  end
+
   def update_assignees
     begin
       set_project
