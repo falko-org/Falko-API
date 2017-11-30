@@ -17,6 +17,12 @@ Rails.application.routes.draw do
   patch "projects/:id/issues", to: "issues#update"
   delete "projects/:id/issues", to: "issues#close"
 
+  get "releases/:id/evm", to: "earned_value_management#show"
+  post "releases/:id/evm", to: "earned_value_management#create"
+  put "releases/:id/evm", to: "earned_value_management#update"
+  patch "releases/:id/evm", to: "earned_value_management#update"
+  delete "releases/:id/evm", to: "earned_value_management#destroy"
+
   resources :users, shallow: true do
     resources :projects do
       resources :releases do
