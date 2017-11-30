@@ -61,15 +61,15 @@ class FeaturesControllerTest < ActionDispatch::IntegrationTest
     end
 
   test "should not create feature without correct title" do
-      # Final date before initial date
-      post "/projects/#{@project.id}/features", params: {
-        "feature": {
-          "title": "F",
-          "description": "First Feature"
-        }
-      }, headers: { Authorization: @token.result }
+    # Final date before initial date
+    post "/projects/#{@project.id}/features", params: {
+      "feature": {
+        "title": "F",
+        "description": "First Feature"
+      }
+    }, headers: { Authorization: @token.result }
 
-      assert_response :unprocessable_entity
+    assert_response :unprocessable_entity
   end
 
   test "should not create feature without correct description" do
@@ -77,7 +77,7 @@ class FeaturesControllerTest < ActionDispatch::IntegrationTest
       post "/projects/#{@project.id}/features", params: {
         "feature": {
           "title": "Feature 111",
-          "description": "a"*257
+          "description": "a" * 257
         }
       }, headers: { Authorization: @token.result }
 
