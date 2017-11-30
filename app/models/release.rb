@@ -3,6 +3,7 @@ class Release < ApplicationRecord
 
   belongs_to :project
   has_many :sprints, dependent: :destroy
+  has_one :earned_value_management, dependent: :destroy 
 
   validates :name, presence: true, length: { maximum: 80, minimum: 2 }
   validates :description, length: { maximum: 256 }

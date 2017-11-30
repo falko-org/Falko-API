@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171111174534) do
+ActiveRecord::Schema.define(version: 20171130131944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "earned_value_management", force: :cascade do |t|
+    t.float "budget_actual_cost"
+    t.integer "planned_sprints"
+    t.integer "planned_release_points"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "release_id"
+    t.index ["release_id"], name: "index_earned_value_management_on_release_id"
+  end
 
   create_table "issues", force: :cascade do |t|
     t.string "title"
@@ -106,6 +116,7 @@ ActiveRecord::Schema.define(version: 20171111174534) do
     t.string "access_token"
   end
 
+  add_foreign_key "earned_value_management", "releases"
   add_foreign_key "projects", "users"
   add_foreign_key "releases", "projects"
   add_foreign_key "retrospectives", "sprints"
