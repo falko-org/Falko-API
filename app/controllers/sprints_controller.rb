@@ -103,7 +103,7 @@ class SprintsController < ApplicationController
       render json: { error: "The Burndown Chart is only available in projects that use Story Points" }, status: :unprocessable_entity
     end
   end
-  
+
   private
     def set_sprint
       @sprint = Sprint.find(params[:id])

@@ -1,5 +1,4 @@
 module VelocityHelper
-
   def get_sprints_informations(sprints, actual_sprint)
     names = []
     total_points = []
@@ -38,6 +37,6 @@ module VelocityHelper
       total_completed_points += point
     end
 
-    return Float(total_completed_points)/size
+    return Float(total_completed_points) / size
   end
 end
