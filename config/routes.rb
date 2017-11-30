@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   post "request_github_token", to: "users#request_github_token"
   post "remove_github_token", to: "users#remove_github_token"
 
+  get "sprints/:id/burndown", to: "sprints#get_burndown"
+
   get "repos", to: "projects#github_projects_list"
   get "projects/:id/contributors", to: "projects#get_contributors"
   post "projects/:id/issues/assignees", to: "issues#update_assignees"
