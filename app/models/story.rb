@@ -11,4 +11,5 @@ class Story < ApplicationRecord
   validates :initial_date, presence: true
   validates :issue_number, presence: true, uniqueness: true
   validate :is_final_date_valid?
+  validates :feature_id, presence: true
 end

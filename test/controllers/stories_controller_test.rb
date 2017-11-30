@@ -27,6 +27,11 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       project_id: @project.id
     )
 
+    @feature = Feature.create(
+      title: "F1",
+      description: "Description"
+    )
+
     @sprint = Sprint.create(
       name: "Sprint 1",
       description: "Sprint 1 us10",
@@ -72,6 +77,11 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       project_id: @another_project.id
     )
 
+    @another_feature = Feature.create(
+      title: "F2",
+      description: "Description 2"
+    )
+
     @another_sprint = Sprint.create(
       name: "Sprint 2",
       description: "Sprint 2 us10",
@@ -112,6 +122,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "initial_date": "01/01/2018",
         "final_date": "09/01/2018",
         "issue_number": "8",
+        "story_points":false,
+        "feature_id":"#{@feature.id}"
       }
     }, headers: { Authorization: @token.result }
 
@@ -128,6 +140,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "a" * 60,
         "initial_date": "01/01/2018",
         "issue_number": "8",
+        "story_points":false,
+        "feature_id":"#{@feature.id}"
       }
     }, headers: { Authorization: @token.result }
 
@@ -144,6 +158,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "In Progress",
         "initial_date": "01/01/2018",
         "issue_number": "8",
+        "story_points":false,
+        "feature_id":"#{@feature.id}"
       }
     }
 
@@ -159,6 +175,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "In Progress",
         "initial_date": "01/01/2018",
         "issue_number": "8",
+        "story_points":false,
+        "feature_id":"#{@feature.id}"
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -174,7 +192,9 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "Done",
         "initial_date": "2018-01-02",
         "final_date": "01/01/2018",
+        "story_points":false,
         "issue_number": "8",
+        "feature_id":"#{@feature.id}"
       }
     }
 
@@ -342,10 +362,12 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "description": "First Story",
         "assign": "Mateus",
         "pipeline": "Done",
+        "story_points":false,
         "initial_date": "01/01/2018",
         "final_date": "09/01/2018",
         "story_points": "10",
         "issue_number": "8",
+        "feature_id":"#{@feature.id}"
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -360,7 +382,9 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "assign": "Mateus",
         "pipeline": "Done",
         "initial_date": "01/01/2018",
+        "story_points":false,
         "issue_number": "8",
+        "feature_id":"#{@feature.id}"
       }
     }, headers: { Authorization: @token.result }
 
@@ -374,7 +398,9 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "description": "First Story",
         "assign": "Mateus",
         "pipeline": "Done",
-        "initial_date": "01/01/2018"
+        "story_points":false,
+        "initial_date": "01/01/2018",
+        "feature_id":"#{@feature.id}"
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -388,9 +414,11 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "description": "First Story",
         "assign": "Mateus",
         "pipeline": "Done",
+        "story_points":false,
         "initial_date": "01/01/2018",
         "story_points": "10",
         "issue_number": "10",
+        "feature_id":"#{@feature.id}"
       }
     }, headers: { Authorization: @token.result }
 
@@ -404,9 +432,11 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "description": "First Story",
         "assign": "Mateus",
         "pipeline": "Done",
+        "story_points":false,
         "initial_date": "01/01/2018",
         "story_points": "10",
         "issue_number": "8",
+        "feature_id":"#{@feature.id}"
       }
     }, headers: { Authorization: @another_token.result }
 
