@@ -1,0 +1,39 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  planned_percent_completed: 1.5
+  actual_percent_completed: 1.5
+  completed_points: 1
+  added_points: 1
+  current_sprint: 1
+  planned_value: 1.5
+  actual_value: 1.5
+  earned_value: 1.5
+  accumulated_planned_value: 1.5
+  accumulated_actual_value: 1.5
+  accumulated_earned_value: 1.5
+  cost_variance: 1.5
+  schedule_variance: 1.5
+  cost_performance_index: 1.5
+  schedule_performance_index: 1.5
+  estimate_to_complete: 1.5
+  estimate_at_complete: 1.5
+
+two:
+  planned_percent_completed: 1.5
+  actual_percent_completed: 1.5
+  completed_points: 1
+  added_points: 1
+  current_sprint: 1
+  planned_value: 1.5
+  actual_value: 1.5
+  earned_value: 1.5
+  accumulated_planned_value: 1.5
+  accumulated_actual_value: 1.5
+  accumulated_earned_value: 1.5
+  cost_variance: 1.5
+  schedule_variance: 1.5
+  cost_performance_index: 1.5
+  schedule_performance_index: 1.5
+  estimate_to_complete: 1.5
+  estimate_at_complete: 1.5
