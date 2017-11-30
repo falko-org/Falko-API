@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  budget_actual_cost: 1.5
+  planned_sprints: 1
+  planned_release_points: 1
+
+two:
+  budget_actual_cost: 1.5
+  planned_sprints: 1
+  planned_release_points: 1
