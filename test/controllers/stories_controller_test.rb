@@ -29,7 +29,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
 
     @feature = Feature.create(
       title: "F1",
-      description: "Description"
+      description: "Description",
+      project_id: @project.id
     )
 
     @sprint = Sprint.create(
@@ -48,7 +49,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       initial_date: "01/01/2017",
       issue_number: "10",
       story_points: 10,
-      sprint_id: @sprint.id
+      sprint_id: @sprint.id,
+      feature_id: @feature.id
     )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
@@ -80,7 +82,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
 
     @another_feature = Feature.create(
       title: "F2",
-      description: "Description 2"
+      description: "Description 2",
+      project_id: @another_project.id
     )
 
     @another_sprint = Sprint.create(
@@ -100,15 +103,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       final_date: "07/01/2017",
       issue_number: "9",
       story_points: 10,
-      sprint_id: @another_sprint.id
-    )
-
-    @another_user = User.create(
-      name: "Ronaldo",
-      email: "ronaldo@email.com",
-      password: "123123",
-      password_confirmation: "123123",
-      github: "ronaldoGit"
+      sprint_id: @another_sprint.id,
+      feature_id: @another_feature.id
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
@@ -117,331 +113,320 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   test "should create story" do
     post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
+        "name": "F1",
+		     "description": "Description",
+		     "assign": "ThalissonMelo",
+         "pipeline": "To Do",
+         "initial_date": "03/01/2017",
+         "issue_number": "11",
+         "feature_id": "#{@feature.id}"
+      }
+    }, headers: { Authorization: @token.result }
+
+    assert_response :created
+  end
+
+  test "should not create story without correct params" do
+    # Final date before initial date
+    post "/sprints/#{@sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "a" * 60,
+        "initial_date": "01/01/2018",
+        "issue_number": "8",
+        "feature_id": "#{@feature.id}"
+      }
+    }, headers: { Authorization: @token.result }
+
+    assert_response :unprocessable_entity
+  end
+
+
+  test "should not create story without authentication" do
+    post "/sprints/#{@sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "In Progress",
+        "initial_date": "01/01/2018",
+        "issue_number": "8",
+        "feature_id": "#{@feature.id}"
+      }
+    }
+
+    assert_response :unauthorized
+  end
+
+  test "should not create story in another user" do
+    post "/sprints/#{@sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "In Progress",
+        "initial_date": "01/01/2018",
+        "issue_number": "8",
+        "feature_id": "#{@feature.id}"
+      }
+    }, headers: { Authorization: @another_token.result }
+
+    assert_response :unauthorized
+  end
+
+  test "should not create story with invalid dates" do
+    post "/sprints/#{@sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "2018-01-02",
+        "final_date": "01/01/2018",
+        "issue_number": "8",
+        "feature_id": "#{@feature.id}"
+      }
+    }
+
+    assert_response :unauthorized
+  end
+
+  test "should not get stories index without authentication" do
+    get "/sprints/#{@sprint.id}/stories"
+
+    assert_response :unauthorized
+  end
+
+  test "should get stories index" do
+    get "/sprints/#{@sprint.id}/stories", headers: { Authorization: @token.result }
+
+    assert_response :success
+  end
+
+  test "should not get stories of other user" do
+    get "/sprints/#{@sprint.id}/stories", headers: { Authorization: @another_token.result }
+
+    assert_response :unauthorized
+  end
+
+  test "should not get stories show without authentication" do
+    get "/stories/#{@story.id}"
+
+    assert_response :unauthorized
+  end
+
+  test "should get stories show" do
+    get "/stories/#{@story.id}", headers: { Authorization: @token.result }
+
+    assert_response :success
+  end
+
+  test "should get stories show of other user" do
+    get "/stories/#{@story.id}", headers: { Authorization: @another_token.result }
+
+    assert_response :unauthorized
+  end
+
+  test "should update stories" do
+    @old_name_story = @story.name
+    @old_description_story = @story.description
+    @old_initial_date_story = @story.initial_date
+    @old_assign_story = @story.assign
+    @old_pipeline_story = @story.pipeline
+
+    patch "/stories/#{@story.id}", params: {
+      story: {
+        name: "Story 5",
+        description: "Story 3 us14",
+        assign: "Richard",
+        pipeline: "Done",
+        initial_date: "02/01/2017",
+        final_date: "09/01/2017"
+      }
+    }, headers: { Authorization: @token.result }
+
+    @story.reload
+
+    assert_response :ok
+    assert_not_equal @old_name_story, @story.name
+    assert_not_equal @old_description_story, @story.description
+    assert_not_equal @old_initial_date_story, @story.initial_date
+    assert_not_equal @old_assign_story, @story.assign
+    assert_not_equal @old_pipeline_story, @story.pipeline
+  end
+
+  test "should not update stories without authenticantion" do
+    @old_name_story = @story.name
+    @old_description_story = @story.description
+    @old_initial_date_story = @story.initial_date
+    @old_assign_story = @story.assign
+    @old_pipeline_story = @story.pipeline
+
+    patch "/stories/#{@story.id}", params: {
+      story: {
+        name: "Story 6",
+        description: "Story 3 us14",
+        assign: "Richard",
+        pipeline: "Backlog",
+        initial_date: "01/01/2017"
+      }
+    }
+
+    @story.reload
+
+    assert_response :unauthorized
+    assert_equal @old_name_story, @story.name
+    assert_equal @old_description_story, @story.description
+    assert_equal @old_initial_date_story, @story.initial_date
+    assert_equal @old_assign_story, @story.assign
+    assert_equal @old_pipeline_story, @story.pipeline
+  end
+
+  test "should not update stories with blank params" do
+    @old_name_story = @story.name
+    @old_description_story = @story.description
+    @old_initial_date_story = @story.initial_date
+    @old_assign_story = @story.assign
+    @old_pipeline_story = @story.pipeline
+
+    patch "/stories/#{@story.id}", params: {
+      story: {
+        name: "",
+        description: "",
+        assign: "",
+        pipeline: "",
+        initial_date: ""
+      }
+    }, headers: { Authorization: @token.result }
+
+    @story.reload
+
+    assert_response :unprocessable_entity
+    assert_equal @old_name_story, @story.name
+    assert_equal @old_description_story, @story.description
+    assert_equal @old_initial_date_story, @story.initial_date
+    assert_equal @old_assign_story, @story.assign
+    assert_equal @old_pipeline_story, @story.pipeline
+  end
+
+  test "should not update stories of another user" do
+    patch "/stories/#{@story.id}", params: {
+      story: {
+        name: "Story 6",
+        description: "Story 3 us14",
+        assign: "Richard",
+        pipeline: "Backlog",
+        initial_date: "01/01/2017"
+      }
+    }, headers: { Authorization: @another_token.result }
+
+    assert_response :unauthorized
+  end
+
+  test "should destroy story" do
+    assert_difference("Story.count", -1) do
+      delete "/stories/#{@story.id}", headers: { Authorization: @token.result }
+    end
+
+    assert_response :no_content
+  end
+
+  test "should not destroy story without authentication" do
+    assert_no_difference "Story.count" do
+      delete "/stories/#{@story.id}"
+    end
+
+    assert_response :unauthorized
+  end
+
+  test "should not destroy story of another user" do
+    delete "/stories/#{@story.id}", headers: { Authorization: @another_token.result }
+
+    assert_response :unauthorized
+  end
+
+  test "should create a story with story points" do
+    post "/sprints/#{@another_sprint.id}/stories", params: {
+      "story": {
         "name": "Story 01",
         "description": "First Story",
         "assign": "Mateus",
         "pipeline": "Done",
         "initial_date": "01/01/2018",
         "final_date": "09/01/2018",
-        "issue_number": "8",
         "story_points": "10",
+        "issue_number": "8",
+        "feature_id": "#{@feature.id}"
+      }
+    }, headers: { Authorization: @another_token.result }
+
+    assert_response :created
+  end
+
+  test "should create a story without final_date in a project that does not score story" do
+    post "/sprints/#{@sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018",
+        "issue_number": "8",
         "feature_id": "#{@feature.id}"
       }
     }, headers: { Authorization: @token.result }
 
     assert_response :created
   end
-  #
-  # test "should not create story without correct params" do
-  #   # Final date before initial date
-  #   post "/sprints/#{@sprint.id}/stories", params: {
-  #     "story": {
-  #       "name": "Story 01",
-  #       "description": "First Story",
-  #       "assign": "Mateus",
-  #       "pipeline": "a" * 60,
-  #       "initial_date": "01/01/2018",
-  #       "issue_number": "8",
-  #       "story_points": false,
-  #       "feature_id": "#{@feature.id}"
-  #     }
-  #   }, headers: { Authorization: @token.result }
-  #
-  #   assert_response :unprocessable_entity
-  # end
-  #
-  #
-  # test "should not create story without authentication" do
-  #   post "/sprints/#{@sprint.id}/stories", params: {
-  #     "story": {
-  #       "name": "Story 01",
-  #       "description": "First Story",
-  #       "assign": "Mateus",
-  #       "pipeline": "In Progress",
-  #       "initial_date": "01/01/2018",
-  #       "issue_number": "8",
-  #       "story_points": false,
-  #       "feature_id": "#{@feature.id}"
-  #     }
-  #   }
-  #
-  #   assert_response :unauthorized
-  # end
-  #
-  # test "should not create story in another user" do
-  #   post "/sprints/#{@sprint.id}/stories", params: {
-  #     "story": {
-  #       "name": "Story 01",
-  #       "description": "First Story",
-  #       "assign": "Mateus",
-  #       "pipeline": "In Progress",
-  #       "initial_date": "01/01/2018",
-  #       "issue_number": "8",
-  #       "story_points": false,
-  #       "feature_id": "#{@feature.id}"
-  #     }
-  #   }, headers: { Authorization: @another_token.result }
-  #
-  #   assert_response :unauthorized
-  # end
-  #
-  # test "should not create story with invalid dates" do
-  #   post "/sprints/#{@sprint.id}/stories", params: {
-  #     "story": {
-  #       "name": "Story 01",
-  #       "description": "First Story",
-  #       "assign": "Mateus",
-  #       "pipeline": "Done",
-  #       "initial_date": "2018-01-02",
-  #       "final_date": "01/01/2018",
-  #       "story_points": false,
-  #       "issue_number": "8",
-  #       "feature_id": "#{@feature.id}"
-  #     }
-  #   }
-  #
-  #   assert_response :unauthorized
-  # end
-  #
-  # test "should not get stories index without authentication" do
-  #   get "/sprints/#{@sprint.id}/stories"
-  #
-  #   assert_response :unauthorized
-  # end
-  #
-  # test "should get stories index" do
-  #   get "/sprints/#{@sprint.id}/stories", headers: { Authorization: @token.result }
-  #
-  #   assert_response :success
-  # end
-  #
-  # test "should not get stories of other user" do
-  #   get "/sprints/#{@sprint.id}/stories", headers: { Authorization: @another_token.result }
-  #
-  #   assert_response :unauthorized
-  # end
-  #
-  # test "should not get stories show without authentication" do
-  #   get "/stories/#{@story.id}"
-  #
-  #   assert_response :unauthorized
-  # end
-  #
-  # test "should get stories show" do
-  #   get "/stories/#{@story.id}", headers: { Authorization: @token.result }
-  #
-  #   assert_response :success
-  # end
-  #
-  # test "should get stories show of other user" do
-  #   get "/stories/#{@story.id}", headers: { Authorization: @another_token.result }
-  #
-  #   assert_response :unauthorized
-  # end
-  #
-  # test "should update stories" do
-  #   @old_name_story = @story.name
-  #   @old_description_story = @story.description
-  #   @old_initial_date_story = @story.initial_date
-  #   @old_assign_story = @story.assign
-  #   @old_pipeline_story = @story.pipeline
-  #
-  #   patch "/stories/#{@story.id}", params: {
-  #     story: {
-  #       name: "Story 5",
-  #       description: "Story 3 us14",
-  #       assign: "Richard",
-  #       pipeline: "Done",
-  #       initial_date: "02/01/2017",
-  #       final_date: "09/01/2017"
-  #     }
-  #   }, headers: { Authorization: @token.result }
-  #
-  #   @story.reload
-  #
-  #   assert_response :ok
-  #   assert_not_equal @old_name_story, @story.name
-  #   assert_not_equal @old_description_story, @story.description
-  #   assert_not_equal @old_initial_date_story, @story.initial_date
-  #   assert_not_equal @old_assign_story, @story.assign
-  #   assert_not_equal @old_pipeline_story, @story.pipeline
-  # end
-  #
-  # test "should not update stories without authenticantion" do
-  #   @old_name_story = @story.name
-  #   @old_description_story = @story.description
-  #   @old_initial_date_story = @story.initial_date
-  #   @old_assign_story = @story.assign
-  #   @old_pipeline_story = @story.pipeline
-  #
-  #   patch "/stories/#{@story.id}", params: {
-  #     story: {
-  #       name: "Story 6",
-  #       description: "Story 3 us14",
-  #       assign: "Richard",
-  #       pipeline: "Backlog",
-  #       initial_date: "01/01/2017"
-  #     }
-  #   }
-  #
-  #   @story.reload
-  #
-  #   assert_response :unauthorized
-  #   assert_equal @old_name_story, @story.name
-  #   assert_equal @old_description_story, @story.description
-  #   assert_equal @old_initial_date_story, @story.initial_date
-  #   assert_equal @old_assign_story, @story.assign
-  #   assert_equal @old_pipeline_story, @story.pipeline
-  # end
-  #
-  # test "should not update stories with blank params" do
-  #   @old_name_story = @story.name
-  #   @old_description_story = @story.description
-  #   @old_initial_date_story = @story.initial_date
-  #   @old_assign_story = @story.assign
-  #   @old_pipeline_story = @story.pipeline
-  #
-  #   patch "/stories/#{@story.id}", params: {
-  #     story: {
-  #       name: "",
-  #       description: "",
-  #       assign: "",
-  #       pipeline: "",
-  #       initial_date: ""
-  #     }
-  #   }, headers: { Authorization: @token.result }
-  #
-  #   @story.reload
-  #
-  #   assert_response :unprocessable_entity
-  #   assert_equal @old_name_story, @story.name
-  #   assert_equal @old_description_story, @story.description
-  #   assert_equal @old_initial_date_story, @story.initial_date
-  #   assert_equal @old_assign_story, @story.assign
-  #   assert_equal @old_pipeline_story, @story.pipeline
-  # end
-  #
-  # test "should not update stories of another user" do
-  #   patch "/stories/#{@story.id}", params: {
-  #     story: {
-  #       name: "Story 6",
-  #       description: "Story 3 us14",
-  #       assign: "Richard",
-  #       pipeline: "Backlog",
-  #       initial_date: "01/01/2017"
-  #     }
-  #   }, headers: { Authorization: @another_token.result }
-  #
-  #   assert_response :unauthorized
-  # end
-  #
-  # test "should destroy story" do
-  #   assert_difference("Story.count", -1) do
-  #     delete "/stories/#{@story.id}", headers: { Authorization: @token.result }
-  #   end
-  #
-  #   assert_response :no_content
-  # end
-  #
-  # test "should not destroy story without authentication" do
-  #   assert_no_difference "Story.count" do
-  #     delete "/stories/#{@story.id}"
-  #   end
-  #
-  #   assert_response :unauthorized
-  # end
-  #
-  # test "should not destroy story of another user" do
-  #   delete "/stories/#{@story.id}", headers: { Authorization: @another_token.result }
-  #
-  #   assert_response :unauthorized
-  # end
-  #
-  # test "should create a story with story points" do
-  #   post "/sprints/#{@another_sprint.id}/stories", params: {
-  #     "story": {
-  #       "name": "Story 01",
-  #       "description": "First Story",
-  #       "assign": "Mateus",
-  #       "pipeline": "Done",
-  #       "story_points": false,
-  #       "initial_date": "01/01/2018",
-  #       "final_date": "09/01/2018",
-  #       "story_points": "10",
-  #       "issue_number": "8",
-  #       "feature_id": "#{@feature.id}"
-  #     }
-  #   }, headers: { Authorization: @another_token.result }
-  #
-  #   assert_response :created
-  # end
-  #
-  # test "should create a story without final_date in a project that does not score story" do
-  #   post "/sprints/#{@sprint.id}/stories", params: {
-  #     "story": {
-  #       "name": "Story 01",
-  #       "description": "First Story",
-  #       "assign": "Mateus",
-  #       "pipeline": "Done",
-  #       "initial_date": "01/01/2018",
-  #       "story_points": false,
-  #       "issue_number": "8",
-  #       "feature_id": "#{@feature.id}"
-  #     }
-  #   }, headers: { Authorization: @token.result }
-  #
-  #   assert_response :created
-  # end
-  #
-  # test "should not create a story without story_points in a project that scores story" do
-  #   post "/sprints/#{@another_sprint.id}/stories", params: {
-  #     "story": {
-  #       "name": "Story 01",
-  #       "description": "First Story",
-  #       "assign": "Mateus",
-  #       "pipeline": "Done",
-  #       "story_points": false,
-  #       "initial_date": "01/01/2018",
-  #       "feature_id": "#{@feature.id}"
-  #     }
-  #   }, headers: { Authorization: @another_token.result }
-  #
-  #   assert_response :unprocessable_entity
-  # end
-  #
-  # test "should not create a story with story_points in a project that does not score story" do
-  #   post "/sprints/#{@sprint.id}/stories", params: {
-  #     "story": {
-  #       "name": "Story 01",
-  #       "description": "First Story",
-  #       "assign": "Mateus",
-  #       "pipeline": "Done",
-  #       "story_points": false,
-  #       "initial_date": "01/01/2018",
-  #       "story_points": "10",
-  #       "issue_number": "10",
-  #       "feature_id": "#{@feature.id}"
-  #     }
-  #   }, headers: { Authorization: @token.result }
-  #
-  #   assert_response :unprocessable_entity
-  # end
-  #
-  # test "should create a story with story_points and final_date in a project that scores story" do
-  #   post "/sprints/#{@another_sprint.id}/stories", params: {
-  #     "story": {
-  #       "name": "Story 01",
-  #       "description": "First Story",
-  #       "assign": "Mateus",
-  #       "pipeline": "Done",
-  #       "story_points": false,
-  #       "initial_date": "01/01/2018",
-  #       "story_points": "10",
-  #       "issue_number": "8",
-  #       "feature_id": "#{@feature.id}"
-  #     }
-  #   }, headers: { Authorization: @another_token.result }
-  #
-  #   assert_response :created
-  # end
+
+  test "should not create a story without story_points in a project that scores story" do
+    post "/sprints/#{@another_sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018",
+        "feature_id": "#{@feature.id}"
+      }
+    }, headers: { Authorization: @another_token.result }
+
+    assert_response :unprocessable_entity
+  end
+
+  test "should not create a story with story_points in a project that does not score story" do
+    post "/sprints/#{@sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018",
+        "story_points": "10",
+        "issue_number": "10",
+        "feature_id": "#{@feature.id}"
+      }
+    }, headers: { Authorization: @token.result }
+
+    assert_response :unprocessable_entity
+  end
+
+  test "should create a story with story_points and final_date in a project that scores story" do
+    post "/sprints/#{@another_sprint.id}/stories", params: {
+      "story": {
+        "name": "Story 01",
+        "description": "First Story",
+        "assign": "Mateus",
+        "pipeline": "Done",
+        "initial_date": "01/01/2018",
+        "story_points": "10",
+        "issue_number": "8",
+        "feature_id": "#{@feature.id}"
+      }
+    }, headers: { Authorization: @another_token.result }
+
+    assert_response :created
+  end
 end
