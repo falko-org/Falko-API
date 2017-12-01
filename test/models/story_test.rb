@@ -26,6 +26,12 @@ class StoryTest < ActiveSupport::TestCase
       project_id: @project.id
     )
 
+    @feature = Feature.create(
+      title: "F1",
+      description: "Description",
+      project_id: @project.id
+    )
+
     @sprint = Sprint.create(
       name: "Sprint 1",
       description: "Sprint 1 us10",
@@ -38,10 +44,12 @@ class StoryTest < ActiveSupport::TestCase
       name: "Story 1",
       description: "Story 1 us14",
       assign: "Lucas",
-      pipeline: "in progress",
+      pipeline: "In Progress",
       initial_date: "01/01/2017",
       issue_number: "10",
-      sprint_id: @sprint.id
+      story_points: 10,
+      sprint_id: @sprint.id,
+      feature_id: @feature.id
     )
   end
 
