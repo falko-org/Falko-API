@@ -103,6 +103,19 @@ module ValidationsHelper
     end
   end
 
+  def validate_sprints_date(component_type, component_params)
+    if @release.initial_date > @sprint.initial_date ||
+       @release.final_date < @sprint.initial_date
+      false
+    elsif @release.final_date < @sprint.final_date ||
+          @release.initial_date > @sprint.final_date
+      false
+    else
+      return true
+    end
+  end
+
+
   def validate_stories(story_points, id, sprint_id)
     current_user
     verifies_id(id, sprint_id, "sprint")

@@ -14,12 +14,14 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     @project = Project.create(name: "Falko",
                               description: "Project description.",
                               user_id: @user.id,
+                              github_slug: "fga-gpp-mds/falko",
                               is_project_from_github: true,
                               is_scoring: false)
 
     @another_project = Project.create(name: "FalkoSolutions/Falko",
                                       description: "Project description.",
                                       user_id: @user.id,
+                                      github_slug: "fga-gpp-mds/falko",
                                       is_project_from_github: false,
                                       is_scoring: false)
 
@@ -44,7 +46,6 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
                           initial_date: "07/10/2017",
                           final_date: "12/10/2017",
                           issue_number: "9",
-                          is_closed: false,
                           sprint_id: @sprint.id,
                           story_points: 5
                           )
@@ -54,16 +55,16 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.list_issues(name)
+    def mock.list_issues(github_slug)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: "3", body: "This is a template body") ]
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       get "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }
 
       assert response.parsed_body["issues_infos"][0]["name"] == "issue"
@@ -77,16 +78,16 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.list_issues(name)
+    def mock.list_issues(github_slug)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: "3", body: "This is a template body") ]
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       get "/projects/#{@project.id}/issues"
 
       assert_response :unauthorized
@@ -97,16 +98,16 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.create_issue(path, name, body)
+    def mock.create_issue(name, body)
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3")
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       post "/projects/#{@another_project.id}/issues", headers: { Authorization: @token.result }, params: {
         issue: {
           "name": "New Issue",
@@ -114,8 +115,8 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
         }
       }
 
-      assert response.parsed_body["issues_infos"][0]["name"] == "New Issue"
-      assert response.parsed_body["issues_infos"][0]["body"] == "New Body"
+      assert response.parsed_body["issues_infos"][0]["name"] == "fga-gpp-mds/falko"
+      assert response.parsed_body["issues_infos"][0]["body"]["body"] == "New Body"
       assert_response :created
     end
   end
@@ -124,7 +125,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
@@ -133,7 +134,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       post "/projects/#{@project.id}/issues", params: {
         issue: {
           "name": "New Issue",
@@ -149,16 +150,16 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.update_issue(path, number, name, body)
+    def mock.update_issue(name, body)
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3")
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       put "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }, params: {
         issue: {
           "number": "3",
@@ -166,8 +167,9 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
           "body": "Updated Body"
         }
       }
-      assert response.parsed_body["issues_infos"][0]["name"] == "Updated Issue"
-      assert response.parsed_body["issues_infos"][0]["body"] == "Updated Body"
+
+      assert response.parsed_body["issues_infos"][0]["name"] == "fga-gpp-mds/falko"
+      assert response.parsed_body["issues_infos"][0]["body"]["body"] == "Updated Body"
       assert_response :success
     end
   end
@@ -176,7 +178,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
@@ -185,7 +187,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       put "/projects/#{@project.id}/issues", params: {
         issue: {
           "number": "3",
@@ -202,7 +204,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
@@ -211,7 +213,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       delete "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }, params: {
         issue: {
           "number": "3"
@@ -226,7 +228,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
@@ -235,7 +237,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       delete "/projects/#{@project.id}/issues", params: {
         issue: {
           "number": "3"
@@ -297,10 +299,10 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "should not show issue with same number as story" do
+  test "should not show issues in Backlog already allocated" do
     mock = Minitest::Mock.new
 
-    def mock.user()
+    def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
@@ -309,7 +311,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubIssue.stub :new, mock do
       get "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }
 
       assert response.parsed_body["issues_infos"] == []

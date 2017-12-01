@@ -41,7 +41,6 @@ class StoryTest < ActiveSupport::TestCase
       pipeline: "in progress",
       initial_date: "01/01/2017",
       issue_number: "10",
-      is_closed: false,
       sprint_id: @sprint.id
     )
   end
@@ -121,5 +120,12 @@ class StoryTest < ActiveSupport::TestCase
 
     @story.pipeline = "s" * 16
     assert @story.save
+  end
+
+  test "should note create a story with duplicate issue_number" do
+    duplicate_story = @story.dup
+    duplicate_story.issue_number = @story.issue_number
+    @story.save
+    assert_not duplicate_story.save
   end
 end
