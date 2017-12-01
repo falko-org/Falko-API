@@ -110,28 +110,28 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response 204
   end
 
-  test "should see repositories if user is loged in" do
+  test "should see repositories if user is logged in" do
     mock = Minitest::Mock.new
 
-    def mock.user
-      Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "test")
+    def mock.get_github_user()
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/project_test"), login: "username") ]
     end
 
-    def mock.repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test") ]
+    def mock.get_github_repos(user_login)
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/project_test"), name: "repository_name") ]
     end
 
-    def mock.organizations(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "test") ]
+    def mock.get_github_orgs(user_login)
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/project_test"), name: "organization_name") ]
     end
 
-    def mock.organization_repositories(login)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test1") ]
+    def mock.get_github_orgs_repos(org)
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/project_test"), name: "organization_repository") ]
     end
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubProject.stub :new, mock do
       get "/repos", headers: { Authorization: @token.result }
-      assert response.parsed_body["user"] == [{ "login" => "test" }, { "repos" => ["test"] }]
+
       assert_response :success
     end
   end
@@ -152,7 +152,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test1") ]
     end
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubProject.stub :new, mock do
       get "/repos", headers: { Authorization: @token.result }
 
       assert_response :unauthorized
@@ -175,7 +175,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test1") ]
     end
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubProject.stub :new, mock do
       get "/repos", headers: { Authorization: @token.result }
 
       assert_response :unauthorized
@@ -198,7 +198,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test1") ]
     end
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubProject.stub :new, mock do
       get "/repos", headers: { Authorization: @token.result }
 
       assert_response :unauthorized
@@ -219,8 +219,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       [ Sawyer::Resource.new(Sawyer::Agent.new("/test"), name: "test1") ]
     end
 
-    Octokit::Client.stub :new, mock do
-      get "/repos", headers: { Authorization: "hgfcjgcgfc" }
+    Adapter::GitHubProject.stub :new, mock do
+      get "/repos", headers: { Authorization: "aVeryFuckedUpToken-NoWayThisIsRight" }
 
       assert_response :unauthorized
     end
@@ -267,14 +267,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test "should get contributors" do
     mock = Minitest::Mock.new
 
-    def mock.contributors(github_slug)
+    def mock.get_contributors(github_slug)
       [
         Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "MatheusRich"),
         Sawyer::Resource.new(Sawyer::Agent.new("/test"), login: "ThalissonMelo")
       ]
     end
 
-    Octokit::Client.stub :new, mock do
+    Adapter::GitHubProject.stub :new, mock do
       get "/projects/#{@project.id}/contributors", headers: { Authorization: @token.result }
     end
 

@@ -5,7 +5,9 @@ class IssuesController < ApplicationController
   before_action :set_path, except: [:update_assignees]
 
   def index
-    @issues = @client.list_issues(@path)
+    client = Adapter::GitHubIssue.new(request)
+
+    @issues = client.list_issues(@path)
 
     convert_form_params(@issues)
 
@@ -25,7 +27,9 @@ class IssuesController < ApplicationController
   end
 
   def create
-    @issue = @client.create_issue(@path, issue_params[:name], issue_params[:body])
+    client = Adapter::GitHubIssue.new(request)
+
+    @issue = client.create_issue(@project.github_slug, issue_params)
 
     convert_form_params(@issue)
 
@@ -33,7 +37,9 @@ class IssuesController < ApplicationController
   end
 
   def update
-    @issue = @client.update_issue(@path, issue_params[:number], issue_params[:name], issue_params[:body])
+    client = Adapter::GitHubIssue.new(request)
+
+    @issue = client.update_issue(@project.github_slug, issue_params)
 
     convert_form_params(@issue)
 
@@ -41,9 +47,11 @@ class IssuesController < ApplicationController
   end
 
   def close
-    @issue = @client.close_issue(@path, issue_params[:number])
+    client = Adapter::GitHubIssue.new(request)
 
-    render status: 200
+    client.close_issue(@path, issue_params)
+
+    render status: :ok
   end
 
   def update_assignees
@@ -70,8 +78,7 @@ class IssuesController < ApplicationController
   private
 
     def set_authorization
-      @current_user = AuthorizeApiRequest.call(request.headers).result
-      @client = Octokit::Client.new(access_token: @current_user.access_token)
+      client = Adapter::GitHubIssue.new(request)
     end
 
     def set_project
@@ -84,9 +91,10 @@ class IssuesController < ApplicationController
       if @project.name.include? "/"
         @path = @project.name
       else
-        @name = @client.user.login
+        client = Adapter::GitHubIssue.new(request)
+        @name = client.get_github_user
         @repo = @project.name
-        @path = @name + "/" + @repo
+        @path = @name.to_s + "/" + @repo
       end
 
       @path
