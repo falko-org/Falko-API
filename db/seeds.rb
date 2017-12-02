@@ -119,7 +119,6 @@ stories = [
     pipeline: "Backlog",
     initial_date: "01/01/2017",
     final_date: "02/01/2017",
-    story_points: "10",
     issue_number: "1",
     story_points: "2",
     sprint_id: "1"
@@ -131,7 +130,6 @@ stories = [
     pipeline: "Done",
     initial_date: "01/01/2017",
     final_date: "08/01/2017",
-    story_points: "10",
     issue_number: "2",
     story_points: "3",
     sprint_id: "1"
@@ -143,7 +141,6 @@ stories = [
     pipeline: "Done",
     initial_date: "01/01/2017",
     final_date: "04/01/2017",
-    story_points: "10",
     issue_number: "3",
     story_points: "5",
     sprint_id: "2"
@@ -155,7 +152,6 @@ stories = [
     pipeline: "Done",
     initial_date: "01/01/2017",
     final_date: "04/01/2017",
-    story_points: "10",
     issue_number: "4",
     story_points: "8",
     sprint_id: "2"
@@ -195,10 +191,31 @@ stories = [
     name: "Story 2",
     description: "Story 2 us14",
     assign: "Adrianne",
-    pipeline: "In Progress",
+    pipeline: "Done",
     initial_date: "01/01/2017",
     story_points: "10",
     issue_number: "8",
+    sprint_id: "4"
+  ),
+  Story.find_or_create_by(
+    name: "Story 2",
+    description: "Story 2 us15",
+    assign: "Lucas",
+    pipeline: "Done",
+    initial_date: "01/01/2017",
+    story_points: "15",
+    issue_number: "6",
+    sprint_id: "3"
+  ),
+  Story.find_or_create_by(
+    name: "Story 2",
+    description: "Story 2 us16",
+    assign: "Pedro",
+    pipeline: "Done",
+    initial_date: "01/01/2017",
+    story_points: "25",
+    issue_number: "6",
+    sprint_id: "3"
   )
 ]
 
