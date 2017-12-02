@@ -21,7 +21,7 @@ class StoriesController < ApplicationController
   def to_do_list
     sprint = Sprint.find(params[:id])
 
-    stories = sprint.stories.select { |story| story.pipeline == 'To Do' }
+    stories = sprint.stories.select { |story| story.pipeline == "To Do" }
 
     render json: format_json_output(stories)
   end
@@ -29,7 +29,7 @@ class StoriesController < ApplicationController
   def doing_list
     sprint = Sprint.find(params[:id])
 
-    stories = sprint.stories.select { |story| story.pipeline == 'Doing' }
+    stories = sprint.stories.select { |story| story.pipeline == "Doing" }
 
     render json: format_json_output(stories)
   end
@@ -37,7 +37,7 @@ class StoriesController < ApplicationController
   def done_list
     sprint = Sprint.find(params[:id])
 
-    stories = sprint.stories.select { |story| story.pipeline == 'Done' }
+    stories = sprint.stories.select { |story| story.pipeline == "Done" }
 
     render json: format_json_output(stories)
   end
