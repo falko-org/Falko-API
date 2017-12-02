@@ -23,6 +23,8 @@ Rails.application.routes.draw do
 
   post "projects/:id/reopen_issue", to: "issues#reopen_issue"
 
+  get "sprints/:id/velocity", to: "sprints#get_velocity"
+
   resources :users, shallow: true do
     resources :projects do
       resources :releases do

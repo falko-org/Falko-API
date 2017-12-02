@@ -16,8 +16,10 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.homolog
-    environment: 
+    environment:
       - RAILS_ENV=production
+      - CLIENT_ID=cbd5f91719282354f09b
+      - CLIENT_SECRET=634dd13c943b8196d4345334031c43d6d5a75fc8
     volumes:
       - .:/Falko-2017.2-BackEnd
       - bundle-cache:/bundle-cache
