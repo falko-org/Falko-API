@@ -1,5 +1,6 @@
 class SprintsController < ApplicationController
   include ValidationsHelper
+  include VelocityHelper
 
   before_action :set_sprint, only: [:show, :update, :destroy, :get_burndown]
 
@@ -7,7 +8,7 @@ class SprintsController < ApplicationController
     validate_release(0, :release_id)
   end
 
-  before_action only: [:show, :update, :destroy] do
+  before_action only: [:show, :update, :destroy, :get_velocity] do
     validate_sprint(:id, 0)
   end
 
@@ -54,6 +55,17 @@ class SprintsController < ApplicationController
     update_amount_of_sprints
   end
 
+  def get_velocity
+    release = @sprint.release
+    if release.project.is_scoring == true
+      velocity = get_sprints_informations(release.sprints, @sprint)
+
+      render json: velocity
+    else
+      render json: { error: "The Velocity is only available in projects that use Story Points" }, status: :unprocessable_entity
+    end
+  end
+
   def get_burndown
     project = @sprint.release.project
     if project.is_scoring != false
@@ -91,6 +103,7 @@ class SprintsController < ApplicationController
       render json: { error: "The Burndown Chart is only available in projects that use Story Points" }, status: :unprocessable_entity
     end
   end
+
   private
     def set_sprint
       @sprint = Sprint.find(params[:id])
