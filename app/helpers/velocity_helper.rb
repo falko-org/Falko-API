@@ -10,7 +10,7 @@ module VelocityHelper
       end
     end
 
-     points = { sprint_total_points: sprint_total_points, sprint_completed_points: sprint_completed_points }
+    points = { sprint_total_points: sprint_total_points, sprint_completed_points: sprint_completed_points }
   end
 
   def get_sprints_informations(sprints, actual_sprint)

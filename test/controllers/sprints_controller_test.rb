@@ -396,5 +396,4 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
     assert response.parsed_body["error"] == "The Velocity is only available in projects that use Story Points"
   end
-
 end
