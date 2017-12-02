@@ -32,7 +32,7 @@ class UsersController < ApplicationController
 
   def request_github_token
     code_token = params[:code]
-    puts ENV["CLIENT_ID"]
+
     result = RestClient.post(
       "https://github.com/login/oauth/access_token",
       client_id: ENV["CLIENT_ID"],
