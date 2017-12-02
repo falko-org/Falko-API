@@ -55,7 +55,9 @@ class IssuesController < ApplicationController
   end
 
   def reopen_issue
-    @issue = @client.reopen_issue(@path, issue_params[:number])
+    client = Adapter::GitHubIssue.new(request)
+
+    client.reopen_issue(@path, issue_params)
 
     render status: 200
   end
