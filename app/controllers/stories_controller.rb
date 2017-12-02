@@ -18,6 +18,30 @@ class StoriesController < ApplicationController
     render json: @stories
   end
 
+  def to_do_list
+    sprint = Sprint.find(params[:id])
+
+    stories = sprint.stories.select { |story| story.pipeline == 'To Do' }
+
+    render json: format_json_output(stories)
+  end
+
+  def doing_list
+    sprint = Sprint.find(params[:id])
+
+    stories = sprint.stories.select { |story| story.pipeline == 'Doing' }
+
+    render json: format_json_output(stories)
+  end
+
+  def done_list
+    sprint = Sprint.find(params[:id])
+
+    stories = sprint.stories.select { |story| story.pipeline == 'Done' }
+
+    render json: format_json_output(stories)
+  end
+
   def show
     @story = Story.find(params[:id])
     render json: @story
@@ -57,7 +81,23 @@ class StoriesController < ApplicationController
       @story = Story.find(params[:id])
     end
 
+    def format_json_output(stories)
+      form_params = { stories_infos: [] }
+
+      if stories != nil
+        if stories.kind_of?(Array)
+          stories.each do |story|
+            form_params[:stories_infos].push(name: story.name, description: story.description, assign: story.assign, pipeline: story.pipeline, initial_date: story.initial_date, story_points: story.story_points, final_date: story.final_date, issue_number: story.issue_number, id: story.id)
+          end
+        else
+          form_params[:stories_infos].push(name: stories.name, description: stories.description, assign: stories.assign, pipeline: stories.pipeline, initial_date: stories.initial_date, story_points: stories.story_points, final_date: stories.final_date, issue_number: stories.issue_number, id: stories.id)
+        end
+      end
+
+      form_params
+    end
+
     def story_params
-      params.require(:story).permit(:name, :description, :assign, :pipeline, :initial_date, :story_points, :final_date, :issue_number)
+      params.require(:story).permit(:name, :description, :assign, :pipeline, :initial_date, :story_points, :final_date, :issue_number, :feature_id)
     end
 end

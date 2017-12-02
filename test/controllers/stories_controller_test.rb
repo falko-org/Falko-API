@@ -27,6 +27,12 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       project_id: @project.id
     )
 
+    @feature = Feature.create(
+      title: "F1",
+      description: "Description",
+      project_id: @project.id
+    )
+
     @sprint = Sprint.create(
       name: "Sprint 1",
       description: "Sprint 1 us10",
@@ -42,7 +48,9 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       pipeline: "In Progress",
       initial_date: "01/01/2017",
       issue_number: "10",
-      sprint_id: @sprint.id
+      story_points: 10,
+      sprint_id: @sprint.id,
+      feature_id: @feature.id
     )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
@@ -72,6 +80,12 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       project_id: @another_project.id
     )
 
+    @another_feature = Feature.create(
+      title: "F2",
+      description: "Description 2",
+      project_id: @another_project.id
+    )
+
     @another_sprint = Sprint.create(
       name: "Sprint 2",
       description: "Sprint 2 us10",
@@ -88,15 +102,9 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       initial_date: "01/01/2017",
       final_date: "07/01/2017",
       issue_number: "9",
-      sprint_id: @another_sprint.id
-    )
-
-    @another_user = User.create(
-      name: "Ronaldo",
-      email: "ronaldo@email.com",
-      password: "123123",
-      password_confirmation: "123123",
-      github: "ronaldoGit"
+      story_points: 10,
+      sprint_id: @another_sprint.id,
+      feature_id: @another_feature.id
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
@@ -105,13 +113,13 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
   test "should create story" do
     post "/sprints/#{@sprint.id}/stories", params: {
       "story": {
-        "name": "Story 01",
-        "description": "First Story",
-        "assign": "Mateus",
-        "pipeline": "Done",
-        "initial_date": "01/01/2018",
-        "final_date": "09/01/2018",
-        "issue_number": "8",
+        "name": "F1",
+		     "description": "Description",
+		     "assign": "ThalissonMelo",
+         "pipeline": "To Do",
+         "initial_date": "03/01/2017",
+         "issue_number": "11",
+         "feature_id": "#{@feature.id}"
       }
     }, headers: { Authorization: @token.result }
 
@@ -128,6 +136,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "a" * 60,
         "initial_date": "01/01/2018",
         "issue_number": "8",
+        "feature_id": "#{@feature.id}"
       }
     }, headers: { Authorization: @token.result }
 
@@ -144,6 +153,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "In Progress",
         "initial_date": "01/01/2018",
         "issue_number": "8",
+        "feature_id": "#{@feature.id}"
       }
     }
 
@@ -159,6 +169,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "In Progress",
         "initial_date": "01/01/2018",
         "issue_number": "8",
+        "feature_id": "#{@feature.id}"
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -175,6 +186,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "initial_date": "2018-01-02",
         "final_date": "01/01/2018",
         "issue_number": "8",
+        "feature_id": "#{@feature.id}"
       }
     }
 
@@ -346,6 +358,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "final_date": "09/01/2018",
         "story_points": "10",
         "issue_number": "8",
+        "feature_id": "#{@feature.id}"
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -361,6 +374,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "pipeline": "Done",
         "initial_date": "01/01/2018",
         "issue_number": "8",
+        "feature_id": "#{@feature.id}"
       }
     }, headers: { Authorization: @token.result }
 
@@ -374,7 +388,8 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "description": "First Story",
         "assign": "Mateus",
         "pipeline": "Done",
-        "initial_date": "01/01/2018"
+        "initial_date": "01/01/2018",
+        "feature_id": "#{@feature.id}"
       }
     }, headers: { Authorization: @another_token.result }
 
@@ -391,6 +406,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "initial_date": "01/01/2018",
         "story_points": "10",
         "issue_number": "10",
+        "feature_id": "#{@feature.id}"
       }
     }, headers: { Authorization: @token.result }
 
@@ -407,6 +423,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
         "initial_date": "01/01/2018",
         "story_points": "10",
         "issue_number": "8",
+        "feature_id": "#{@feature.id}"
       }
     }, headers: { Authorization: @another_token.result }
 

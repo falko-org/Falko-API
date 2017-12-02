@@ -7,12 +7,20 @@ module ValidationsHelper
     @user = User.find(@project.user_id)
   end
 
-  def project
-    @project = Project.find(@release.project_id)
+  def project(component_type)
+    if component_type == "release"
+      @project = Project.find(@release.project_id)
+    elsif component_type == "feature"
+      @project = Project.find(@feature.project_id)
+    end
   end
 
   def release
     @release = Release.find(@sprint.release_id)
+  end
+
+  def feature
+    @feature = Feature.find(@story.feature_id)
   end
 
   def sprint(component_type)
@@ -32,18 +40,28 @@ module ValidationsHelper
     elsif component_type == "user" && previous_id != 0
       user_id = previous_id
       @user = User.find(params[:user_id].to_i)
+
     elsif component_type == "project" && current_id != 0
       id = current_id
       @project = Project.find(params[:id].to_i)
     elsif component_type == "project" && previous_id != 0
       project_id = previous_id
       @project = Project.find(params[:project_id].to_i)
+
     elsif component_type == "release" && current_id != 0
       id = current_id
       @release = Release.find(params[:id].to_i)
     elsif component_type == "release" && previous_id != 0
       release_id = previous_id
       @release = Release.find(params[:release_id].to_i)
+
+    elsif component_type == "feature" && current_id != 0
+      id = current_id
+      @feature = Feature.find(params[:id].to_i)
+    elsif component_type == "feature" && previous_id != 0
+      feature_id = previous_id
+      @release = Feature.find(params[:feature_id].to_i)
+
     elsif component_type == "sprint" && current_id != 0
       id = current_id
       @sprint = Sprint.find(params[:id].to_i)
@@ -79,7 +97,20 @@ module ValidationsHelper
   def validate_release(id, release_id)
     current_user
     verifies_id(id, release_id, "release")
-    project
+    project("release")
+    user
+
+    if @current_user.id == @user.id
+      return true
+    else
+      render json: { error: "Not Authorized" }, status: 401
+    end
+  end
+
+  def validate_feature(id, feature_id)
+    current_user
+    verifies_id(id, feature_id, "feature")
+    project("feature")
     user
 
     if @current_user.id == @user.id
@@ -93,7 +124,7 @@ module ValidationsHelper
     current_user
     verifies_id(id, sprint_id, "sprint")
     release
-    project
+    project("release")
     user
 
     if @current_user.id == @user.id
@@ -120,7 +151,7 @@ module ValidationsHelper
     current_user
     verifies_id(id, sprint_id, "sprint")
     release
-    project
+    project("release")
     user
 
     if @project.is_scoring
@@ -151,7 +182,7 @@ module ValidationsHelper
       sprint("retrospective")
     end
     release
-    project
+    project("release")
     user
 
     if @current_user.id == @user.id
