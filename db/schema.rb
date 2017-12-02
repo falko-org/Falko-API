@@ -10,30 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171130131944) do
+ActiveRecord::Schema.define(version: 20171130165550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "earned_value_management", force: :cascade do |t|
+  create_table "earned_value_managements", force: :cascade do |t|
     t.float "budget_actual_cost"
     t.integer "planned_sprints"
     t.integer "planned_release_points"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "release_id"
-    t.index ["release_id"], name: "index_earned_value_management_on_release_id"
+    t.index ["release_id"], name: "index_earned_value_managements_on_release_id"
   end
 
-  create_table "issues", force: :cascade do |t|
-    t.string "title"
-    t.text "body"
-    t.string "assignee"
-    t.integer "milestone"
-    t.string "labels"
-    t.string "assignees"
+  create_table "evm_sprints", force: :cascade do |t|
+    t.float "planned_percent_completed"
+    t.float "actual_percent_completed"
+    t.integer "completed_points"
+    t.integer "added_points"
+    t.integer "current_sprint"
+    t.float "planned_value"
+    t.float "actual_value"
+    t.float "earned_value"
+    t.float "accumulated_planned_value"
+    t.float "accumulated_actual_value"
+    t.float "accumulated_earned_value"
+    t.float "cost_variance"
+    t.float "schedule_variance"
+    t.float "cost_performance_index"
+    t.float "schedule_performance_index"
+    t.float "estimate_to_complete"
+    t.float "estimate_at_complete"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "earned_value_management_id"
+    t.index ["earned_value_management_id"], name: "index_evm_sprints_on_earned_value_management_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -116,7 +129,8 @@ ActiveRecord::Schema.define(version: 20171130131944) do
     t.string "access_token"
   end
 
-  add_foreign_key "earned_value_management", "releases"
+  add_foreign_key "earned_value_managements", "releases"
+  add_foreign_key "evm_sprints", "earned_value_managements"
   add_foreign_key "projects", "users"
   add_foreign_key "releases", "projects"
   add_foreign_key "retrospectives", "sprints"

@@ -35,10 +35,9 @@ class EarnedValueManagementController < ApplicationController
 
     def set_earned_value_management
       begin
-        release = Release.find(params[:id])
-        @evm = release.earned_value_management
+        @evm = EarnedValueManagement.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        render json: { errors: "Release not found" }, status: :not_found
+        render json: { errors: "EVM not found" }, status: :not_found
       end
     end
 end
