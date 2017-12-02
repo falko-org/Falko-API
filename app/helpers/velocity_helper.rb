@@ -1,27 +1,33 @@
 module VelocityHelper
+  def calculate_points(sprint)
+    sprint_total_points = 0
+    sprint_completed_points = 0
+
+    sprint.stories.each do |story|
+      sprint_total_points += story.story_points
+      if story.pipeline == "Done"
+        sprint_completed_points += story.story_points
+      end
+    end
+
+     points = { sprint_total_points: sprint_total_points, sprint_completed_points: sprint_completed_points }
+  end
+
   def get_sprints_informations(sprints, actual_sprint)
     names = []
     total_points = []
     completed_points = []
     velocities = []
+    points = {}
 
     sprints.each do |sprint|
       if actual_sprint.final_date >= sprint.final_date
         names.push(sprint.name)
 
-        sprint_total_points = 0
-        sprint_completed_points = 0
+        points = calculate_points(sprint)
 
-        sprint.stories.each do |story|
-          sprint_total_points += story.story_points
-
-          if story.pipeline == "Done"
-            sprint_completed_points += story.story_points
-          end
-        end
-
-        total_points.push(sprint_total_points)
-        completed_points.push(sprint_completed_points)
+        total_points.push(points[:sprint_total_points])
+        completed_points.push(points[:sprint_completed_points])
         velocities.push(calculate_velocity(completed_points))
       end
     end
