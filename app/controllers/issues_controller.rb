@@ -54,6 +54,14 @@ class IssuesController < ApplicationController
     render status: :ok
   end
 
+  def reopen_issue
+    client = Adapter::GitHubIssue.new(request)
+
+    client.reopen_issue(@path, issue_params)
+
+    render status: 200
+  end
+
   def update_assignees
     begin
       set_project
