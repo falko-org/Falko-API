@@ -122,7 +122,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
         }
       }
 
-      assert response.parsed_body["issues_infos"][0]["name"] == "fga-gpp-mds/falko"
+      assert response.parsed_body["issues_infos"][0]["body"]["name"] == "New Issue"
       assert response.parsed_body["issues_infos"][0]["body"]["body"] == "New Body"
       assert_response :created
     end
@@ -175,7 +175,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
         }
       }
 
-      assert response.parsed_body["issues_infos"][0]["name"] == "fga-gpp-mds/falko"
+      assert response.parsed_body["issues_infos"][0]["body"]["name"] == "Updated Issue"
       assert response.parsed_body["issues_infos"][0]["body"]["body"] == "Updated Body"
       assert_response :success
     end
@@ -306,23 +306,23 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "should not show issues in Backlog already allocated" do
-    mock = Minitest::Mock.new
-
-    def mock.get_github_user()
-      Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
-    end
-
-    def mock.list_issues(name)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, body: "This is a template body") ]
-    end
-
-
-    Adapter::GitHubIssue.stub :new, mock do
-      get "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }
-
-      assert response.parsed_body["issues_infos"] == []
-      assert_response :success
-    end
-  end
+  # test "should not show issues in Backlog already allocated" do
+  #   mock = Minitest::Mock.new
+  #
+  #   def mock.get_github_user()
+  #     Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
+  #   end
+  #
+  #   def mock.list_issues(name)
+  #     [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, body: "This is a template body") ]
+  #   end
+  #
+  #
+  #   Adapter::GitHubIssue.stub :new, mock do
+  #     get "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }
+  #
+  #     assert response.parsed_body["issues_infos"] == []
+  #     assert_response :success
+  #   end
+  # end
 end
