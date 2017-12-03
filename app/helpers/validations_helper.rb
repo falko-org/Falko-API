@@ -11,7 +11,9 @@ module ValidationsHelper
     if component_type == "release"
       @project = Project.find(@release.project_id)
     elsif component_type == "feature"
-      @project = Project.find(@feature.project_id)
+      @project = Project.find(@epic.project_id)
+    elsif component_type == "epic"
+      @project = Project.find(@epic.project_id)
     end
   end
 
@@ -21,6 +23,10 @@ module ValidationsHelper
 
   def feature
     @feature = Feature.find(@story.feature_id)
+  end
+
+  def epic
+    @epic = Epic.find(@feature.epic_id)
   end
 
   def sprint(component_type)
@@ -60,7 +66,14 @@ module ValidationsHelper
       @feature = Feature.find(params[:id].to_i)
     elsif component_type == "feature" && previous_id != 0
       feature_id = previous_id
-      @release = Feature.find(params[:feature_id].to_i)
+      @feature = Feature.find(params[:feature_id].to_i)
+
+    elsif component_type == "epic" && current_id != 0
+      id = current_id
+      @epic = Epic.find(params[:id].to_i)
+    elsif component_type == "epic" && previous_id != 0
+      epic_id = previous_id
+      @epic = Epic.find(params[:epic_id].to_i)
 
     elsif component_type == "sprint" && current_id != 0
       id = current_id
@@ -110,7 +123,21 @@ module ValidationsHelper
   def validate_feature(id, feature_id)
     current_user
     verifies_id(id, feature_id, "feature")
+    epic
     project("feature")
+    user
+
+    if @current_user.id == @user.id
+      return true
+    else
+      render json: { error: "Not Authorized" }, status: 401
+    end
+  end
+
+  def validate_epic(id, epic_id)
+    current_user
+    verifies_id(id, epic_id, "epic")
+    project("epic")
     user
 
     if @current_user.id == @user.id
