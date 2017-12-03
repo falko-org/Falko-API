@@ -1,7 +1,8 @@
  module EarnedValueManagementHelper
 
   def calculate_evm_sprint_values(evm, evm_sprint)
-    evm.planned_sprints = evm.evm_sprints.size
+
+    calculate_planned_sprints(evm)
 
     evm_sprint.current_sprint = get_current_sprint(evm.planned_sprints)
 
@@ -11,7 +12,7 @@
     )
 
     evm_sprint.actual_percent_completed = calculate_apc(
-      evm.completed_points,
+      evm_sprint.completed_points,
       evm.planned_release_points
     )
 
@@ -31,7 +32,7 @@
       evm.budget_actual_cost
     )
 
-    accumulated_values = calculate_accumulated_values(evm)
+    accumulated_values = calculate_accumulated_values(evm, evm_sprint)
 
     evm_sprint.accumulated_planned_value = accumulated_values[:apv]
     evm_sprint.accumulated_actual_value = accumulated_values[:aav]
@@ -69,16 +70,31 @@
     )
   end
 
-  def get_current_sprint(planned_sprints)
-    current_sprint = planned_sprints + 1
+  def calculate_planned_sprints(evm)
+    evm.update(planned_sprints: evm.evm_sprints.size + 1)
   end
 
+  def get_current_sprint(planned_sprints)
+    current_sprint = planned_sprints
+  end
+
+  #issue: Always 1
   def calculate_ppc(current_sprint, planned_sprints)
-    planned_percent_completed = current_sprint / planned_sprints
+    begin
+      planned_percent_completed = Float(current_sprint) / planned_sprints
+    rescue ZeroDivisionError
+      return 0
+    end
+    return planned_percent_completed
   end
 
   def calculate_apc(completed_points, planned_release_points)
-    actual_percent_completed = completed_points / planned_release_points
+    begin
+      actual_percent_completed = Float(completed_points) / planned_release_points
+    rescue ZeroDivisionError
+      return 1.0
+    end
+    return actual_percent_completed
   end
 
   def calculate_pv(planned_percent_completed, budget_actual_cost)
@@ -86,23 +102,28 @@
   end
 
   def calculate_av(budget_actual_cost, planned_release_points, completed_points)
-    actual_value = (budget_actual_cost / planned_release_points) * completed_points
+    begin
+      actual_value = (Float (budget_actual_cost) / planned_release_points) * completed_points
+    rescue ZeroDivisionError
+      return 0
+    end
+    return actual_value
   end
 
   def calculate_ev(actual_percent_completed, budget_actual_cost)
     earned_value = actual_percent_completed * budget_actual_cost
   end
 
-  def calculate_accumulated_values(evm)
-    accumulated_planned_value = 0
-    accumulated_actual_value = 0
-    accumulated_earned_value = 0
+  def calculate_accumulated_values(evm, evm_sprint)
+    accumulated_planned_value = evm_sprint.planned_value
+    accumulated_actual_value = evm_sprint.actual_value
+    accumulated_earned_value = evm_sprint.earned_value
 
-    evm.evm_sprints.each do |evm_sprint, index|
-      if index < evm_sprint.current_sprint
-        accumulated_planned_value += evm_sprint.planned_value
-        accumulated_actual_value += evm_sprint.actual_value
-        accumulated_earned_value += evm_sprint.earned_value
+    evm.evm_sprints.each_with_index do |sprint, index|
+      if(index < evm_sprint.current_sprint)
+        accumulated_planned_value += sprint.planned_value
+        accumulated_actual_value += sprint.actual_value
+        accumulated_earned_value += sprint.earned_value
       end
     end
 
@@ -122,15 +143,30 @@
   end
 
   def calculate_cpi(earned_value, actual_value)
-    cost_performance_index = earned_value / actual_value
+    begin
+      cost_performance_index = Float(earned_value) / actual_value
+    rescue ZeroDivisionError
+      return earned_value
+    end
+    return cost_performance_index
   end
 
   def calculate_spi(earned_value, planned_value)
-    schedule_performance_index = earned_value / planned_value
+    begin
+      schedule_performance_index = Float(earned_value) / planned_value
+    rescue ZeroDivisionError
+      return planned_value
+    end
+    return schedule_performance_index
   end
 
   def calculate_etc(cost_performance_index, budget_actual_cost, earned_value)
-    estimate_to_complete = (1 / cost_performance_index) * budget_actual_cost - earned_value
+    begin
+      estimate_to_complete = (1.0 / cost_performance_index) * budget_actual_cost - earned_value
+    rescue ZeroDivisionError
+      estimate_to_complete = budget_actual_cost - earned_value
+    end
+    return estimate_to_complete
   end
 
   def calculate_eac(actual_value, estimate_to_complete)

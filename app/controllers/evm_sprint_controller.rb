@@ -1,5 +1,7 @@
 class EvmSprintController < ApplicationController
-  before_action :set_evm_sprint, only: [:create, :show, :update, :destroy]
+  include EarnedValueManagementHelper
+
+  before_action :set_evm_sprint, only: [:show, :update, :destroy]
 
   def index
     evm_sprints = @evm.evm_sprints
@@ -7,12 +9,14 @@ class EvmSprintController < ApplicationController
   end
 
   def create
-    evm_sprint = EarnedValueManagement.new(evm_sprint_params)
+    evm_sprint = EvmSprint.new(evm_sprint_params)
+
+    @evm = EarnedValueManagement.find(params[:earned_value_management_id])
     evm_sprint.earned_value_management_id = @evm.id
+    
+    calculate_evm_sprint_values(@evm, evm_sprint)
 
     if evm_sprint.save
-      calculate_evm_sprint_values(@evm, evm_sprint)
-
       render json: evm_sprint, status: :created
     else
       render json: evm_sprint.errors, status: :unprocessable_entity
