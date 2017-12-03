@@ -18,10 +18,16 @@ class FeaturesControllerTest < ActionDispatch::IntegrationTest
       is_scoring: false
     )
 
+    @epic = Epic.create(
+      title: "E1",
+      description: "Description E1",
+      project_id: @project.id
+    )
+
     @feature = Feature.create(
       title: "F1",
       description: "Description F1",
-      project_id: @project.id
+      epic_id: @epic.id
     )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
@@ -40,20 +46,27 @@ class FeaturesControllerTest < ActionDispatch::IntegrationTest
       is_project_from_github: true
     )
 
-    @another_feature = Feature.create(
-      title: "Paris Saint German",
-      description: "Descriptions",
+    @another_epic = Epic.create(
+      title: "E1",
+      description: "Description E1",
       project_id: @another_project.id
+    )
+
+    @another_feature = Feature.create(
+      title: "F1",
+      description: "Description F1",
+      epic_id: @another_epic.id
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
   end
 
   test "should create feature" do
-      post "/projects/#{@project.id}/features", params: {
+      post "/epics/#{@epic.id}/features", params: {
         "feature": {
           "title": "Feature 01",
-          "description": "First Feature"
+          "description": "First Feature",
+          "epic_id":"#{@epic.id}"
         }
       }, headers: { Authorization: @token.result }
 
@@ -62,10 +75,11 @@ class FeaturesControllerTest < ActionDispatch::IntegrationTest
 
   test "should not create feature without correct title" do
     # Final date before initial date
-    post "/projects/#{@project.id}/features", params: {
+    post "/epics/#{@epic.id}/features", params: {
       "feature": {
         "title": "F",
-        "description": "First Feature"
+        "description": "First Feature",
+        "epic_id":"#{@epic.id}"
       }
     }, headers: { Authorization: @token.result }
 
@@ -74,10 +88,11 @@ class FeaturesControllerTest < ActionDispatch::IntegrationTest
 
   test "should not create feature without correct description" do
       # Final date before initial date
-      post "/projects/#{@project.id}/features", params: {
+      post "/epics/#{@epic.id}/features", params: {
         "feature": {
           "title": "Feature 111",
-          "description": "a" * 257
+          "description": "a" * 257,
+          "epic_id":"#{@epic.id}"
         }
       }, headers: { Authorization: @token.result }
 
@@ -85,10 +100,11 @@ class FeaturesControllerTest < ActionDispatch::IntegrationTest
     end
 
   test "should not create feature without authentication" do
-    post "/projects/#{@project.id}/features", params: {
+    post "/epics/#{@epic.id}/features", params: {
       "feature": {
         "title": "Feature 01",
-        "description": "First Feature"
+        "description": "First Feature",
+        "epic_id":"#{@epic.id}"
       }
     }
 
@@ -96,12 +112,12 @@ class FeaturesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not get features index without authentication" do
-    get "/projects/#{@project.id}/features"
+    get "/epics/#{@epic.id}/features"
     assert_response :unauthorized
   end
 
   test "should get features index" do
-    get "/projects/#{@project.id}/features", headers: { Authorization: @token.result }
+    get "/epics/#{@epic.id}/features", headers: { Authorization: @token.result }
     assert_response :success
   end
 

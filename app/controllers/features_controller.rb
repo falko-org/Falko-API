@@ -4,7 +4,7 @@ class FeaturesController < ApplicationController
   before_action :set_feature, only: [:show, :update, :destroy]
 
   before_action only: [:index, :create] do
-    validate_project(0, :project_id)
+    validate_epic(0, :epic_id)
   end
 
   before_action only: [:show, :update, :destroy] do
@@ -13,7 +13,7 @@ class FeaturesController < ApplicationController
 
   def index
     # @project used from validate_project(0, :project_id)
-    @features = @project.features.reverse
+    @features = @epic.features.reverse
     render json: @features
   end
 
@@ -23,8 +23,8 @@ class FeaturesController < ApplicationController
   end
 
   def create
-    @feature = Feature.create(feature_params)
-    @feature.project = @project
+    @feature = Feature.new(feature_params)
+    @feature.epic = Epic.find_by_id(params[:epic_id])
     if @feature.save
       render json: @feature, status: :created
     else
@@ -50,6 +50,6 @@ class FeaturesController < ApplicationController
     end
 
     def feature_params
-      params.require(:feature).permit(:title, :description)
+      params.require(:feature).permit(:title, :description, :epic_id)
     end
 end
