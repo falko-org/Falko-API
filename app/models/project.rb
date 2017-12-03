@@ -1,7 +1,7 @@
 class Project < ApplicationRecord
   belongs_to :user
   has_many :releases, dependent: :destroy
-  has_many :features, dependent: :destroy
+  has_many :epics, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 128, minimum: 2 }
   validates :description, length: { maximum: 256 }

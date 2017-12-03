@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :epics
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   post "authenticate", to: "authentication#authenticate"
   post "request_github_token", to: "users#request_github_token"
@@ -33,13 +34,15 @@ Rails.application.routes.draw do
 
   resources :users, shallow: true do
     resources :projects do
-      resources :features
       resources :releases do
         resources :sprints do
           resources :stories
           resources :revisions
           resources :retrospectives
         end
+      end
+      resources :epics do
+        resources :features
       end
     end
   end
