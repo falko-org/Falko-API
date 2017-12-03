@@ -16,12 +16,12 @@ Rails.application.routes.draw do
   put "projects/:id/issues", to: "issues#update"
   patch "projects/:id/issues", to: "issues#update"
   delete "projects/:id/issues", to: "issues#close"
-  
+
   resources :users, shallow: true do
     resources :projects do
       resources :releases do
-        resources :earned_value_managements do
-          resources :evm_sprints
+        resources :earned_value_management do
+          resources :evm_sprint
         end
         resources :sprints do
           resources :stories

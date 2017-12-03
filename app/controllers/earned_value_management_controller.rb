@@ -4,6 +4,9 @@ class EarnedValueManagementController < ApplicationController
 
   def create
     evm = EarnedValueManagement.new(earned_value_management_params)
+    @release = Release.find(params[:release_id])
+    evm.release_id = @release.id
+
     if evm.save
       render json: evm, status: :created
     else
