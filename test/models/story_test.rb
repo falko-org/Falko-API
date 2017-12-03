@@ -26,10 +26,16 @@ class StoryTest < ActiveSupport::TestCase
       project_id: @project.id
     )
 
+    @epic = Epic.create(
+      title: "E1",
+      description: "Description E1",
+      project_id: @project.id
+    )
+
     @feature = Feature.create(
       title: "F1",
-      description: "Description",
-      project_id: @project.id
+      description: "Description F1",
+      epic_id: @epic.id
     )
 
     @sprint = Sprint.create(

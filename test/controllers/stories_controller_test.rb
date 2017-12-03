@@ -27,10 +27,16 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       project_id: @project.id
     )
 
+    @epic = Epic.create(
+      title: "E1",
+      description: "Description E1",
+      project_id: @project.id
+    )
+
     @feature = Feature.create(
       title: "F1",
-      description: "Description",
-      project_id: @project.id
+      description: "Description F1",
+      epic_id: @epic.id
     )
 
     @sprint = Sprint.create(
@@ -80,10 +86,16 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       project_id: @another_project.id
     )
 
-    @another_feature = Feature.create(
-      title: "F2",
-      description: "Description 2",
+    @another_epic = Epic.create(
+      title: "E1",
+      description: "Description E1",
       project_id: @another_project.id
+    )
+
+    @another_feature = Feature.create(
+      title: "F1",
+      description: "Description F1",
+      epic_id: @another_epic.id
     )
 
     @another_sprint = Sprint.create(
