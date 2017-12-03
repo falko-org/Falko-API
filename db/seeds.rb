@@ -77,27 +77,51 @@ releases = [
   )
 ]
 
+puts "Creating Epics"
+features = [
+  Epic.find_or_create_by(
+    title: "E1",
+    description: "Epic description",
+    project_id: "1"
+  ),
+  Epic.find_or_create_by(
+    title: "E2",
+    description: "Epic description",
+    project_id: "1"
+  ),
+  Epic.find_or_create_by(
+    title: "E - 01",
+    description: "Epic description",
+    project_id: "2"
+  ),
+  Epic.find_or_create_by(
+    title: "E - 02",
+    description: "Epic description",
+    project_id: "2"
+  )
+]
+
 puts "Creating Features"
 features = [
   Feature.find_or_create_by(
     title: "F1",
     description: "Feature description",
-    project_id: "1"
+    epic_id: "1"
   ),
   Feature.find_or_create_by(
     title: "F2",
     description: "Feature description",
-    project_id: "1"
+    epic_id: "1"
   ),
   Feature.find_or_create_by(
     title: "F - 01",
     description: "Feature description",
-    project_id: "2"
+    epic_id: "2"
   ),
   Feature.find_or_create_by(
     title: "F - 02",
     description: "Feature description",
-    project_id: "2"
+    epic_id: "2"
   )
 ]
 
@@ -143,7 +167,7 @@ stories = [
     initial_date: "01/01/2017",
     final_date: "02/01/2017",
     issue_number: "1",
-    feature_id: "1"
+    feature_id: "1",
     story_points: "2",
     sprint_id: "1"
   ),
@@ -156,7 +180,7 @@ stories = [
     final_date: "08/01/2017",
     issue_number: "2",
     sprint_id: "1",
-    feature_id: "1"
+    feature_id: "1",
     story_points: "3",
   ),
   Story.find_or_create_by(
@@ -167,7 +191,7 @@ stories = [
     initial_date: "01/01/2017",
     final_date: "04/01/2017",
     issue_number: "3",
-    feature_id: "2"
+    feature_id: "2",
     story_points: "5",
     sprint_id: "2"
   ),
@@ -180,7 +204,7 @@ stories = [
     final_date: "04/01/2017",
     issue_number: "4",
     sprint_id: "2",
-    feature_id: "2"
+    feature_id: "2",
     story_points: "8",
   ),
   Story.find_or_create_by(
@@ -225,7 +249,7 @@ stories = [
     initial_date: "01/01/2017",
     story_points: "10",
     issue_number: "8",
-    feature_id: "4"
+    feature_id: "4",
     sprint_id: "4"
   ),
   Story.find_or_create_by(
