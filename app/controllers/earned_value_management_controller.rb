@@ -5,6 +5,7 @@ class EarnedValueManagementController < ApplicationController
   def create
     evm = EarnedValueManagement.new(earned_value_management_params)
     @release = Release.find(params[:release_id])
+
     evm.release_id = @release.id
 
     if evm.save
@@ -33,7 +34,7 @@ class EarnedValueManagementController < ApplicationController
   private
 
     def earned_value_management_params
-      params.require(:earned_value_management).permit(:budget_actual_cost, :planned_release_points, :planned_sprints)
+      params.require(:earned_value_management).permit(:budget_actual_cost, :planned_release_points, :planned_sprints, :release_id)
     end
 
     def set_earned_value_management

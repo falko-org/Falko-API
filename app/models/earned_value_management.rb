@@ -8,7 +8,6 @@ class EarnedValueManagement < ApplicationRecord
   # planned_release_points => Total points planned for the release. Numeric user input
   # planned_sprints => Number of sprints in the release
 
-  validates :budget_actual_cost, presence: true
-  validates :planned_release_points, presence: true
-
+  validates :budget_actual_cost, presence: true, numericality: { greater_than_or_equal_to: 0 } 
+  validates :planned_release_points, presence: true, numericality: { greater_than_or_equal_to: 0 }
 end
