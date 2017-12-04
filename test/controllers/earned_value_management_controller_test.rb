@@ -102,11 +102,83 @@ class EarnedValueManagementControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized  	
   end
   
-  # test "should show evm" do
-  #   get "/releases/#{@release.id}/earned_value_management", headers: { Authorization: @token.result }
+  test "should show evm" do
+    get "/releases/#{@release.id}/earned_value_management", headers: { Authorization: @token.result }
 
-  #   assert_response :success
+    assert_response :success
+  end
+
+  test "should update evm" do
+    @old_budget_actual_cost = @evm.budget_actual_cost
+    @old_planned_release_points = @evm.planned_release_points
+
+    patch "/earned_value_management/#{@evm.id}", params: {
+      "earned_value_management": {
+        "budget_actual_cost": "30",
+        "planned_release_points": "200",
+        "planned_sprints": "1",
+      }
+    }, headers: { Authorization: @token.result }
+    @evm.reload
+
+    assert_not_equal @old_budget_actual_cost, @evm.budget_actual_cost
+    assert_not_equal @old_planned_release_points, @evm.planned_release_points
+    assert_response :success
+  end
+
+  test "should not update evm with invalid parameters" do
+    @old_budget_actual_cost = @evm.budget_actual_cost
+    @old_planned_release_points = @evm.planned_release_points
+
+    patch "/earned_value_management/#{@evm.id}", params: {
+      earned_value_management: {
+        "budget_actual_cost": "a",
+        "planned_release_points": "30",
+        "planned_sprints": "3"
+      }
+    }, headers: { Authorization: @token.result }
+    @evm.reload
+
+    assert_equal @old_budget_actual_cost, @evm.budget_actual_cost
+    assert_equal @old_planned_release_points, @evm.planned_release_points
+    assert_response :unprocessable_entity
+  end
+  test "should not update evm with blank parameters" do
+    @old_budget_actual_cost = @evm.budget_actual_cost
+    @old_planned_release_points = @evm.planned_release_points
+    
+    patch "/earned_value_management/#{@evm.id}", params: {
+      earned_value_management: {
+        "budget_actual_cost": "",
+        "planned_release_points": "",
+        "planned_sprints": ""
+      }
+    }, headers: { Authorization: @token.result }
+    @evm.reload
+
+    assert_equal @old_budget_actual_cost, @evm.budget_actual_cost
+    assert_equal @old_planned_release_points, @evm.planned_release_points
+  end
+  
+  test "should destroy evm" do
+    assert_difference("EarnedValueManagement.count", -1) do
+      delete "/earned_value_management/#{@evm.id}", headers: { Authorization: @token.result }
+    end
+    
+    assert_response :no_content
+  end
+
+  test"should not destroy evm without authentication" do
+    assert_no_difference "EarnedValueManagement.count" do
+      delete "/earned_value_management/#{@evm.id}"
+    end
+
+    assert_response :unauthorized
+  end
+  
+  # test "should not destroy evm with different user" do
+  #   delete "/earned_value_management/#{@evm.id}", headers: { Authorization: @another_token.result }
+
+  #   assert_response :unauthorized
   # end
-
-
 end
