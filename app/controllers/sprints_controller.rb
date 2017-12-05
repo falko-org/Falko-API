@@ -8,7 +8,7 @@ class SprintsController < ApplicationController
     validate_release(0, :release_id)
   end
 
-  before_action only: [:show, :update, :destroy, :get_velocity] do
+  before_action only: [:show, :update, :destroy, :get_velocity, :get_velocity_variance] do
     validate_sprint(:id, 0)
   end
 
@@ -66,6 +66,25 @@ class SprintsController < ApplicationController
     end
   end
 
+  def get_velocity_variance
+    release = @sprint.release
+    velocity = get_sprints_informations(release.sprints, @sprint)
+
+    total_sprints_points = velocity[:total_points]
+    velocities = velocity[:velocities]
+
+    amount = release.amount_of_sprints
+    variance = 0
+
+    for i in 0..(amount - 1)
+      variance = variance + (total_sprints_points[i] - velocities[i])
+    end
+
+    variance = variance/amount
+
+    render json: variance
+  end
+
   def get_burndown
     project = @sprint.release.project
     if project.is_scoring != false
@@ -83,7 +102,6 @@ class SprintsController < ApplicationController
           end
         end
       end
-
 
       range = (@sprint.initial_date .. @sprint.final_date)
 

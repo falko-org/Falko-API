@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   delete "projects/:id/issues", to: "issues#close"
 
   get "sprints/:id/velocity", to: "sprints#get_velocity"
-
+  get "sprints/:id/velocity_variance", to: "sprints#get_velocity_variance"
 
   resources :users, shallow: true do
     resources :projects do
