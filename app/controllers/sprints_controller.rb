@@ -72,8 +72,8 @@ class SprintsController < ApplicationController
       total_points = 0
       burned_stories = {}
       coordenates = []
-      date_axes = []
-      points_axes = []
+      date_axis = []
+      points_axis = []
       ideal_line = []
 
       for story in @sprint.stories
@@ -98,17 +98,17 @@ class SprintsController < ApplicationController
           total_points -= burned_stories[date]
           burned_stories[date] = total_points
         end
-        date_axes.push(date)
-        points_axes.push(burned_stories[date])
+        date_axis.push(date)
+        points_axis.push(burned_stories[date])
       end
 
-      days_of_sprint = date_axes.length - 1
+      days_of_sprint = date_axis.length - 1
 
       for day in (days_of_sprint).downto(0)
         ideal_line.push(planned_points * (day / (Float days_of_sprint)))
       end
 
-      coordenates = { x: date_axes, y: points_axes, ideal_line: ideal_line }
+      coordenates = { x: date_axis, y: points_axis, ideal_line: ideal_line }
       burned_stories = burned_stories.sort_by { |key, value| key }
 
       render json: coordenates
