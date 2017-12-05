@@ -105,7 +105,7 @@ class SprintsController < ApplicationController
       days_of_sprint = date_axes.length - 1
 
       for day in (days_of_sprint).downto(0)
-        ideal_line.push(planned_points*(day/(Float days_of_sprint)))
+        ideal_line.push(planned_points * (day / (Float days_of_sprint)))
       end
 
       coordenates = { x: date_axes, y: points_axes, ideal_line: ideal_line }
