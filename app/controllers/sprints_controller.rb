@@ -99,7 +99,7 @@ class SprintsController < ApplicationController
         coordenate_x.push(date)
         coordenate_y.push(burned_stories[date])
       end
-      coordenates = {x: coordenate_x, y: coordenate_y}
+      coordenates = { x: coordenate_x, y: coordenate_y }
       burned_stories = burned_stories.sort_by { |key, value| key }
       render json: coordenates
     else
