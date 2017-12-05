@@ -72,6 +72,8 @@ class SprintsController < ApplicationController
       total_points = 0
       burned_stories = {}
       coordenates = []
+      coordenate_x = []
+      coordenate_y = []
 
       for story in @sprint.stories
         total_points += story.story_points
@@ -94,9 +96,10 @@ class SprintsController < ApplicationController
           total_points -= burned_stories[date]
           burned_stories[date] = total_points
         end
-        coordanate = { x: date, y: burned_stories[date] }
-        coordenates.push(coordanate)
+        coordenate_x.push(date)
+        coordenate_y.push(burned_stories[date])
       end
+      coordenates = { x: coordenate_x, y: coordenate_y }
       burned_stories = burned_stories.sort_by { |key, value| key }
       render json: coordenates
     else
