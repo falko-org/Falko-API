@@ -19,6 +19,8 @@ Rails.application.routes.draw do
 
   get "sprints/:id/velocity", to: "sprints#get_velocity"
 
+  post "/projects/:id/issues/graphic", to: "issues#issue_graphic_data"
+
 
   resources :users, shallow: true do
     resources :projects do
