@@ -21,8 +21,7 @@ class IssuesController < ApplicationController
 
     @filter_form = { issues_infos: [] }
 
-    @filter_form[:issues_infos] = @form_params[:issues_infos].reject { |h| all_stories_number.include? h[:number] }
-
+    @filter_form[:issues_infos] = @form_params[:issues_infos]
     render json: @filter_form
   end
 
@@ -52,6 +51,58 @@ class IssuesController < ApplicationController
     client.close_issue(@path, issue_params)
 
     render status: :ok
+  end
+
+  def issue_graphic_data
+    client = Adapter::GitHubIssue.new(request)
+
+    @issues = client.list_all_issues(@path)
+
+
+    initial_date = params[:initial_date].to_date
+    final_date = params[:final_date].to_date
+    total = final_date - initial_date
+
+    initial_last_range = initial_date - total
+
+    dates = [initial_date, final_date]
+    number_of_issues = {}
+
+    closed_issues = 0
+    open_issues = 0
+
+    closed_on_range_issues = 0
+    open_on_range_issues = 0
+
+    total_closed_issues = []
+    total_open_issues = []
+
+    @issues.each do |issue|
+      if issue.created_at.to_date <= final_date || issue.created_at.to_date >= initial_date
+        if issue.closed_at
+          open_issues = 1 + open_issues
+          else
+            closed_issues = 1 + closed_issues
+        end
+
+      elsif issue.created_at.to_date < initial_date || issue.created_at.to_date >= initial_last_range
+        if issue.closed_at == nil
+          open_on_range_issues = open_on_range_issues + 1
+        else
+          closed_on_range_issues = closed_on_range_issues+ 1
+        end
+      end
+    end
+
+    total_open_issues.push(open_issues)
+    total_open_issues.push(open_on_range_issues)
+
+    total_closed_issues.push(closed_issues)
+    total_closed_issues.push(closed_on_range_issues)
+
+    number_of_issues = { open_issues: total_open_issues, closed_issues: total_closed_issues, datesFirstRange: dates}
+
+    render json: number_of_issues
   end
 
   def update_assignees
