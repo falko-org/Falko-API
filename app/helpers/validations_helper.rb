@@ -11,8 +11,12 @@ module ValidationsHelper
     @project = Project.find(@release.project_id)
   end
 
-  def release
-    @release = Release.find(@sprint.release_id)
+  def release(component_type)
+    if component_type == "sprint"
+      @release = Release.find(@sprint.release_id)
+    elsif component_type == "evm"
+      @release = Release.find(@evm.release_id)
+    end
   end
 
   def sprint(component_type)
@@ -44,7 +48,13 @@ module ValidationsHelper
     elsif component_type == "release" && previous_id != 0
       release_id = previous_id
       @release = Release.find(params[:release_id].to_i)
-    elsif component_type == "sprint" && current_id != 0
+    elsif component_type == "earned_value_management" && current_id != 0
+      id = current_id
+      @evm = EarnedValueManagement.find(params[:id].to_i) 
+    elsif component_type == "earned_value_management" && previous_id != 0
+      earned_value_management_id = previous_id
+      @evm = EarnedValueManagement.find(params[:earned_value_management_id].to_i)
+    elsif component_type == "earned_value_management" && current_id != 0
       id = current_id
       @sprint = Sprint.find(params[:id].to_i)
     elsif component_type == "sprint" && previous_id != 0
@@ -88,11 +98,25 @@ module ValidationsHelper
       render json: { error: "Not Authorized" }, status: 401
     end
   end
+  
+  def validate_earned_value_management(id, earned_value_management_id)
+    current_user
+    verifies_id(id, earned_value_management_id, "earned_value_management")
+    release("evm")
+    project
+    user
+
+    if @current_user.id == @user.id
+      return true
+    else
+      render json: { error: "Not Authorized" }, status: 401
+    end
+  end
 
   def validate_sprint(id, sprint_id)
     current_user
     verifies_id(id, sprint_id, "sprint")
-    release
+    release("sprint")
     project
     user
 
@@ -115,11 +139,10 @@ module ValidationsHelper
     end
   end
 
-
   def validate_stories(story_points, id, sprint_id)
     current_user
     verifies_id(id, sprint_id, "sprint")
-    release
+    release("sprint")
     project
     user
 
@@ -150,7 +173,7 @@ module ValidationsHelper
       @retrospective = Retrospective.find(params[:id].to_i)
       sprint("retrospective")
     end
-    release
+    release("sprint")
     project
     user
 
