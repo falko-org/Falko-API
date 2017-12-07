@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
   get "sprints/:id/velocity", to: "sprints#get_velocity"
   get "sprints/:id/velocity_variance", to: "sprints#get_velocity_variance"
+  get "sprints/:id/debts", to: "sprints#get_debts"
 
   resources :users, shallow: true do
     resources :projects do

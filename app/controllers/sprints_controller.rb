@@ -8,7 +8,7 @@ class SprintsController < ApplicationController
     validate_release(0, :release_id)
   end
 
-  before_action only: [:show, :update, :destroy, :get_velocity, :get_velocity_variance] do
+  before_action only: [:show, :update, :destroy, :get_velocity, :get_velocity_variance, :get_debts] do
     validate_sprint(:id, 0)
   end
 
@@ -120,6 +120,26 @@ class SprintsController < ApplicationController
     else
       render json: { error: "The Burndown Chart is only available in projects that use Story Points" }, status: :unprocessable_entity
     end
+  end
+
+  def get_debts
+    release = @sprint.release
+    if release.project.is_scoring == true
+      velocity = get_sprints_informations(release.sprints, @sprint)
+    end
+
+    planned_points = 0
+    burned_points = 0
+
+    puts release.sprints.length
+    for i in 0..(release.sprints.length - 1)
+      planned_points = planned_points + velocity[:total_points][i]
+      burned_points = burned_points + velocity[:completed_points][i]
+    end
+
+    debts = Float(planned_points - burned_points)/planned_points
+
+    render json: debts
   end
 
   private
