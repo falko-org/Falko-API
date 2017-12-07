@@ -63,9 +63,10 @@ class IssuesController < ApplicationController
     final_date = params[:final_date].to_date
     total = final_date - initial_date
 
-    initial_last_range = initial_date - total
+    final_last_range = initial_date - 1.day
+    initial_last_range = final_last_range - total
 
-    dates = [initial_last_range, final_date]
+    dates = [(initial_last_range).strftime('%Y %B %d').to_s + ' to ' + (final_last_range).strftime('%Y %B %d').to_s, (initial_date).strftime('%Y %B %d').to_s + ' to ' + (final_date).strftime('%Y %B %d').to_s ]
     number_of_issues = {}
 
     closed_issues = 0
@@ -82,10 +83,10 @@ class IssuesController < ApplicationController
         if issue.closed_at
           open_issues = 1 + open_issues
           else
-            closed_issues = 1 + closed_issues
+            closed_issues = 1 - closed_issues
         end
 
-      elsif issue.created_at.to_date < initial_date && issue.created_at.to_date >= initial_last_range
+      elsif issue.created_at.to_date < final_last_range && issue.created_at.to_date >= initial_last_range
         if issue.closed_at == nil
           open_on_range_issues = open_on_range_issues + 1
         else
