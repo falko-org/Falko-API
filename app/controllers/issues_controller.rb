@@ -65,7 +65,7 @@ class IssuesController < ApplicationController
 
     initial_last_range = initial_date - total
 
-    dates = [initial_date, final_date]
+    dates = [initial_last_range, final_date]
     number_of_issues = {}
 
     closed_issues = 0
@@ -78,18 +78,18 @@ class IssuesController < ApplicationController
     total_open_issues = []
 
     @issues.each do |issue|
-      if issue.created_at.to_date <= final_date || issue.created_at.to_date >= initial_date
+      if issue.created_at.to_date <= final_date && issue.created_at.to_date >= initial_date
         if issue.closed_at
           open_issues = 1 + open_issues
           else
             closed_issues = 1 + closed_issues
         end
 
-      elsif issue.created_at.to_date < initial_date || issue.created_at.to_date >= initial_last_range
+      elsif issue.created_at.to_date < initial_date && issue.created_at.to_date >= initial_last_range
         if issue.closed_at == nil
           open_on_range_issues = open_on_range_issues + 1
         else
-          closed_on_range_issues = closed_on_range_issues+ 1
+          closed_on_range_issues = closed_on_range_issues - 1
         end
       end
     end
