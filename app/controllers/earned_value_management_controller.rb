@@ -2,9 +2,6 @@ class EarnedValueManagementController < ApplicationController
 
   before_action :set_earned_value_management, only: [:show, :update, :destroy]
 
-  def index
-  end
-
   def create
     evm = EarnedValueManagement.new(earned_value_management_params)
     @release = Release.find(params[:release_id])

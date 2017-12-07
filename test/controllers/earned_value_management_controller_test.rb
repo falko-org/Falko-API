@@ -65,7 +65,7 @@ class EarnedValueManagementControllerTest < ActionDispatch::IntegrationTest
 		)
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
   end
-  
+
   test "should create evm" do
   	post "/releases/#{@release.id}/earned_value_management", params: {
 			"earned_value_management": {
@@ -75,7 +75,7 @@ class EarnedValueManagementControllerTest < ActionDispatch::IntegrationTest
 			}
 		}, headers: { Authorization: @token.result }
 
-    assert_response :created  	
+    assert_response :created
   end
 
    test "should not create evm without corrects params" do
@@ -87,7 +87,7 @@ class EarnedValueManagementControllerTest < ActionDispatch::IntegrationTest
       }
     }, headers: { Authorization: @token.result }
 
-    assert_response :unprocessable_entity    
+    assert_response :unprocessable_entity
   end
 
   test "should not create evm without authentication" do
@@ -99,14 +99,23 @@ class EarnedValueManagementControllerTest < ActionDispatch::IntegrationTest
 		  }
 		}
 
-    assert_response :unauthorized  	
+    assert_response :unauthorized
   end
-  
-  test "should show evm" do
-    get "/releases/#{@release.id}/earned_value_management", headers: { Authorization: @token.result }
 
+  test "should show evm" do
+    get "/earned_value_management/#{@evm.id}", headers: { Authorization: @token.result }
+
+		assert_equal @evm.budget_actual_cost, response.parsed_body["budget_actual_cost"]
+		assert_equal @evm.planned_sprints, response.parsed_body["planned_sprints"]
+		assert_equal @evm.planned_release_points, response.parsed_body["planned_release_points"]
     assert_response :success
   end
+
+	test "should not show nonexistent evm" do
+		get "/earned_value_management/9999", headers: { Authorization: @token.result }
+
+		assert_response :not_found
+	end
 
   test "should update evm" do
     @old_budget_actual_cost = @evm.budget_actual_cost
@@ -133,7 +142,7 @@ class EarnedValueManagementControllerTest < ActionDispatch::IntegrationTest
     patch "/earned_value_management/#{@evm.id}", params: {
       earned_value_management: {
         "budget_actual_cost": "a",
-        "planned_release_points": "30",
+        "planned_release_points": "-30",
         "planned_sprints": "3"
       }
     }, headers: { Authorization: @token.result }
@@ -146,7 +155,7 @@ class EarnedValueManagementControllerTest < ActionDispatch::IntegrationTest
   test "should not update evm with blank parameters" do
     @old_budget_actual_cost = @evm.budget_actual_cost
     @old_planned_release_points = @evm.planned_release_points
-    
+
     patch "/earned_value_management/#{@evm.id}", params: {
       earned_value_management: {
         "budget_actual_cost": "",
@@ -159,12 +168,12 @@ class EarnedValueManagementControllerTest < ActionDispatch::IntegrationTest
     assert_equal @old_budget_actual_cost, @evm.budget_actual_cost
     assert_equal @old_planned_release_points, @evm.planned_release_points
   end
-  
+
   test "should destroy evm" do
     assert_difference("EarnedValueManagement.count", -1) do
       delete "/earned_value_management/#{@evm.id}", headers: { Authorization: @token.result }
     end
-    
+
     assert_response :no_content
   end
 
@@ -175,7 +184,7 @@ class EarnedValueManagementControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unauthorized
   end
-  
+
   # test "should not destroy evm with different user" do
   #   delete "/earned_value_management/#{@evm.id}", headers: { Authorization: @another_token.result }
 
