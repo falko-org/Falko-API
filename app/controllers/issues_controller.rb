@@ -1,6 +1,8 @@
 require "rest-client"
 
 class IssuesController < ApplicationController
+  include IssueGraphicHelper
+
   before_action :set_authorization, except: [:update_assignees]
   before_action :set_path, except: [:update_assignees]
 
@@ -58,52 +60,14 @@ class IssuesController < ApplicationController
 
     @issues = client.list_all_issues(@path)
 
+    actual_date = params[:actual_date].to_date
+    option = params[:option]
 
-    initial_date = params[:initial_date].to_date
-    final_date = params[:final_date].to_date
-    total = final_date - initial_date
+    data_of_issues = {}
 
-    final_last_range = initial_date - 1.day
-    initial_last_range = final_last_range - total
+    data_of_issues = get_issues_graphic(actual_date, option, @issues)
 
-    dates = [(initial_last_range).strftime('%Y %B %d').to_s + ' to ' + (final_last_range).strftime('%Y %B %d').to_s, (initial_date).strftime('%Y %B %d').to_s + ' to ' + (final_date).strftime('%Y %B %d').to_s ]
-    number_of_issues = {}
-
-    closed_issues = 0
-    open_issues = 0
-
-    closed_on_range_issues = 0
-    open_on_range_issues = 0
-
-    total_closed_issues = []
-    total_open_issues = []
-
-    @issues.each do |issue|
-      if issue.created_at.to_date <= final_date && issue.created_at.to_date >= initial_date
-        if issue.closed_at
-          open_issues = 1 + open_issues
-          else
-            closed_issues = 1 - closed_issues
-        end
-
-      elsif issue.created_at.to_date < final_last_range && issue.created_at.to_date >= initial_last_range
-        if issue.closed_at == nil
-          open_on_range_issues = open_on_range_issues + 1
-        else
-          closed_on_range_issues = closed_on_range_issues - 1
-        end
-      end
-    end
-
-    total_open_issues.push(open_issues)
-    total_open_issues.push(open_on_range_issues)
-
-    total_closed_issues.push(closed_issues)
-    total_closed_issues.push(closed_on_range_issues)
-
-    number_of_issues = { open_issues: total_open_issues, closed_issues: total_closed_issues, datesFirstRange: dates}
-
-    render json: number_of_issues
+    render json: data_of_issues
   end
 
   def update_assignees
