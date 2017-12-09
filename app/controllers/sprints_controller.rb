@@ -91,6 +91,9 @@ class SprintsController < ApplicationController
       total_points = 0
       burned_stories = {}
       coordenates = []
+      date_axis = []
+      points_axis = []
+      ideal_line = []
 
       for story in @sprint.stories
         total_points += story.story_points
@@ -103,6 +106,8 @@ class SprintsController < ApplicationController
         end
       end
 
+      planned_points = total_points
+
       range = (@sprint.initial_date .. @sprint.final_date)
 
       range.each do |date|
@@ -112,10 +117,19 @@ class SprintsController < ApplicationController
           total_points -= burned_stories[date]
           burned_stories[date] = total_points
         end
-        coordanate = { x: date, y: burned_stories[date] }
-        coordenates.push(coordanate)
+        date_axis.push(date)
+        points_axis.push(burned_stories[date])
       end
+
+      days_of_sprint = date_axis.length - 1
+
+      for day in (days_of_sprint).downto(0)
+        ideal_line.push(planned_points * (day / (Float days_of_sprint)))
+      end
+
+      coordenates = { x: date_axis, y: points_axis, ideal_line: ideal_line }
       burned_stories = burned_stories.sort_by { |key, value| key }
+
       render json: coordenates
     else
       render json: { error: "The Burndown Chart is only available in projects that use Story Points" }, status: :unprocessable_entity

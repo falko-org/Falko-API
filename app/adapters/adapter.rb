@@ -7,7 +7,6 @@ module Adapter
 
     def get_github_user
       user_login = @client.user.login
-      p user_login
       return user_login
     end
 
@@ -52,6 +51,10 @@ module Adapter
 
     def close_issue(path, issue_params)
       @client.close_issue(path, issue_params[:number])
+    end
+
+    def reopen_issue(path, issue_params)
+      @client.reopen_issue(@path, issue_params[:number])
     end
   end
 end
