@@ -38,10 +38,11 @@ projects = [
   ),
   Project.find_or_create_by(
     name: "Falko",
-    description: "Agile Projects Manager",
-    user_id: "2",
+    description: "This project helps agile projects",
     is_project_from_github: true,
-    is_scoring: true
+    github_slug: nil,
+    is_scoring: true,
+    user_id: "1"
   )
 ]
 
@@ -116,7 +117,7 @@ stories = [
     name: "Story 1",
     description: "Story 1 us14",
     assign: "Lucas",
-    pipeline: "Backlog",
+    pipeline: "Doing",
     initial_date: "01/01/2017",
     final_date: "02/01/2017",
     issue_number: "1",
