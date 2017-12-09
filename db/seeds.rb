@@ -64,16 +64,16 @@ releases = [
   ),
   Release.find_or_create_by(
     name: "R - 01",
-    description: "First Release",
+    description: "RUP Release",
     initial_date: "01-08-2016",
     final_date: "01-10-2016",
     project_id: "2"
   ),
   Release.find_or_create_by(
     name: "R - 02",
-    description: "Second Release",
-    initial_date: "01-01-2016",
-    final_date: "01-12-2016",
+    description: "Agile Release",
+    initial_date: "01-05-2017",
+    final_date: "14-12-2017",
     project_id: "2"
   )
 ]
@@ -97,17 +97,66 @@ sprints = [
   Sprint.find_or_create_by(
     name: "Sprint 1 - P2",
     description: "First Sprint",
-    initial_date: "01-08-2016",
-    final_date: "01-10-2016",
+    initial_date: "07-10-2017",
+    final_date: "13-10-2017",
     release_id: "3"
   ),
   Sprint.find_or_create_by(
     name: "Sprint 2 - P2",
     description: "Second Sprint",
-    initial_date: "01-10-2016",
-    final_date: "01-12-2016",
+    initial_date: "14-10-2017",
+    final_date: "20-10-2017",
     release_id: "3"
-  )
+  ),
+  Sprint.find_or_create_by(
+    name: "Sprint 3 - P2",
+    description: "Third Sprint",
+    initial_date: "21-10-2017",
+    final_date: "27-10-2017",
+    release_id: "3"
+  ),
+  Sprint.find_or_create_by(
+    name: "Sprint 4 - P2",
+    description: "Fourth Sprint",
+    initial_date: "28-10-2017",
+    final_date: "03-11-2017",
+    release_id: "3"
+  ),
+  Sprint.find_or_create_by(
+    name: "Sprint 5 - P2",
+    description: "Fifth Sprint",
+    initial_date: "04-11-2017",
+    final_date: "10-11-2017",
+    release_id: "3"
+  ),
+  Sprint.find_or_create_by(
+    name: "Sprint 6 - P2",
+    description: "Sixth Sprint",
+    initial_date: "11-11-2017",
+    final_date: "17-11-2017",
+    release_id: "3"
+  ),
+  Sprint.find_or_create_by(
+    name: "Sprint 7 - P2",
+    description: "Seventh Sprint",
+    initial_date: "18-11-2017",
+    final_date: "24-11-2017",
+    release_id: "3"
+  ),
+  Sprint.find_or_create_by(
+    name: "Sprint 8 - P2",
+    description: "Eighth Sprint",
+    initial_date: "25-11-2017",
+    final_date: "01-12-2017",
+    release_id: "3"
+  ),
+  Sprint.find_or_create_by(
+    name: "Sprint 9 - P2",
+    description: "Ninth Sprint",
+    initial_date: "02-12-2017",
+    final_date: "08-12-2017",
+    release_id: "3"
+  ),
 ]
 
 puts "Creating Stories"
