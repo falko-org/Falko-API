@@ -671,48 +671,48 @@ revisions = [
     sprint_id: "2"
   ),
   Revision.find_or_create_by(
-    done_report: ["US01 - Pesquisar Projeto."],
-    undone_report: ["Story US23 was not done."],
+    done_report: ["US01 - Pesquisar Projeto.","US09 - Manter Release Back","US10 - Manter Sprint Back"],
+    undone_report: ["US03 - Conectar Conta ao Github","US14 - Manter Historia","US09 - Manter Release Front","US10 - Manter Sprint Front"],
     sprint_id: "3"
   ),
   Revision.find_or_create_by(
-    done_report: ["Story US14 was done."],
-    undone_report: ["Story US24 was not done."],
+    done_report: ["US03 - Conectar Conta ao Github","US09 - Manter Release Front","US10 - Manter Sprint Front"],
+    undone_report: ["US14 - Manter Historia","US12 - Manter Retrospectiva"],
     sprint_id: "4"
   ),
   Revision.find_or_create_by(
-    done_report: ["Story US14 was done."],
-    undone_report: ["Story US24 was not done."],
+    done_report: ["US05 - Listar Possíveis Projetos","US04 - Importar Repositório"],
+    undone_report: ["US12 - Manter Retrospectiva Front"],
     sprint_id: "5"
   ),
   Revision.find_or_create_by(
-    done_report: ["Story US14 was done."],
-    undone_report: ["Story US24 was not done."],
+    done_report: ["US12 - Manter Retrospectiva Back","US22 - Manter Issue Back","US14 - Manter Historia","US07 - Manter GPA Back"],
+    undone_report: ["US12 - Manter Retrospectiva Front","US22 - Manter Issue Front","US07 - Manter GPA Front"],
     sprint_id: "6"
   ),
   Revision.find_or_create_by(
-    done_report: ["Story US14 was done."],
-    undone_report: ["Story US24 was not done."],
+    done_report: ["US11 - Manter Revisão de Sprint","US06 - Designar Membros Back","US15 - Pontuar História Back","US22 - Manter Issue Front"],
+    undone_report: ["Tudo foi feito"],
     sprint_id: "7"
   ),
   Revision.find_or_create_by(
-    done_report: ["Story US14 was done."],
-    undone_report: ["Story US24 was not done."],
+    done_report: ["US06 -Designar Membros Front","US08 - Visualizar Burndown","US15 - Pontuar História","US16 - Alocar História para Sprint Back"],
+    undone_report: ["US16 - Alocar História para Sprint Front"],
     sprint_id: "8"
   ),
   Revision.find_or_create_by(
-    done_report: ["Story US14 was done."],
-    undone_report: ["Story US24 was not done."],
+    done_report: ["US23 - Planejar Sprint","US19 - Visualizar Velocity"],
+    undone_report: ["Histórias Técnicas"],
     sprint_id: "9"
   ),
   Revision.find_or_create_by(
-    done_report: ["Story US14 was done."],
-    undone_report: ["Story US24 was not done."],
+    done_report: ["US20 - Manter EVM Back","US18 - Manter Feature Back"],
+    undone_report: ["US20 - Manter EVM Front","US18 - Manter Feature Front"],
     sprint_id: "10"
   ),
   Revision.find_or_create_by(
-    done_report: ["Story US14 was done."],
-    undone_report: ["Story US24 was not done."],
+    done_report: ["US17 - Manter Épico Back","US24 - Gŕafico de Issues"],
+    undone_report: ["US20 - Manter EVM", "US21 - Manter Nota", "US17 - Manter Épico"],
     sprint_id: "11"
   ),
 ]
