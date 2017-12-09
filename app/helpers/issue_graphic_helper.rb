@@ -22,13 +22,12 @@ module IssueGraphicHelper
       dates = [(actual_date - 2.month).strftime('%B'), (actual_date - 1.month).strftime('%B'), (actual_date).strftime('%B')]
     end
 
-
     issues.each do |issue|
       if issue.created_at.to_date <= actual_date && issue.created_at.to_date >= first_date
         if issue.closed_at == nil
           if issue.created_at.to_date.month == actual_date.month
             open_issues_first = open_issues_first + 1
-          elsif issue.created_at.to_date.month - 1.month == actual_date.month
+          elsif issue.created_at.to_date.month == (actual_date - 1.month).month
             open_issues_second = open_issues_second + 1
           else
             open_issues_third = open_issues_third + 1
@@ -36,7 +35,7 @@ module IssueGraphicHelper
         else
           if issue.closed_at.to_date.month == actual_date.month
             closed_issues_first = closed_issues_first + 1
-          elsif issue.closed_at.to_date.month - 1.month == actual_date.month
+          elsif issue.closed_at.to_date.month == (actual_date - 1.month).month
             closed_issues_second = closed_issues_second + 1
           else
             closed_issues_third = closed_issues_third + 1
