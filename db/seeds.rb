@@ -671,47 +671,47 @@ revisions = [
     sprint_id: "2"
   ),
   Revision.find_or_create_by(
-    done_report: ["US01 - Pesquisar Projeto.","US09 - Manter Release Back","US10 - Manter Sprint Back"],
-    undone_report: ["US03 - Conectar Conta ao Github","US14 - Manter Historia","US09 - Manter Release Front","US10 - Manter Sprint Front"],
+    done_report: ["US01 - Pesquisar Projeto.", "US09 - Manter Release Back", "US10 - Manter Sprint Back"],
+    undone_report: ["US03 - Conectar Conta ao Github", "US14 - Manter Historia", "US09 - Manter Release Front", "US10 - Manter Sprint Front"],
     sprint_id: "3"
   ),
   Revision.find_or_create_by(
-    done_report: ["US03 - Conectar Conta ao Github","US09 - Manter Release Front","US10 - Manter Sprint Front"],
-    undone_report: ["US14 - Manter Historia","US12 - Manter Retrospectiva"],
+    done_report: ["US03 - Conectar Conta ao Github", "US09 - Manter Release Front", "US10 - Manter Sprint Front"],
+    undone_report: ["US14 - Manter Historia", "US12 - Manter Retrospectiva"],
     sprint_id: "4"
   ),
   Revision.find_or_create_by(
-    done_report: ["US05 - Listar Possíveis Projetos","US04 - Importar Repositório"],
+    done_report: ["US05 - Listar Possíveis Projetos", "US04 - Importar Repositório"],
     undone_report: ["US12 - Manter Retrospectiva Front"],
     sprint_id: "5"
   ),
   Revision.find_or_create_by(
-    done_report: ["US12 - Manter Retrospectiva Back","US22 - Manter Issue Back","US14 - Manter Historia","US07 - Manter GPA Back"],
-    undone_report: ["US12 - Manter Retrospectiva Front","US22 - Manter Issue Front","US07 - Manter GPA Front"],
+    done_report: ["US12 - Manter Retrospectiva Back", "US22 - Manter Issue Back", "US14 - Manter Historia", "US07 - Manter GPA Back"],
+    undone_report: ["US12 - Manter Retrospectiva Front", "US22 - Manter Issue Front", "US07 - Manter GPA Front"],
     sprint_id: "6"
   ),
   Revision.find_or_create_by(
-    done_report: ["US11 - Manter Revisão de Sprint","US06 - Designar Membros Back","US15 - Pontuar História Back","US22 - Manter Issue Front"],
+    done_report: ["US11 - Manter Revisão de Sprint", "US06 - Designar Membros Back", "US15 - Pontuar História Back", "US22 - Manter Issue Front"],
     undone_report: ["Tudo foi feito"],
     sprint_id: "7"
   ),
   Revision.find_or_create_by(
-    done_report: ["US06 -Designar Membros Front","US08 - Visualizar Burndown","US15 - Pontuar História","US16 - Alocar História para Sprint Back"],
+    done_report: ["US06 -Designar Membros Front", "US08 - Visualizar Burndown", "US15 - Pontuar História", "US16 - Alocar História para Sprint Back"],
     undone_report: ["US16 - Alocar História para Sprint Front"],
     sprint_id: "8"
   ),
   Revision.find_or_create_by(
-    done_report: ["US23 - Planejar Sprint","US19 - Visualizar Velocity"],
+    done_report: ["US23 - Planejar Sprint", "US19 - Visualizar Velocity"],
     undone_report: ["Histórias Técnicas"],
     sprint_id: "9"
   ),
   Revision.find_or_create_by(
-    done_report: ["US20 - Manter EVM Back","US18 - Manter Feature Back"],
-    undone_report: ["US20 - Manter EVM Front","US18 - Manter Feature Front"],
+    done_report: ["US20 - Manter EVM Back", "US18 - Manter Feature Back"],
+    undone_report: ["US20 - Manter EVM Front", "US18 - Manter Feature Front"],
     sprint_id: "10"
   ),
   Revision.find_or_create_by(
-    done_report: ["US17 - Manter Épico Back","US24 - Gŕafico de Issues"],
+    done_report: ["US17 - Manter Épico Back", "US24 - Gŕafico de Issues"],
     undone_report: ["US20 - Manter EVM", "US21 - Manter Nota", "US17 - Manter Épico"],
     sprint_id: "11"
   ),
@@ -741,9 +741,9 @@ A equipe havia decidido que cada história seria completa (back-end e front-end)
 Para a próxima sprint espera-se que os débitos sejam quitados, com o amadurecimento da equipe. Ademais, uma nova reunião no primeiro dia da sprint (sábado) será estabelecida, e os pareamentos serão alocados de forma a colaborar com estas atividades.
 
 ",
-    positive_points: ["Time cumpriu com os standups","Pareamentos efetivos"],
-    negative_points: ["Desnível do conhecimento entre o time","Dependência do time de MDS com GPP","Alguns pareamentos não aconteceram(problemas com ambiente, internet e hangouts)","Desenvolvimento tardio(fim de semana não foi bem aproveitado para o desenvolvimento)"],
-    improvements: ["Formalizar os horários de pareamento","Reunião de desenvolvimento sábado","Treinamento nas tecnologias","Melhorar alocação dos pares","Melhorar atuação do scrum master"],
+    positive_points: ["Time cumpriu com os standups", "Pareamentos efetivos"],
+    negative_points: ["Desnível do conhecimento entre o time", "Dependência do time de MDS com GPP", "Alguns pareamentos não aconteceram(problemas com ambiente, internet e hangouts)", "Desenvolvimento tardio(fim de semana não foi bem aproveitado para o desenvolvimento)"],
+    improvements: ["Formalizar os horários de pareamento", "Reunião de desenvolvimento sábado", "Treinamento nas tecnologias", "Melhorar alocação dos pares", "Melhorar atuação do scrum master"],
     sprint_id: "3"
   ),
   Retrospective.find_or_create_by(
@@ -756,10 +756,10 @@ Os super parings realizados contribuíram, pois a equipe realizou mais pareament
 Por fim, a reunião de sábado se mostrou muito efetiva, uma vez que presencialmente os membros trabalham mais e melhor.
 
 Para a próxima sprint espera-se que os débitos sejam quitados, com o amadurecimento da equipe.",
-    positive_points: ["Melhora na comunicação graças aos feedbacks.","Super pairing aumentou a frequência de pareamentos, contribuindo, assim, para a produtividade.","A reunião de sábado mostrou-se efetiva."],
+    positive_points: ["Melhora na comunicação graças aos feedbacks.", "Super pairing aumentou a frequência de pareamentos, contribuindo, assim, para a produtividade.", "A reunião de sábado mostrou-se efetiva."],
     negative_points: ["Interdependência entre histórias dificultou o desenvolvimento.
-(Solução de problemas ficaram em branches específicas, não na devel, onde estariam disponíveis para todo o grupo.)","Membros ausentes (Lucas e Kelvin viajaram)."],
-    improvements: ["Ser mais criterioso quanto a política de branches.","Planejar melhor a escolha das histórias pensando na interdependência delas."],
+(Solução de problemas ficaram em branches específicas, não na devel, onde estariam disponíveis para todo o grupo.)", "Membros ausentes (Lucas e Kelvin viajaram)."],
+    improvements: ["Ser mais criterioso quanto a política de branches.", "Planejar melhor a escolha das histórias pensando na interdependência delas."],
     sprint_id: "4"
   ),
   Retrospective.find_or_create_by(
@@ -768,28 +768,28 @@ Para a próxima sprint espera-se que os débitos sejam quitados, com o amadureci
 A equipe toda foi dividida em dois nessa sprint e todo o time trabalhou simultaneamente nas mesmas histórias(exceto nas dívidas técnicas), metade no front-end da aplicação, e metade no back-end.
 
 Embora a semana tenha sido muito produtiva nem todos os membros puderam participar dos super parings por motivos de viagem ou outras atividades e a dívida técnica persistiu.",
-positive_points: ["Super pairing ajudou a disseminar o conhecimento na equipe","Empenho da equipe"],
-negative_points: ["Falta de alguns membros nos pareamentos","Dívida técnica não concluída"],
-improvements: ["Maior presença nos pareamentos","Treinamento de Bootstrap"],
+positive_points: ["Super pairing ajudou a disseminar o conhecimento na equipe", "Empenho da equipe"],
+negative_points: ["Falta de alguns membros nos pareamentos", "Dívida técnica não concluída"],
+improvements: ["Maior presença nos pareamentos", "Treinamento de Bootstrap"],
     sprint_id: "5"
   ),
   Retrospective.find_or_create_by(
     sprint_report: "Sprint 4",
     positive_points: ["Equipe de MDS mais independente
-(Pareamentos MDS vs MDS foram produtivos)","O desenvolvimento das histórias começou mais cedo
-(Reunião de desenvolvimento no Sábado cooperou para a finalização das histórias mais cedo)","Divisão de histórias grandes em menores foi positiva","A presença dos membros nos pareamentos melhorou","Dívidas técnicas antigas foram concluídas"],
+(Pareamentos MDS vs MDS foram produtivos)", "O desenvolvimento das histórias começou mais cedo
+(Reunião de desenvolvimento no Sábado cooperou para a finalização das histórias mais cedo)", "Divisão de histórias grandes em menores foi positiva", "A presença dos membros nos pareamentos melhorou", "Dívidas técnicas antigas foram concluídas"],
     negative_points: ["Ausências e atrasos em reuniões
 (Stand-up meetings foram negligenciados)
-(Membros não avisaram com antecedência as ausências e atrasos nas reuniões)","Critérios de aceitação não documentados atrapalharam o desenvolvimento de algumas histórias.","Algumas histórias dependiam de funcionalidades já implementadas. Problemas com estas funcionalidades prejudicaram o desenvolvimento."],
+(Membros não avisaram com antecedência as ausências e atrasos nas reuniões)", "Critérios de aceitação não documentados atrapalharam o desenvolvimento de algumas histórias.", "Algumas histórias dependiam de funcionalidades já implementadas. Problemas com estas funcionalidades prejudicaram o desenvolvimento."],
     improvements: ["Melhorar comunicação
-(Avisar com antecedência atrasos e ausências)","Comprometimento com o Stand-up (Presença e Pontualidade)","Sempre documentar critérios de aceitação das histórias da Sprint","Desenvolver uma cultura de “Código Coletivo”","Sempre assinar as issues que estão sendo desenvolvidas
-(Nunca assinar uma issue que não estão sendo desenvolvidas naquele momento)","Seguir templates de Pull Request"],
+(Avisar com antecedência atrasos e ausências)", "Comprometimento com o Stand-up (Presença e Pontualidade)", "Sempre documentar critérios de aceitação das histórias da Sprint", "Desenvolver uma cultura de “Código Coletivo”", "Sempre assinar as issues que estão sendo desenvolvidas
+(Nunca assinar uma issue que não estão sendo desenvolvidas naquele momento)", "Seguir templates de Pull Request"],
     sprint_id: "6"
   ),
   Retrospective.find_or_create_by(
     sprint_report: "Sprint 5",
-    positive_points: ["Boa comunicação nos Pull Requests.","Equipe de MDS mais madura.","A integração entre os PR’s do Github e o Slack melhorou a rastreabilidade.","Melhoria dos critérios de aceitação nas Issues."],
-    negative_points: ["Atrasos ainda ocorrem.","Dificuldade de realizar os testes devido à complexidade do código."],
+    positive_points: ["Boa comunicação nos Pull Requests.", "Equipe de MDS mais madura.", "A integração entre os PR’s do Github e o Slack melhorou a rastreabilidade.", "Melhoria dos critérios de aceitação nas Issues."],
+    negative_points: ["Atrasos ainda ocorrem.", "Dificuldade de realizar os testes devido à complexidade do código."],
     improvements: ["Atraso não justificado maior que 10 minutos terá que pagar balinha/bombom para cada um do grupo."],
     sprint_id: "7"
   ),
@@ -797,36 +797,36 @@ improvements: ["Maior presença nos pareamentos","Treinamento de Bootstrap"],
     sprint_report: "Essa Sprint o grupo de MDS se mostrou mais independente e assumiu algumas responsabilidades sozinhos. As histórias terminaram relativamente rápidas, e isso foi reflexo do empenho da equipe nos pareamentos.
 
 Entretanto, isso também foi em partes um aspecto negativo, pois os membros que terminaram suas histórias não se disponibilizaram para ajudar aqueles que ainda não tinham terminado, e somado a isso alguns membros também não requisitaram ajuda. Logo, houve uma certa falha na comunicação entre pareamentos diferentes, o que levou no atraso de uma história.",
-    positive_points: ["Pareamentos efetivos;","MDS mais independente;","Desenvolvimento ágil melhor refletido no burndown;","Leve melhoria com relação aos atrasos;"],
-    negative_points: ["Complexidade de realizar testes no código permanecem;","Falta de comunicação entre os pareamentos;
+    positive_points: ["Pareamentos efetivos;", "MDS mais independente;", "Desenvolvimento ágil melhor refletido no burndown;", "Leve melhoria com relação aos atrasos;"],
+    negative_points: ["Complexidade de realizar testes no código permanecem;", "Falta de comunicação entre os pareamentos;
 (Pareamentos que finalizaram as histórias no início da sprint não auxiliaram outros alocados em histórias mais complexas, além disso, estes não solicitaram ajuda.)"],
-    improvements: ["O Scrum master deve estar mais atento ao que é relatado durante os stand ups;","Utilizar biblioteca Chart.js para substituir a d3.js como forma de testar qual das duas é melhor aplicável ao nosso projeto."],
+    improvements: ["O Scrum master deve estar mais atento ao que é relatado durante os stand ups;", "Utilizar biblioteca Chart.js para substituir a d3.js como forma de testar qual das duas é melhor aplicável ao nosso projeto."],
     sprint_id: "8"
   ),
   Retrospective.find_or_create_by(
     sprint_report: "Sprint 7",
-    positive_points: ["Escolha da biblioteca ChartJS facilitou a geração de gráficos;","Equipe organizou documentações que estavam faltando."],
-    negative_points: ["Dependência de alguns membros de MDS em relação a outros atrasou desenvolvimento de histórias;","Equipe muito atarefada com outras disciplinas.
+    positive_points: ["Escolha da biblioteca ChartJS facilitou a geração de gráficos;", "Equipe organizou documentações que estavam faltando."],
+    negative_points: ["Dependência de alguns membros de MDS em relação a outros atrasou desenvolvimento de histórias;", "Equipe muito atarefada com outras disciplinas.
 (Alguns membros não conseguiram parear de maneira eficiente;)
 (Baixo comprometimento com os stand ups do meio ao fim da sprint;)
 "],
-    improvements: ["Levar em conta o calendário acadêmico dos integrantes da equipe ao planejar a sprint.","Membros devem ser mais independentes para realizar suas histórias"],
+    improvements: ["Levar em conta o calendário acadêmico dos integrantes da equipe ao planejar a sprint.", "Membros devem ser mais independentes para realizar suas histórias"],
     sprint_id: "9"
   ),
   Retrospective.find_or_create_by(
     sprint_report: "Sprint 8",
     positive_points: ["Os testes de aceitação foram feitos."],
-    negative_points: ["O fim do semestre dificultou a disponibilidade da equipe.","Testes unitários, faltou proatividade.","Dispersão nas reuniões.","GPA não será utilizado."],
-    improvements: ["Apenas um computador ligado nas reuniões de retrospectiva e planejamento.","Arrumar o webhook em produção.","Treinamento de teste unitário.","Fazer o próximo planejamento e revisão da Sprint utilizando o Falko."],
+    negative_points: ["O fim do semestre dificultou a disponibilidade da equipe.", "Testes unitários, faltou proatividade.", "Dispersão nas reuniões.", "GPA não será utilizado."],
+    improvements: ["Apenas um computador ligado nas reuniões de retrospectiva e planejamento.", "Arrumar o webhook em produção.", "Treinamento de teste unitário.", "Fazer o próximo planejamento e revisão da Sprint utilizando o Falko."],
     sprint_id: "10"
   ),
   Retrospective.find_or_create_by(
     sprint_report: "Sprint 9",
-    positive_points: ["Gráficos estão saindo com mais facilidade","Pareamentos com grupos menores","Cobertura de teste do front-end aumentou"],
-    negative_points: ["Falta de pareamentos","Membros ausentes","Histórias com complexidade muito alta","Dispersão no final do semestre","Falta de comunicação do grupo
+    positive_points: ["Gráficos estão saindo com mais facilidade", "Pareamentos com grupos menores", "Cobertura de teste do front-end aumentou"],
+    negative_points: ["Falta de pareamentos", "Membros ausentes", "Histórias com complexidade muito alta", "Dispersão no final do semestre", "Falta de comunicação do grupo
 (Stand up não foi levado a sério)
 "],
-    improvements: ["Foco na última sprint","Pareamento presencial todos os dias"],
+    improvements: ["Foco na última sprint", "Pareamento presencial todos os dias"],
     sprint_id: "11"
   ),
 ]
