@@ -1,6 +1,7 @@
 class SprintsController < ApplicationController
   include ValidationsHelper
   include VelocityHelper
+  include BurndownHelper
 
   before_action :set_sprint, only: [:show, :update, :destroy, :get_burndown]
 
@@ -88,44 +89,21 @@ class SprintsController < ApplicationController
   def get_burndown
     project = @sprint.release.project
     if project.is_scoring != false
-      total_points = 0
       burned_stories = {}
       coordenates = []
       date_axis = []
       points_axis = []
       ideal_line = []
 
-      for story in @sprint.stories
-        total_points += story.story_points
-        if story.pipeline == "Done"
-          if burned_stories[story.final_date] == nil
-            burned_stories[story.final_date] = story.story_points
-          else
-            burned_stories[story.final_date] += story.story_points
-          end
-        end
-      end
+      total_points = get_burned_points(@sprint, burned_stories)
 
       planned_points = total_points
 
-      range = (@sprint.initial_date .. @sprint.final_date)
-
-      range.each do |date|
-        if burned_stories[date] == nil
-          burned_stories[date] = total_points
-        else
-          total_points -= burned_stories[date]
-          burned_stories[date] = total_points
-        end
-        date_axis.push(date)
-        points_axis.push(burned_stories[date])
-      end
+      range_dates = (@sprint.initial_date .. @sprint.final_date)
+      get_dates(burned_stories, date_axis, points_axis, range_dates, total_points)
 
       days_of_sprint = date_axis.length - 1
-
-      for day in (days_of_sprint).downto(0)
-        ideal_line.push(planned_points * (day / (Float days_of_sprint)))
-      end
+      set_ideal_line(days_of_sprint, ideal_line, planned_points)
 
       coordenates = { x: date_axis, y: points_axis, ideal_line: ideal_line }
       burned_stories = burned_stories.sort_by { |key, value| key }
