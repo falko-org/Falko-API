@@ -46,6 +46,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
                           initial_date: "07/10/2017",
                           final_date: "12/10/2017",
                           issue_number: "9",
+                          issue_id: 10,
                           sprint_id: @sprint.id,
                           story_points: 5
                           )
@@ -307,7 +308,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
     def mock.list_issues(name)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, body: "This is a template body") ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, id: 10, body: "This is a template body") ]
     end
 
 
