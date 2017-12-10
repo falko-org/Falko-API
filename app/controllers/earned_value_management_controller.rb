@@ -1,6 +1,7 @@
 class EarnedValueManagementController < ApplicationController
   include ValidationsHelper
-  
+  include Subject
+
   before_action :set_earned_value_management, only: [:show, :update, :destroy]
 
   before_action only: [:index, :create] do
@@ -11,6 +12,9 @@ class EarnedValueManagementController < ApplicationController
     validate_earned_value_management(:id, 0)
   end
 
+  after_save :update
+  after_destroy :destroy
+
   def index
     @evm = @release.earned_value_management
     render json: @evm
@@ -18,7 +22,7 @@ class EarnedValueManagementController < ApplicationController
 
   def create
     test_evm = EarnedValueManagement.count
-    
+
     if (test_evm.to_i) == 0
       evm = EarnedValueManagement.new(earned_value_management_params)
       @release = Release.find(params[:release_id])
@@ -26,6 +30,10 @@ class EarnedValueManagementController < ApplicationController
       evm.release_id = @release.id
 
       if evm.save
+        # It gets all observable classes by calling super().
+        # When an instance of EVM class is created, an observer(EVM Sprint) is added by the super()
+        super() # Invokes the create method in Subject module
+
         render json: evm, status: :created
       else
         render json: evm.errors, status: :unprocessable_entity
@@ -35,19 +43,27 @@ class EarnedValueManagementController < ApplicationController
     end
   end
 
+  def show
+    render json: @evm
+  end
+
   def update
     if @evm.update(earned_value_management_params)
+      # When the update() method is called, it notifies the observers (EVM Sprint)
+      # by asserting that the object has changed
+      changed
+      # In the method below the EVM Sprint class is notified when there's a change in the Planned Sprints attribute,
+      # so that the Evm Sprints class can recalculate its attributes.
+      notify_observers
       render json: @evm
     else
       render json: @evm.errors, status: :unprocessable_entity
     end
   end
 
-  def show
-    render json: @evm
-  end
-
   def destroy
+    changed
+    notify_observers
     @evm.destroy
   end
 

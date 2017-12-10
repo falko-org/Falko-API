@@ -13,7 +13,7 @@ class EvmSprintController < ApplicationController
 
     @evm = EarnedValueManagement.find(params[:earned_value_management_id])
     evm_sprint.earned_value_management_id = @evm.id
-    
+
     calculate_evm_sprint_values(@evm, evm_sprint)
 
     if evm_sprint.save

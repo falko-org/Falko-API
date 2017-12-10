@@ -1,8 +1,9 @@
 class EvmSprint < ApplicationRecord
   belongs_to :earned_value_management
-  
+
   validates :completed_points, presence: true
   validates :added_points, presence: true
+
   # Attributes:
   # completed_points => Points completed during the sprint
   # addded_points => Points added to the backlog
@@ -15,7 +16,7 @@ class EvmSprint < ApplicationRecord
   # accumulated_earned_value
 
   #results
-  # planned_value => 
+  # planned_value =>
   # earned_value
   # schedule_variance
   # cost_variance
@@ -23,6 +24,5 @@ class EvmSprint < ApplicationRecord
   # schedule_performance_index
   # estimate_to_complete
   # estimate_at_complete
-
 
 end
