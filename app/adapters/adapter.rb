@@ -53,8 +53,8 @@ module Adapter
       @client.close_issue(path, issue_params[:number])
     end
 
-    def reopen_issue(path, issue_params)
-      @client.reopen_issue(@path, issue_params[:number])
+    def reopen_issue(github_slug, issue_params)
+      @client.reopen_issue(github_slug, issue_params[:number])
     end
   end
 end
