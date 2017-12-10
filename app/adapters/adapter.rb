@@ -42,8 +42,8 @@ module Adapter
       @client.list_issues(github_slug)
     end
 
-    def list_all_issues(github_slug)
-      @client.list_issues(github_slug, :state => 'all')
+    def list_all_issues(github_slug, page)
+      @client.list_issues(github_slug, :state => 'all', :page => page)
     end
 
     def create_issue(github_slug, issue_params)
