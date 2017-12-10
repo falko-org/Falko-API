@@ -49,8 +49,8 @@ module Adapter
       @client.update_issue(github_slug, issue_params[:number], issue_params[:name], issue_params[:body])
     end
 
-    def close_issue(path, issue_params)
-      @client.close_issue(path, issue_params[:number])
+    def close_issue(github_slug, issue_params)
+      @client.close_issue(github_slug, issue_params[:number])
     end
 
     def reopen_issue(github_slug, issue_params)

@@ -2,12 +2,12 @@ require "rest-client"
 
 class IssuesController < ApplicationController
   before_action :set_authorization, except: [:update_assignees]
-  before_action :set_path, except: [:update_assignees]
+  before_action :set_project
 
   def index
     client = Adapter::GitHubIssue.new(request)
 
-    @issues = client.list_issues(@path)
+    @issues = client.list_issues(@project.github_slug)
 
     convert_form_params(@issues)
 
@@ -49,7 +49,7 @@ class IssuesController < ApplicationController
   def close
     client = Adapter::GitHubIssue.new(request)
 
-    client.close_issue(@path, issue_params)
+    client.close_issue(@project.github_slug, issue_params)
 
     render status: :ok
   end
@@ -91,21 +91,6 @@ class IssuesController < ApplicationController
 
     def set_project
       @project = Project.find(params[:id])
-    end
-
-    def set_path
-      set_project
-
-      if @project.name.include? "/"
-        @path = @project.name
-      else
-        client = Adapter::GitHubIssue.new(request)
-        @name = client.get_github_user
-        @repo = @project.name
-        @path = @name.to_s + "/" + @repo
-      end
-
-      @path
     end
 
     def convert_form_params(issue)
