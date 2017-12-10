@@ -83,7 +83,7 @@ class SprintsController < ApplicationController
         variance += (total_sprints_points[i] - velocities[i])
       end
 
-      variance = variance/amount
+      variance = variance / amount
 
       render json: variance
     else
@@ -136,7 +136,7 @@ class SprintsController < ApplicationController
       variance = 0
 
       for i in 0..(date_axis.length - 2)
-        variance = (points_axis[i] - points_axis[i+1]) + (ideal_line[i] - ideal_line[i+1])
+        variance = (points_axis[i] - points_axis[i + 1]) + (ideal_line[i] - ideal_line[i + 1])
       end
 
       variance = Float(variance) / date_axis.length
@@ -160,7 +160,7 @@ class SprintsController < ApplicationController
         burned_points = burned_points + velocity[:completed_points][i]
       end
 
-      debts = Float(planned_points - burned_points)/planned_points
+      debts = Float(planned_points - burned_points) / planned_points
 
       render json: debts
     else

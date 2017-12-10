@@ -1,7 +1,5 @@
 module BurndownHelper
-
   def get_burned_points(sprint, burned_stories)
-
     total_points = 0
 
     for story in sprint.stories
@@ -19,7 +17,6 @@ module BurndownHelper
   end
 
   def get_dates(burned_stories, date_axis, points_axis, range_dates, total_points)
-
     range_dates.each do |date|
       if burned_stories[date] == nil
         burned_stories[date] = total_points
@@ -33,10 +30,8 @@ module BurndownHelper
   end
 
   def set_ideal_line(days_of_sprint, ideal_line, planned_points)
-
     for day in (days_of_sprint).downto(0)
       ideal_line.push(planned_points * (day / (Float days_of_sprint)))
     end
   end
-
 end
