@@ -98,6 +98,6 @@ class StoriesController < ApplicationController
     end
 
     def story_params
-      params.require(:story).permit(:name, :description, :assign, :pipeline, :initial_date, :story_points, :final_date, :issue_number)
+      params.require(:story).permit(:name, :description, :assign, :pipeline, :initial_date, :story_points, :final_date, :issue_number, :issue_id)
     end
 end
