@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post "remove_github_token", to: "users#remove_github_token"
 
   get "sprints/:id/burndown", to: "sprints#get_burndown"
+  get "sprints/:id/burndown_variance", to: "sprints#get_burndown_variance"
 
   get "repos", to: "projects#github_projects_list"
   get "projects/:id/contributors", to: "projects#get_contributors"
@@ -27,7 +28,6 @@ Rails.application.routes.draw do
 
   post "projects/:id/reopen_issue", to: "issues#reopen_issue"
 
-  get "sprints/:id/velocity", to: "sprints#get_velocity"
 
   resources :users, shallow: true do
     resources :projects do
