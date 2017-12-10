@@ -41,12 +41,12 @@ script:
   - docker exec falko-test bash -c "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
   - docker exec falko-test bash -c "chmod +x cc-test-reporter"
   - docker exec falko-test bash -c "./cc-test-reporter before-build"
-  - docker exec falko-test bash -c "./wait-4-postgres.sh"
-  - docker exec falko-test bundle install
-  - docker exec falko-test bundle exec rails db:create
-  - docker exec falko-test bundle exec rails db:migrate
-  - docker exec falko-test bundle exec rake db:test:prepare
-  - docker exec falko-test bundle exec rails test
+  - docker exec -it falko-test bash -c "./wait-4-postgres.sh"
+  - docker exec -it falko-test bundle install
+  - docker exec -it falko-test bundle exec rails db:create
+  - docker exec -it falko-test bundle exec rails db:migrate
+  - docker exec -it falko-test bundle exec rake db:test:prepare
+  - docker exec -it falko-test bundle exec rails test
 
 after_script:
   - docker exec falko-test bash -c "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT --coverage-input-type simplecov --id $CC_TEST_REPORTER_ID"

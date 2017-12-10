@@ -4,7 +4,7 @@ namespace :db do
     begin
       # Tries to initialize the application.
       # It will fail if the database does not exist
-      Rake::Task['environment'].invoke
+      Rake::Task["environment"].invoke
     rescue
       exit 1
     else
