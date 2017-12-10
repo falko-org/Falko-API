@@ -16,12 +16,12 @@ class IssuesController < ApplicationController
     all_stories_number = []
 
     all_stories.each do |story|
-      all_stories_number.push(story.issue_number.to_i)
+      all_stories_number.push(story.issue_id.to_i)
     end
 
     @filter_form = { issues_infos: [] }
 
-    @filter_form[:issues_infos] = @form_params[:issues_infos].reject { |h| all_stories_number.include? h[:number] }
+    @filter_form[:issues_infos] = @form_params[:issues_infos].reject { |h| all_stories_number.include? h[:issue_id] }
 
     render json: @filter_form
   end
@@ -57,7 +57,7 @@ class IssuesController < ApplicationController
   def reopen_issue
     client = Adapter::GitHubIssue.new(request)
 
-    client.reopen_issue(@path, issue_params)
+    client.reopen_issue(@project.github_slug, issue_params)
 
     render status: 200
   end
@@ -112,10 +112,10 @@ class IssuesController < ApplicationController
       @form_params = { issues_infos: [] }
       if issue.kind_of?(Array)
         @issues.each do |issue|
-          @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body)
+          @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body, issue_id: issue.id)
         end
       else
-        @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body)
+        @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body, issue_id: issue.id)
       end
       @form_params
     end
