@@ -100,7 +100,9 @@ class SprintsController < ApplicationController
       points_axis = []
       ideal_line = []
 
-      total_points = get_burned_points(@sprint, burned_stories)
+      total_points = get_total_points(@sprint)
+
+      burned_stories = get_burned_points(@sprint, burned_stories)
 
       range_dates = (@sprint.initial_date .. @sprint.final_date)
       get_dates(burned_stories, date_axis, points_axis, range_dates, total_points)

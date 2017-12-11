@@ -1,9 +1,6 @@
 module BurndownHelper
   def get_burned_points(sprint, burned_stories)
-    total_points = 0
-
     for story in sprint.stories
-      total_points += story.story_points
       if story.pipeline == "Done"
         if burned_stories[story.final_date] == nil
           burned_stories[story.final_date] = story.story_points
@@ -11,6 +8,16 @@ module BurndownHelper
           burned_stories[story.final_date] += story.story_points
         end
       end
+    end
+
+    return burned_stories
+  end
+
+  def get_total_points(sprint)
+    total_points = 0
+
+    for story in sprint.stories
+      total_points += story.story_points
     end
 
     return total_points
