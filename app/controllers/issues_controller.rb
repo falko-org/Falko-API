@@ -60,14 +60,19 @@ class IssuesController < ApplicationController
 
     @issues = client.list_all_issues(@path)
 
-    actual_date = params[:actual_date].to_date
-    option = params[:option]
+    if @issues.count != 0
 
-    data_of_issues = {}
+      actual_date = params[:actual_date].to_date
+      option = params[:option]
 
-    data_of_issues = get_issues_graphic(actual_date, option, @issues, count)
+      data_of_issues = {}
 
-    render json: data_of_issues
+      data_of_issues = get_issues_graphic(actual_date, option, @issues)
+
+      render json: data_of_issues
+    else
+      render json: { error: "Issues don't exists" }, status: :not_found
+    end
   end
 
   def update_assignees
