@@ -3,6 +3,8 @@ module Adapter
     def initialize(request)
       @logged_user = AuthorizeApiRequest.call(request.headers).result
       @client = Octokit::Client.new(access_token: @logged_user.access_token)
+      Octokit.auto_paginate = true
+      @client
     end
 
     def get_github_user
@@ -31,6 +33,8 @@ module Adapter
     def initialize(request)
       @logged_user = AuthorizeApiRequest.call(request.headers).result
       @client = Octokit::Client.new(access_token: @logged_user.access_token)
+      Octokit.auto_paginate = true
+      @client
     end
 
     def get_github_user
