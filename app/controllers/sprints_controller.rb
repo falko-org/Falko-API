@@ -127,8 +127,10 @@ class SprintsController < ApplicationController
       date_axis = []
       points_axis = []
       ideal_line = []
+      metric = []
 
       total_points = get_total_points(@sprint)
+      burned_stories = get_burned_points(@sprint, burned_stories)
 
       range_dates = (@sprint.initial_date .. @sprint.final_date)
 
@@ -136,13 +138,13 @@ class SprintsController < ApplicationController
       days_of_sprint = date_axis.length - 1
       set_ideal_line(days_of_sprint, ideal_line, total_points)
 
-      metric = 0
+      ideal_burned_points = ideal_line[0] - ideal_line[1]
 
       for i in 0..(date_axis.length - 2)
-        metric = (points_axis[i] - points_axis[i + 1]) + (ideal_line[i] - ideal_line[i + 1])
+        real_burned_points = points_axis[i] - points_axis[i + 1]
+        burned_percentage = Float((real_burned_points).abs * 100) / ideal_burned_points
+        metric.push(burned_percentage)
       end
-
-      metric = Float(metric) / date_axis.length
 
       render json: metric
     else
