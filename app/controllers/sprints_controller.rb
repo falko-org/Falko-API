@@ -9,7 +9,7 @@ class SprintsController < ApplicationController
     validate_release(0, :release_id)
   end
 
-  before_action only: [:show, :update, :destroy, :get_velocity, :get_velocity_variance, :get_debts, :get_burndown_variance] do
+  before_action only: [:show, :update, :destroy, :get_velocity, :get_velocity_metric, :get_debts, :get_burndown_metric] do
     validate_sprint(:id, 0)
   end
 
@@ -67,7 +67,7 @@ class SprintsController < ApplicationController
     end
   end
 
-  def get_velocity_variance
+  def get_velocity_metric
     release = @sprint.release
     if release.project.is_scoring == true
       release = @sprint.release
@@ -76,18 +76,20 @@ class SprintsController < ApplicationController
       total_sprints_points = velocity[:total_points]
       velocities = velocity[:velocities]
 
-      amount = release.sprints.count
-      variance = 0
+      amount_of_sprints = release.sprints.count
+      metric = 0
 
-      for i in 0..(amount - 1)
-        variance += (total_sprints_points[i] - velocities[i])
+      for i in 0..(amount_of_sprints - 1)
+        metric += (total_sprints_points[i] - velocities[i])
       end
 
-      variance = variance / amount
+      total_points = get_total_points_release(release)
+      puts total_points
+      metric = metric / total_points
 
-      render json: variance
+      render json: metric
     else
-      render json: { error: "The Velocity variance is only available in projects that use Story Points" }, status: :unprocessable_entity
+      render json: { error: "The Velocity metric is only available in projects that use Story Points" }, status: :unprocessable_entity
     end
   end
 
@@ -118,7 +120,7 @@ class SprintsController < ApplicationController
     end
   end
 
-  def get_burndown_variance
+  def get_burndown_metric
     project = @sprint.release.project
     if project.is_scoring == true
       burned_stories = {}
@@ -134,17 +136,17 @@ class SprintsController < ApplicationController
       days_of_sprint = date_axis.length - 1
       set_ideal_line(days_of_sprint, ideal_line, total_points)
 
-      variance = 0
+      metric = 0
 
       for i in 0..(date_axis.length - 2)
-        variance = (points_axis[i] - points_axis[i + 1]) + (ideal_line[i] - ideal_line[i + 1])
+        metric = (points_axis[i] - points_axis[i + 1]) + (ideal_line[i] - ideal_line[i + 1])
       end
 
-      variance = Float(variance) / date_axis.length
+      metric = Float(metric) / date_axis.length
 
-      render json: variance
+      render json: metric
     else
-      render json: { error: "The Burndown variance is only available in projects that use Story Points" }, status: :unprocessable_entity
+      render json: { error: "The Burndown metric is only available in projects that use Story Points" }, status: :unprocessable_entity
     end
   end
 
