@@ -65,7 +65,7 @@ class IssuesController < ApplicationController
 
     data_of_issues = {}
 
-    data_of_issues = get_issues_graphic(actual_date, option, @issues, count)
+    data_of_issues = get_issues_graphic(actual_date, option, @issues)
 
     render json: data_of_issues
   end
