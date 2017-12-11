@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   post "remove_github_token", to: "users#remove_github_token"
 
   get "sprints/:id/burndown", to: "sprints#get_burndown"
-  get "sprints/:id/burndown_variance", to: "sprints#get_burndown_variance"
+  get "sprints/:id/burndown_metric", to: "sprints#get_burndown_metric"
 
   get "repos", to: "projects#github_projects_list"
   get "projects/:id/contributors", to: "projects#get_contributors"
@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   delete "projects/:id/issues", to: "issues#close"
 
   get "sprints/:id/velocity", to: "sprints#get_velocity"
-  get "sprints/:id/velocity_variance", to: "sprints#get_velocity_variance"
+  get "sprints/:id/velocity_metric", to: "sprints#get_velocity_metric"
   get "sprints/:id/debts", to: "sprints#get_debts"
 
   post "projects/:id/reopen_issue", to: "issues#reopen_issue"

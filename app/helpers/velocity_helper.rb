@@ -1,4 +1,16 @@
 module VelocityHelper
+  include BurndownHelper
+  
+  def get_total_points_release(release)
+    total_points_release = 0
+
+    for sprint in release.sprints
+      total_points_release += get_total_points(sprint)
+    end
+
+    return total_points_release
+  end
+
   def calculate_points(sprint)
     sprint_total_points = 0
     sprint_completed_points = 0
