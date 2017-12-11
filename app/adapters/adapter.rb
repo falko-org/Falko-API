@@ -44,7 +44,6 @@ module Adapter
     end
 
     def list_all_issues(github_slug)
-
       @client.list_issues(github_slug, :state => 'all')
     end
 
