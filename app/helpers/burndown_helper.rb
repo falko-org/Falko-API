@@ -1,13 +1,17 @@
 module BurndownHelper
+  def check_pipeline(story, burned_stories)
+    if story.pipeline == "Done"
+      if burned_stories[story.final_date] == nil
+        burned_stories[story.final_date] = story.story_points
+      else
+        burned_stories[story.final_date] += story.story_points
+      end
+    end
+  end
+
   def get_burned_points(sprint, burned_stories)
     for story in sprint.stories
-      if story.pipeline == "Done"
-        if burned_stories[story.final_date] == nil
-          burned_stories[story.final_date] = story.story_points
-        else
-          burned_stories[story.final_date] += story.story_points
-        end
-      end
+      check_pipeline(story, burned_stories)
     end
 
     return burned_stories
@@ -23,7 +27,7 @@ module BurndownHelper
     return total_points
   end
 
-  def get_dates(burned_stories, date_axis, points_axis, range_dates, total_points)
+  def set_dates_and_points(burned_stories, date_axis, points_axis, range_dates, total_points)
     range_dates.each do |date|
       if burned_stories[date] == nil
         burned_stories[date] = total_points

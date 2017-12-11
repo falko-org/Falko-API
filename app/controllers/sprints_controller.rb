@@ -101,12 +101,11 @@ class SprintsController < ApplicationController
       ideal_line = []
 
       total_points = get_total_points(@sprint)
-
       burned_stories = get_burned_points(@sprint, burned_stories)
 
       range_dates = (@sprint.initial_date .. @sprint.final_date)
-      get_dates(burned_stories, date_axis, points_axis, range_dates, total_points)
 
+      set_dates_and_points(burned_stories, date_axis, points_axis, range_dates, total_points)
       days_of_sprint = date_axis.length - 1
       set_ideal_line(days_of_sprint, ideal_line, total_points)
 
@@ -127,11 +126,11 @@ class SprintsController < ApplicationController
       points_axis = []
       ideal_line = []
 
-      total_points = get_burned_points(@sprint, burned_stories)
+      total_points = get_total_points(@sprint)
 
       range_dates = (@sprint.initial_date .. @sprint.final_date)
-      get_dates(burned_stories, date_axis, points_axis, range_dates, total_points)
 
+      set_dates_and_points(burned_stories, date_axis, points_axis, range_dates, total_points)
       days_of_sprint = date_axis.length - 1
       set_ideal_line(days_of_sprint, ideal_line, total_points)
 
