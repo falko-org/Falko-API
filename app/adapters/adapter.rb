@@ -32,6 +32,8 @@ module Adapter
     def initialize(request)
       @logged_user = AuthorizeApiRequest.call(request.headers).result
       @client = Octokit::Client.new(access_token: @logged_user.access_token)
+      Octokit.auto_paginate = true
+      @client
     end
 
     def get_github_user
@@ -42,8 +44,9 @@ module Adapter
       @client.list_issues(github_slug)
     end
 
-    def list_all_issues(github_slug, page)
-      @client.list_issues(github_slug, :state => 'all', :page => page)
+    def list_all_issues(github_slug)
+
+      @client.list_issues(github_slug, :state => 'all')
     end
 
     def create_issue(github_slug, issue_params)
