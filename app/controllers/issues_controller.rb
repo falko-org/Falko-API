@@ -58,24 +58,7 @@ class IssuesController < ApplicationController
   def issue_graphic_data
     client = Adapter::GitHubIssue.new(request)
 
-    page = 0
-    issues_page = {}
-    issues_hash = {}
-    count = 0
-
-    loop do
-      issues_page = client.list_all_issues(@path, page)
-      page = page + 1
-      if(issues_page.count != 0)
-        issues_page.each do |issue|
-          issues_hash[count] = issue
-          count = count + 1
-        end
-      end
-      break if (issues_page.count == 0)
-    end
-
-    @issues = issues_hash
+    @issues = client.list_all_issues(@path)
 
     actual_date = params[:actual_date].to_date
     option = params[:option]
