@@ -1,5 +1,5 @@
 module IssueGraphicHelper
-  def get_issues_graphic(actual_date, option, issues, count)
+  def get_issues_graphic(actual_date, option, issues)
     first_date = actual_date - 3.month
 
     number_of_issues = {}
