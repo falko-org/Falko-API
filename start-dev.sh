@@ -4,7 +4,6 @@ bundle check || bundle install
 
 if bundle exec rake db:exists; then
   bundle exec rake db:reset
-  bundle exec rake db:migrate
 else
   bundle exec rake db:create
   bundle exec rake db:migrate
