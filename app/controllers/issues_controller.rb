@@ -59,7 +59,7 @@ class IssuesController < ApplicationController
   def issue_graphic_data
     client = Adapter::GitHubIssue.new(request)
 
-    @issues = client.list_all_issues(@path)
+    @issues = client.list_all_issues(@project.github_slug)
 
     if @issues.count != 0
 
