@@ -46,6 +46,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
                           initial_date: "07/10/2017",
                           final_date: "12/10/2017",
                           issue_number: "9",
+                          issue_id: 10,
                           sprint_id: @sprint.id,
                           story_points: 5
                           )
@@ -290,15 +291,6 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should not update issue assignees without project" do
-    post "/projects/-1/issues/assignees", params: {
-      issue_number: "1",
-      assignees: ["MatheusRich"]
-    }, headers: { Authorization: @token.result }
-
-    assert_response :not_found
-  end
-
   test "should not show issues in Backlog already allocated" do
     mock = Minitest::Mock.new
 
@@ -307,7 +299,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
     def mock.list_issues(name)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, body: "This is a template body") ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, id: 10, body: "This is a template body") ]
     end
 
 
