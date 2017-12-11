@@ -7,7 +7,6 @@ module Adapter
 
     def get_github_user
       user_login = @client.user.login
-      p user_login
       return user_login
     end
 
@@ -45,7 +44,6 @@ module Adapter
     end
 
     def list_all_issues(github_slug)
-
       @client.list_issues(github_slug, :state => 'all')
     end
 
@@ -57,8 +55,12 @@ module Adapter
       @client.update_issue(github_slug, issue_params[:number], issue_params[:name], issue_params[:body])
     end
 
-    def close_issue(path, issue_params)
-      @client.close_issue(path, issue_params[:number])
+    def close_issue(github_slug, issue_params)
+      @client.close_issue(github_slug, issue_params[:number])
+    end
+
+    def reopen_issue(github_slug, issue_params)
+      @client.reopen_issue(github_slug, issue_params[:number])
     end
   end
 end

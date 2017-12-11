@@ -52,7 +52,7 @@ module IssueGraphicHelper
     total_closed_issues.push(closed_issues_second)
     total_closed_issues.push(closed_issues_first)
 
-    number_of_issues = { opened_issues: total_open_issues, closed_issues: total_closed_issues, months: dates}
+    number_of_issues = { opened_issues: total_open_issues, closed_issues: total_closed_issues, months: dates }
     return number_of_issues
   end
 end

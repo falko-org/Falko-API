@@ -46,6 +46,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
                           initial_date: "07/10/2017",
                           final_date: "12/10/2017",
                           issue_number: "9",
+                          issue_id: 10,
                           sprint_id: @sprint.id,
                           story_points: 5
                           )
@@ -299,23 +300,65 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
-  test "should not show issues in Backlog already allocated" do
+  # test "should not show issues in Backlog already allocated" do
+  #   mock = Minitest::Mock.new
+  #
+  #   def mock.get_github_user()
+  #     Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
+  #   end
+  #
+  #   def mock.list_issues(name)
+  #     [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, body: "This is a template body") ]
+  #   end
+  #
+  #
+  #   Adapter::GitHubIssue.stub :new, mock do
+  #     get "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }
+  #
+  #     assert response.parsed_body["issues_infos"] == []
+  #     assert_response :success
+  #   end
+  # end
+
+  test "should to see issues graphic" do
+
     mock = Minitest::Mock.new
 
     def mock.get_github_user()
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.list_issues(name)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, body: "This is a template body") ]
+    def mock.list_all_issues(name)
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, id: 10, body: "This is a template body", created_at: "07/10/2017", closed_at: "12/10/2017") ]
     end
-
 
     Adapter::GitHubIssue.stub :new, mock do
-      get "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }
-
-      assert response.parsed_body["issues_infos"] == []
-      assert_response :success
+      post "/projects/#{@project.id}/issues/graphic", params: {
+          actual_date: "07/10/2017",
+          option: "month"
+      }, headers: { Authorization: @token.result }
     end
+    assert_response :success
+  end
+
+  test "should not to see issues graphic if issues not exists" do
+
+    mock = Minitest::Mock.new
+
+    def mock.get_github_user()
+      Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
+    end
+
+    def mock.list_all_issues(name)
+      []
+    end
+
+    Adapter::GitHubIssue.stub :new, mock do
+      post "/projects/#{@project.id}/issues/graphic", params: {
+          actual_date: "07/10/2017",
+          option: "month"
+      }, headers: { Authorization: @token.result }
+    end
+    assert_response :not_found
   end
 end
