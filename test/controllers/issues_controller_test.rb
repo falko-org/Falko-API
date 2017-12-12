@@ -61,7 +61,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
     def mock.list_issues(github_slug)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: "3", body: "This is a template body", assignees: [login: "ThalissonMelo"]) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: "3", body: "This is a template body", assignees: [ login: "ThalissonMelo" ]) ]
     end
 
 
@@ -104,7 +104,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
     def mock.create_issue(name, body)
-      Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3", assignees: [login:"ThalissonMelo"])
+      Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3", assignees: [ login: "ThalissonMelo" ])
     end
 
 
@@ -156,7 +156,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
     def mock.update_issue(name, body)
-      Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3", assignees: [login: "ThalissonMelo"])
+      Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3", assignees: [ login: "ThalissonMelo" ])
     end
 
 
@@ -299,7 +299,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
 
     def mock.list_issues(name)
-      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, id: 10, body: "This is a template body", assignees:[login:"ThalissonMelo"]) ]
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, id: 10, body: "This is a template body", assignees: [ login: "ThalissonMelo" ]) ]
     end
 
 
