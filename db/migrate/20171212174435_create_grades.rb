@@ -1,9 +1,9 @@
 class CreateGrades < ActiveRecord::Migration[5.1]
   def change
     create_table :grades do |t|
-      t.Float :weight_burndown
-      t.Float :weight_velocity
-      t.Float :weight_debt
+      t.float :weight_burndown
+      t.float :weight_velocity
+      t.float :weight_debts
 
       t.timestamps
     end
