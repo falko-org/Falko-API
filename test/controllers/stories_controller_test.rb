@@ -6,8 +6,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       name: "Robert",
       email: "robert@email.com",
       password: "123123",
-      password_confirmation: "123123",
-      github: "robertGit"
+      password_confirmation: "123123"
     )
 
     @project = Project.create(
@@ -51,8 +50,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       name: "Ronaldo",
       email: "ronaldo@email.com",
       password: "123123",
-      password_confirmation: "123123",
-      github: "ronaldoGit"
+      password_confirmation: "123123"
     )
 
     @another_project = Project.create(
@@ -95,8 +93,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       name: "Ronaldo",
       email: "ronaldo@email.com",
       password: "123123",
-      password_confirmation: "123123",
-      github: "ronaldoGit"
+      password_confirmation: "123123"
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)

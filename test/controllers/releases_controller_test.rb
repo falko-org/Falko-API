@@ -6,8 +6,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
       name: "Robert",
       email: "robert@email.com",
       password: "123123",
-      password_confirmation: "123123",
-      github: "robertGit"
+      password_confirmation: "123123"
     )
 
     @project = Project.create(
@@ -32,8 +31,7 @@ class ReleasesControllerTest < ActionDispatch::IntegrationTest
     @another_user = User.create(name: "Ronaldo",
       email: "ronaldo@email.com",
       password: "123123",
-      password_confirmation: "123123",
-      github: "ronaldoGit"
+      password_confirmation: "123123"
     )
 
     @another_project = Project.create(
