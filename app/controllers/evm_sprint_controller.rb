@@ -1,5 +1,6 @@
 class EvmSprintController < ApplicationController
   include EarnedValueManagementHelper
+  include Subject
 
   before_action :set_evm_sprint, only: [:show, :update, :destroy]
 
@@ -17,6 +18,7 @@ class EvmSprintController < ApplicationController
     calculate_evm_sprint_values(@evm, evm_sprint)
 
     if evm_sprint.save
+      @evm.update(earned_value_management_params)
       render json: evm_sprint, status: :created
     else
       render json: evm_sprint.errors, status: :unprocessable_entity
