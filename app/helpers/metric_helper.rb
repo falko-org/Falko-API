@@ -3,7 +3,7 @@ module MetricHelper
   include VelocityHelper
 
   def calculate_metrics(sprint)
-    release = @sprint.release
+    release = sprint.release
 
     if release.project.is_scoring == true
       burned_stories = {}
@@ -16,13 +16,13 @@ module MetricHelper
       planned_points = 0
       burned_points = 0
 
-      velocity = get_sprints_informations(release.sprints, @sprint)
-      total_points = get_total_points(@sprint)
-      burned_stories = get_burned_points(@sprint, burned_stories)
+      velocity = get_sprints_informations(release.sprints, sprint)
+      total_points = get_total_points(sprint)
+      burned_stories = get_burned_points(sprint, burned_stories)
       total_sprints_points = velocity[:total_points]
       velocities = velocity[:velocities]
 
-      range_dates = (@sprint.initial_date .. @sprint.final_date)
+      range_dates = (sprint.initial_date .. sprint.final_date)
 
       set_dates_and_points(burned_stories, date_axis, points_axis, range_dates, total_points)
       days_of_sprint = date_axis.length - 1
@@ -53,7 +53,9 @@ module MetricHelper
       metric_velocity_value = metric_velocity_value / total_points
       metric_velocity_value = calculate_velocity_and_debt(metric_velocity_value)
 
-      # final_metric = weight1*metric_velocity_value + weight2*metric_burndown_value + weight3*metric_debts_value
+      metrics = { metric_debts_value: metric_debts_value,
+                  metric_velocity_value: metric_velocity_value,
+                  metric_burndown_value: metric_burndown_value }
     end
   end
 
