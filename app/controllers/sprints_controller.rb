@@ -97,8 +97,8 @@ class SprintsController < ApplicationController
 
   def get_metrics
     metrics = calculate_metrics(@sprint)
-    final_metric = metrics[:metric_debts_value] + metrics[:metric_velocity_value] + metrics[:metric_burndown_array]
-    
+
+    final_metric = (metrics[:metric_debts_value] + metrics[:metric_velocity_value] + metrics[:metric_burndown_value]) / 3
     render json: final_metric
   end
 

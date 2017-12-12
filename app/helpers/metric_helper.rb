@@ -50,10 +50,10 @@ module MetricHelper
       metric_debts_value = calculate_velocity_and_debt(metric_debts_value)
 
       total_points = get_total_points_release(release)
-      metric_velocity_value = metric_velocity_value / total_points
+      metric_velocity_value = Float metric_velocity_value / total_points
       metric_velocity_value = calculate_velocity_and_debt(metric_velocity_value)
 
-      metrics = { metric_debts_value: metric_debts_value,
+      return metrics = { metric_debts_value: metric_debts_value,
                   metric_velocity_value: metric_velocity_value,
                   metric_burndown_value: metric_burndown_value }
     end
