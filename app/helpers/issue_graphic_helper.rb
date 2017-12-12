@@ -7,7 +7,7 @@ module IssueGraphicHelper
     total_closed_issues = [0, 0, 0]
 
     if option == "month"
-      dates = [(actual_date - 2.month).strftime('%B'), (actual_date - 1.month).strftime('%B'), (actual_date).strftime('%B')]
+      dates = [(actual_date - 2.month).strftime("%B"), (actual_date - 1.month).strftime("%B"), (actual_date).strftime("%B")]
     end
 
     issues.each do |issue|
