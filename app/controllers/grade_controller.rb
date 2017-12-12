@@ -1,4 +1,6 @@
 class GradeController < ApplicationController
+  include MetricHelper
+  
   def update
   end
 
@@ -7,10 +9,13 @@ class GradeController < ApplicationController
     if @grade.save
       render json: @grade, status: :created
     else
-      render json: @grade.errors, status: :unprocessable_entity  
+      render json: @grade.errors, status: :unprocessable_entity
   end
 
   def show
+    final_metric = get_metrics(@grade)
+
+    render json: final_metric
   end
 
   def grade_params

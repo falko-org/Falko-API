@@ -2,8 +2,20 @@ module MetricHelper
   include BurndownHelper
   include VelocityHelper
 
-  def calculate_metrics(sprint)
-    release = sprint.release
+  def get_metrics(grade)
+    last_release = grade.project.releases.last
+    metrics = calculate_metrics(last_release)
+
+    sum_of_weights = grade.weight_debt + grade.weight_velocity + grade.weight_burndown
+
+    final_metric = Float (grade.weight_debt * metrics[:metric_debts_value] +
+                          grade.weight_velocity * metrics[:metric_velocity_value] +
+                          grade.weight_burndown * metrics[:metric_burndown_value]) /
+                          sum_of_weights
+  end
+
+  def calculate_metrics(release)
+    sprint = release.sprints.last
 
     if release.project.is_scoring == true
       burned_stories = {}
