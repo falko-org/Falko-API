@@ -6,8 +6,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       "name": "Ronaldo",
       "email": "ronaldofenomeno@gmail.com",
       "password": "123456789",
-      "password_confirmation": "123456789",
-      "github": "ronaldobola"
+      "password_confirmation": "123456789"
     )
 
     @project = Project.create(
