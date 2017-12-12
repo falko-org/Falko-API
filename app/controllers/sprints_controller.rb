@@ -2,6 +2,7 @@ class SprintsController < ApplicationController
   include ValidationsHelper
   include VelocityHelper
   include BurndownHelper
+  include MetricHelper
 
   before_action :set_sprint, only: [:show, :update, :destroy, :get_burndown]
 
@@ -9,7 +10,7 @@ class SprintsController < ApplicationController
     validate_release(0, :release_id)
   end
 
-  before_action only: [:show, :update, :destroy, :get_velocity, :get_velocity_metric, :get_debts, :get_burndown_metric] do
+  before_action only: [:show, :update, :destroy, :get_velocity, :get_metrics] do
     validate_sprint(:id, 0)
   end
 
@@ -67,32 +68,6 @@ class SprintsController < ApplicationController
     end
   end
 
-  def get_velocity_metric
-    release = @sprint.release
-    if release.project.is_scoring == true
-      release = @sprint.release
-      velocity = get_sprints_informations(release.sprints, @sprint)
-
-      total_sprints_points = velocity[:total_points]
-      velocities = velocity[:velocities]
-
-      amount_of_sprints = release.sprints.count
-      metric = 0
-
-      for i in 0..(amount_of_sprints - 1)
-        metric += (total_sprints_points[i] - velocities[i])
-      end
-
-      total_points = get_total_points_release(release)
-      puts total_points
-      metric = metric / total_points
-
-      render json: metric
-    else
-      render json: { error: "The Velocity metric is only available in projects that use Story Points" }, status: :unprocessable_entity
-    end
-  end
-
   def get_burndown
     project = @sprint.release.project
     if project.is_scoring == true
@@ -120,57 +95,10 @@ class SprintsController < ApplicationController
     end
   end
 
-  def get_burndown_metric
-    project = @sprint.release.project
-    if project.is_scoring == true
-      burned_stories = {}
-      date_axis = []
-      points_axis = []
-      ideal_line = []
-      metric = []
+  def get_metrics
+    final_metric = calculate_metrics(@sprint)
 
-      total_points = get_total_points(@sprint)
-      burned_stories = get_burned_points(@sprint, burned_stories)
-
-      range_dates = (@sprint.initial_date .. @sprint.final_date)
-
-      set_dates_and_points(burned_stories, date_axis, points_axis, range_dates, total_points)
-      days_of_sprint = date_axis.length - 1
-      set_ideal_line(days_of_sprint, ideal_line, total_points)
-
-      ideal_burned_points = ideal_line[0] - ideal_line[1]
-
-      for i in 0..(date_axis.length - 2)
-        real_burned_points = points_axis[i] - points_axis[i + 1]
-        burned_percentage = Float((real_burned_points).abs * 100) / ideal_burned_points
-        metric.push(burned_percentage)
-      end
-
-      render json: metric
-    else
-      render json: { error: "The Burndown metric is only available in projects that use Story Points" }, status: :unprocessable_entity
-    end
-  end
-
-  def get_debts
-    release = @sprint.release
-    if release.project.is_scoring == true
-      velocity = get_sprints_informations(release.sprints, @sprint)
-
-      planned_points = 0
-      burned_points = 0
-
-      for i in 0..(release.sprints.length - 1)
-        planned_points = planned_points + velocity[:total_points][i]
-        burned_points = burned_points + velocity[:completed_points][i]
-      end
-
-      debts = Float(planned_points - burned_points) / planned_points
-
-      render json: debts
-    else
-      render json: { error: "Debts is only available in projects that use Story Points" }, status: :unprocessable_entity
-    end
+    render json: final_metric
   end
 
   private

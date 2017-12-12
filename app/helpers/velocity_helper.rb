@@ -1,6 +1,6 @@
 module VelocityHelper
   include BurndownHelper
-  
+
   def get_total_points_release(release)
     total_points_release = 0
 
