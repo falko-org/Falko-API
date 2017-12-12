@@ -2,12 +2,9 @@
 
 bundle check || bundle install
 
-if bundle exec rake db:exists; then
-  bundle exec rake db:reset
-else
-  bundle exec rake db:create
-  bundle exec rake db:migrate
-fi
+bundle exec rake db:create
+bundle exec rake db:migrate
+bundle exec rake db:seed
 
 pidfile='/Falko-2017.2-BackEnd/tmp/pids/server.pid'
 

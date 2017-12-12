@@ -14,7 +14,7 @@ if bundle exec rake db:exists; then
 else
   bundle exec rake db:create
   bundle exec rails db:migrate
-
+fi
 
 pidfile='/Falko-2017.2-BackEnd/tmp/pids/server.pid'
 
