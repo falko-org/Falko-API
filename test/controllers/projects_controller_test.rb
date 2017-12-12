@@ -226,32 +226,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should receive an numeric score" do
-    @token = AuthenticateUser.call(@user.email, @user.password)
-    codeclimate_response = '{
-        "data": [{
-            "id": "696a76232df2736347000001",
-            "type": "repos",
-            "attributes": {
-              "analysis_version": 3385,
-              "badge_token": "16096d266f46b7c68dd4",
-              "branch": "master",
-              "created_at": "2017-07-15T20:08:03.732Z",
-              "github_slug": "twinpeaks\/ranchorosa",
-              "human_name": "ranchorosa",
-              "last_activity_at": "2017-07-15T20:09:41.846Z",
-              "score": 2.92
-            }
-          }]
-        }'
-
-    RestClient.stub :get, codeclimate_response do
-      get "/projects/#{@project.id}/gpa", headers: { Authorization: @token.result }
-      assert_response :success
-      assert response.parsed_body == 2.92
-    end
-  end
-
   test "should not import a project from github if the is_project_from_github is invalid" do
     post "/users/#{@user.id}/projects", params: {
       "project": {

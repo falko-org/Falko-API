@@ -9,7 +9,6 @@ Rails.application.routes.draw do
   get "repos", to: "projects#github_projects_list"
   get "projects/:id/contributors", to: "projects#get_contributors"
   post "projects/:id/issues/assignees", to: "issues#update_assignees"
-  get "projects/:id/gpa", to: "projects#get_gpa"
 
   get "sprints/:id/doing_stories", to: "stories#doing_list"
   get "sprints/:id/done_stories", to: "stories#done_list"
