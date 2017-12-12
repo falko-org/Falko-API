@@ -13,15 +13,13 @@ users = User.create(
       name: "Vitor Barbosa",
       email: "barbosa@gmail.com",
       password: "123456789",
-      password_confirmation: "123456789",
-      github: "vituuGit"
+      password_confirmation: "123456789"
     },
     {
       name: "Carla",
       email: "carla@gmail.com",
       password: "123456789",
-      password_confirmation: "123456789",
-      github: "carlaGit"
+      password_confirmation: "123456789"
     }
   ]
 )

@@ -6,8 +6,7 @@ class SprintTest < ActiveSupport::TestCase
       name: "Gilberto",
       email: "gilbertin@teste.com",
       password: "1234567",
-      password_confirmation: "1234567",
-      github: "gilbertoCoder"
+      password_confirmation: "1234567"
     )
 
     @project = Project.create(

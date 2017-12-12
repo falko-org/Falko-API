@@ -32,6 +32,8 @@ Rails.application.routes.draw do
 
   get "sprints/:id/metrics", to: "sprints#get_metrics"
 
+  post "/projects/:id/issues/graphic", to: "issues#issue_graphic_data"
+
   resources :users, shallow: true do
     resources :projects do
       resources :releases do

@@ -45,6 +45,10 @@ module Adapter
       @client.list_issues(github_slug)
     end
 
+    def list_all_issues(github_slug)
+      @client.list_issues(github_slug, state: "all")
+    end
+
     def create_issue(github_slug, issue_params)
       @client.create_issue(github_slug, issue_params[:name], issue_params[:body])
     end
