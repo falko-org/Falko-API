@@ -24,7 +24,7 @@ gem "rest-client"
 gem "travis", "~> 1.8", ">= 1.8.8"
 
 # Gem used to implement methods of Active Record's Observer pattern
-gem 'rails-observers', '~> 0.1.5'
+gem "rails-observers", "~> 0.1.5"
 
 gem "codeclimate-test-reporter", group: :test, require: nil
 

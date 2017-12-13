@@ -50,7 +50,7 @@ module ValidationsHelper
       @release = Release.find(params[:release_id].to_i)
     elsif component_type == "earned_value_management" && current_id != 0
       id = current_id
-      @evm = EarnedValueManagement.find(params[:id].to_i) 
+      @evm = EarnedValueManagement.find(params[:id].to_i)
     elsif component_type == "earned_value_management" && previous_id != 0
       earned_value_management_id = previous_id
       @evm = EarnedValueManagement.find(params[:earned_value_management_id].to_i)
@@ -98,7 +98,7 @@ module ValidationsHelper
       render json: { error: "Not Authorized" }, status: 401
     end
   end
-  
+
   def validate_earned_value_management(id, earned_value_management_id)
     current_user
     verifies_id(id, earned_value_management_id, "earned_value_management")

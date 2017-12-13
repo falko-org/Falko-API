@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class EvmSprintTest < ActiveSupport::TestCase
   # test "the truth" do

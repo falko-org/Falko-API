@@ -1,7 +1,7 @@
-require 'test_helper'
+require "test_helper"
 
 class EarnedValueManagementTest < ActiveSupport::TestCase
- 	def setup
+  def setup
     @user = User.create(
       name: "Ronaldo",
       email: "Ronaldofenomeno@gmail.com",
@@ -25,40 +25,40 @@ class EarnedValueManagementTest < ActiveSupport::TestCase
       final_date: "02/02/2019",
       project_id: @project.id
     )
-    
+
     @evm = EarnedValueManagement.create(
-     	budget_actual_cost: "20",
-     	planned_release_points: "20",
-			planned_sprints: "9",
-			release_id: @release.id
+      budget_actual_cost: "20",
+       planned_release_points: "20",
+      planned_sprints: "9",
+      release_id: @release.id
     )
-  end
+ end
 
   test "should save a valid evm" do
-  	assert @evm.save
+    assert @evm.save
   end
 
   test "should not save a evm without a release" do
-  	@evm.release_id = nil
-  	assert_not @evm.save
+    @evm.release_id = nil
+    assert_not @evm.save
   end
 
   test "should not save evm with blank budget_actual_cost" do
-  	@evm.budget_actual_cost = ""
-  	assert_not @evm.save
+    @evm.budget_actual_cost = ""
+    assert_not @evm.save
   end
 
   test "should not save evm with blank planned_release_points" do
-  	@evm.planned_release_points = ""
-  	assert_not @evm.save
+    @evm.planned_release_points = ""
+    assert_not @evm.save
   end
 
   test "should not create evm with negative parameters" do
-  	@wrong_evm = EarnedValueManagement.create(
-  		budget_actual_cost: "-1",
-  		planned_release_points: "-1",
-  		planned_sprints: "30"		
-  	)
-  	assert_not @wrong_evm.save
+    @wrong_evm = EarnedValueManagement.create(
+      budget_actual_cost: "-1",
+      planned_release_points: "-1",
+      planned_sprints: "30"
+    )
+    assert_not @wrong_evm.save
   end
 end

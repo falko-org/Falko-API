@@ -24,5 +24,4 @@ class EvmSprint < ApplicationRecord
   # schedule_performance_index
   # estimate_to_complete
   # estimate_at_complete
-
 end
