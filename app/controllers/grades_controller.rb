@@ -8,7 +8,7 @@ class GradesController < ApplicationController
   end
 
   before_action only: [:show, :update] do
-    validate_release(:id, 0)
+    validate_grade(:id, 0)
   end
 
   def index

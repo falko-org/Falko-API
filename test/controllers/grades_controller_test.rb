@@ -64,6 +64,14 @@ class GradeControllerTest < ActionDispatch::IntegrationTest
       is_project_from_github: true
     )
 
+    @has_grade_project = Project.create(
+      name: "Futebol",
+      description: "Deion.",
+      user_id: @another_user.id,
+      is_project_from_github: true
+    )
+
+
     @another_release = Release.create(
       name: "Real Madrid",
       description: "Deions",
@@ -103,17 +111,23 @@ class GradeControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
   end
 
-#   test "should not create multiple grades" do
-#   post "/projects/#{@project.id}/grades", params: {
-#      "grade": {
-#        "weight_debts": "1",
-#        "weight_velocity": "1",
-#        "weight_burndown": "1"
-#      }
-#    }, headers: { Authorization: @token.result }
-#
-#   assert_response :forbidden
-# end
+  test "should not create multiple grades" do
+    @old_weight_debts = @grade.weight_debts
+    @old_weight_burndown = @grade.weight_burndown
+    @old_weight_velocity = @grade.weight_velocity
+    post "/projects/#{@project.id}/grades", params: {
+     "grade": {
+       "weight_debts": "2",
+       "weight_velocity": "2",
+       "weight_burndown": "2"
+     }
+     }, headers: { Authorization: @token.result }
+
+    assert_equal @old_weight_debts, @grade.weight_debts
+    assert_equal @old_weight_burndown, @grade.weight_burndown
+    assert_equal @old_weight_velocity, @grade.weight_velocity
+    assert_response :ok
+  end
 
   test "should not create grade without correct params" do
     post "/projects/#{@no_grade_project.id}/grades", params: {
@@ -168,12 +182,12 @@ class GradeControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  # test "should not get grades show without authentication" do
-  #   get "/grades/#{@grade.id}"
-  #
-  #   assert_response :unauthorized
-  # end
-  #
+  test "should not get grades show without authentication" do
+    get "/grades/#{@grade.id}"
+
+    assert_response :unauthorized
+  end
+
   # test "should get grades show" do
   #   get "/grades/#{@grade.id}", headers: { Authorization: @token.result }
   #

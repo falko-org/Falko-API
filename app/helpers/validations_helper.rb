@@ -11,6 +11,10 @@ module ValidationsHelper
     @project = Project.find(@release.project_id)
   end
 
+  def project_grade
+    @project = Project.find(@grade.project.id)
+  end
+
   def release
     @release = Release.find(@sprint.release_id)
   end
@@ -86,7 +90,7 @@ module ValidationsHelper
   def validate_grade(id, grade_id)
     current_user
     verifies_id(id, grade_id, "grade")
-    project
+    project_grade
     user
 
     if @current_user.id == @user.id
