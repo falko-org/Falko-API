@@ -11,7 +11,7 @@ class GradeTest < ActiveSupport::TestCase
 
     @project = Project.create(
       name: "Falko",
-      description: "Esse projeto faz parte da disciplina MDS.",
+      description: "This project is part of the course MDS.",
       is_project_from_github: true,
       user_id: @user.id,
       is_scoring: false
@@ -27,7 +27,7 @@ class GradeTest < ActiveSupport::TestCase
 
     @sprint = Sprint.create(
       name: "Sprint1",
-      description: "Essa sprint",
+      description: "This sprint.",
       initial_date: "23-04-1993",
       final_date: "23-04-2003",
       release_id: @release.id

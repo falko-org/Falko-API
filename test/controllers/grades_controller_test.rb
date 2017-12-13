@@ -58,14 +58,14 @@ class GradeControllerTest < ActionDispatch::IntegrationTest
     )
 
     @another_project = Project.create(
-      name: "Futebol",
+      name: "Soccer",
       description: "Deion.",
       user_id: @another_user.id,
       is_project_from_github: true
     )
 
     @has_grade_project = Project.create(
-      name: "Futebol",
+      name: "Soccer",
       description: "Deion.",
       user_id: @another_user.id,
       is_project_from_github: true
