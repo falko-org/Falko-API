@@ -6,8 +6,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       name: "Ronaldo",
       email: "Ronaldofenomeno@gmail.com",
       password: "123456789",
-      password_confirmation: "123456789",
-      github: "ronaldobola"
+      password_confirmation: "123456789"
     )
 
     @project = Project.create(
@@ -99,8 +98,7 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
       name: "Ronaldo 2",
       email: "Ronaldofenomeno1@gmail.com",
       password: "123456789",
-      password_confirmation: "123456789",
-      github: "ronaldobola2"
+      password_confirmation: "123456789"
     )
 
     @another_project = Project.create(
