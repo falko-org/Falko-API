@@ -3,9 +3,9 @@
 one:
   weight_burndown: 
   weight_velocity: 
-  weight_debt: 
+  weight_debts: 
 
 two:
   weight_burndown: 
   weight_velocity: 
-  weight_debt: 
+  weight_debts: 
