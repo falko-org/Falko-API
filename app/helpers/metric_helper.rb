@@ -4,27 +4,31 @@ module MetricHelper
 
   def get_metrics(grade)
     last_release = grade.project.releases.last
-    # if last_release.blank?
-    #   raise HasNoReleases.new(message: "HasNoReleases")
-    # else
+    if last_release.blank?
+      return nil
+    else
       metrics = calculate_metrics(last_release)
 
-      sum_of_weights = grade.weight_debts + grade.weight_velocity + grade.weight_burndown
+      if metrics.blank?
+        final_metric = 0
+      else
+        sum_of_weights = grade.weight_debts + grade.weight_velocity + grade.weight_burndown
 
-      final_metric = (Float (grade.weight_debts * metrics[:metric_debts_value]) +
-                            (grade.weight_velocity * metrics[:metric_velocity_value]) +
-                            (grade.weight_burndown * metrics[:metric_burndown_value])) /
-                            sum_of_weights
+        final_metric = (Float (grade.weight_debts * metrics[:metric_debts_value]) +
+                              (grade.weight_velocity * metrics[:metric_velocity_value]) +
+                              (grade.weight_burndown * metrics[:metric_burndown_value])) /
+                              sum_of_weights
+      end
 
       return final_metric.round(1)
-    # end
+    end
   end
 
   def calculate_metrics(release)
     sprint = release.sprints.last
-    # if sprint.blank?
-    #   raise HasNoSprints.new(message: "HasNoSprints")
-    # else
+    if sprint.blank? || sprint.stories.blank?
+      return nil
+    else
       if release.project.is_scoring == true
         burned_stories = {}
         date_axis = []
@@ -77,7 +81,7 @@ module MetricHelper
                     metric_velocity_value: metric_velocity_value,
                     metric_burndown_value: metric_burndown_value }
       end
-    # end
+    end
   end
 
   def calculate_velocity_and_debt(metric)
