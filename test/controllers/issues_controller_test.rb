@@ -122,6 +122,28 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "should reopen a issue" do
+    mock = Minitest::Mock.new
+    def mock.code
+      200
+    end
+
+    def mock.reopen_issue(name,body)
+      Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3")
+    end
+
+    Adapter::GitHubIssue.stub :new, mock do
+      post "/projects/#{@project.id}/reopen_issue", params: {
+        issue: {
+          "name": "Second Issue",
+          "body": "New Body"
+        }
+      }, headers: { Authorization: @token.result }
+    end
+    assert_response :success
+
+  end
+
   test "should not create issues if user is not logged in" do
 
     mock = Minitest::Mock.new
