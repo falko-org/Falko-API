@@ -87,6 +87,7 @@ class SprintsController < ApplicationController
       set_ideal_line(days_of_sprint, ideal_line, total_points)
 
       coordenates = { x: date_axis, y: points_axis, ideal_line: ideal_line }
+
       burned_stories = burned_stories.sort_by { |key, value| key }
 
       render json: coordenates
