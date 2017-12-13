@@ -46,7 +46,6 @@ class GradeTest < ActiveSupport::TestCase
       weight_velocity: "1",
       project_id: @project.id
     )
-
   end
 
   test "should save a grade" do
@@ -67,5 +66,4 @@ class GradeTest < ActiveSupport::TestCase
     @grade.weight_velocity = nil
     assert_not @grade.save
   end
-
 end
