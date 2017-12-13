@@ -394,43 +394,4 @@ class SprintsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
     assert response.parsed_body["error"] == "The Velocity is only available in projects that use Story Points"
   end
-
-  test "should get velocity metric data if project is scoring" do
-    get "/sprints/#{@sprint.id}/velocity_metric", headers: { Authorization: @token.result }
-
-    assert_response :success
-  end
-
-  test "should not get velocity metric data if project is not scoring" do
-    get "/sprints/#{@sprint_scoring_false.id}/velocity_metric", headers: { Authorization: @token.result }
-
-    assert_response :unprocessable_entity
-    assert response.parsed_body["error"] == "The Velocity metric is only available in projects that use Story Points"
-  end
-
-  test "should get burndown metric data if project is scoring" do
-    get "/sprints/#{@sprint.id}/burndown_metric", headers: { Authorization: @token.result }
-
-    assert_response :success
-  end
-
-  test "should not get burndown metric data if project is not scoring" do
-    get "/sprints/#{@sprint_scoring_false.id}/burndown_metric", headers: { Authorization: @token.result }
-
-    assert_response :unprocessable_entity
-    assert response.parsed_body["error"] == "The Burndown metric is only available in projects that use Story Points"
-  end
-
-  test "should get debts from a project if it is scoring" do
-    get "/sprints/#{@sprint.id}/debts", headers: { Authorization: @token.result }
-
-    assert_response :success
-  end
-
-  test "should not get debts from a project if it is not scoring" do
-    get "/sprints/#{@sprint_scoring_false.id}/debts", headers: { Authorization: @token.result }
-
-    assert_response :unprocessable_entity
-    assert response.parsed_body["error"] == "Debts is only available in projects that use Story Points"
-  end
 end
