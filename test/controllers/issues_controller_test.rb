@@ -122,6 +122,28 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "should reopen a issue" do
+    mock = Minitest::Mock.new
+    def mock.code
+      200
+    end
+
+    def mock.reopen_issue(name, body)
+      Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: name, body: body, number: "3")
+    end
+
+    Adapter::GitHubIssue.stub :new, mock do
+      post "/projects/#{@project.id}/reopen_issue", params: {
+        issue: {
+          "name": "Second Issue",
+          "body": "New Body"
+        }
+      }, headers: { Authorization: @token.result }
+    end
+    assert_response :success
+
+  end
+
   test "should not create issues if user is not logged in" do
 
     mock = Minitest::Mock.new
@@ -360,5 +382,47 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
       }, headers: { Authorization: @token.result }
     end
     assert_response :not_found
+  end
+
+  test "should to see issues graphic if issues was created last month" do
+
+    mock = Minitest::Mock.new
+
+    def mock.get_github_user()
+      Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
+    end
+
+    def mock.list_all_issues(name)
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, id: 10, body: "This is a template body", created_at: "07/09/2017", closed_at: "12/09/2017") ]
+    end
+
+    Adapter::GitHubIssue.stub :new, mock do
+      post "/projects/#{@project.id}/issues/graphic", params: {
+          actual_date: "07/10/2017",
+          option: "month"
+      }, headers: { Authorization: @token.result }
+    end
+    assert_response :success
+  end
+
+  test "should to see issues graphic if issues was created two months ago" do
+
+    mock = Minitest::Mock.new
+
+    def mock.get_github_user()
+      Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
+    end
+
+    def mock.list_all_issues(name)
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: 9, id: 10, body: "This is a template body", created_at: "07/08/2017", closed_at: "12/08/2017") ]
+    end
+
+    Adapter::GitHubIssue.stub :new, mock do
+      post "/projects/#{@project.id}/issues/graphic", params: {
+          actual_date: "07/10/2017",
+          option: "month"
+      }, headers: { Authorization: @token.result }
+    end
+    assert_response :success
   end
 end
