@@ -1,13 +1,13 @@
 class GradesController < ApplicationController
   include MetricHelper
-  
+
   before_action :set_grade, only: [:show, :update, :destroy]
 
   before_action only: [:index, :create] do
     validate_project(0, :project_id)
   end
 
-  before_action only: [:show, :update, :destroy] do
+  before_action only: [:show, :update] do
     validate_release(:id, 0)
   end
 
@@ -18,7 +18,7 @@ class GradesController < ApplicationController
 
   def create
     if @project.grade.blank?
-      grade = Grade.new(grade_params)    
+      grade = Grade.new(grade_params)
       grade.project = @project
 
       if grade.save
