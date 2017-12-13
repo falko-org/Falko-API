@@ -123,12 +123,24 @@ class IssuesController < ApplicationController
       @form_params = { issues_infos: [] }
       if issue.kind_of?(Array)
         @issues.each do |issue|
-          @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body, issue_id: issue.id)
+          assignees = assingnee_counter(issue)
+          @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body, issue_id: issue.id, assignees: assignees)
         end
       else
-        @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body, issue_id: issue.id)
+        assignees = assingnee_counter(issue)
+        @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body, issue_id: issue.id, assignees: assignees)
       end
       @form_params
+    end
+
+    def assingnee_counter(issue)
+      if issue.assignees.count > 0
+        assignees = []
+        issue.assignees.each do |assignee|
+          assignees.push(assignee.login)
+        end
+      end
+      assignees
     end
 
     def issue_params
