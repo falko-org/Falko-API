@@ -9,8 +9,12 @@ done
 
 >&2 echo "Postgres is up - executing command"
 
-bundle exec rails db:create
-bundle exec rails db:migrate
+if bundle exec rake db:exists; then
+  bundle exec rake db:migrate
+else
+  bundle exec rake db:create
+  bundle exec rails db:migrate
+fi
 
 pidfile='/Falko-2017.2-BackEnd/tmp/pids/server.pid'
 
@@ -20,4 +24,3 @@ if [ -f $pidfile ] ; then
 fi
 
 bundle exec puma -C config/puma.rb
-#bundle exec rails s -p 3000 -b 0.0.0.0
