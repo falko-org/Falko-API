@@ -19,6 +19,12 @@ ENV RAILS_ENV=production
 
 ENV BUNDLE_PATH /bundle-cache
 
+# Client ID provided by the GitHub Prod app
+ENV CLIENT_ID=cbd5f91719282354f09b
+
+# Client secret provided by the GitHub Prod app
+ENV CLIENT_SECRET=634dd13c943b8196d4345334031c43d6d5a75fc8
+
 COPY . /Falko-2017.2-BackEnd
 
 COPY Gemfile /Falko-2017.2-BackEnd/Gemfile

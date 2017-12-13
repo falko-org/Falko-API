@@ -18,46 +18,35 @@ class ProjectsController < ApplicationController
     render json: @projects
   end
 
-  def get_gpa
-    project = Project.find(params[:id])
-    github_slug = project.github_slug
-    result = RestClient.get("http://api.codeclimate.com/v1/repos?github_slug=#{github_slug}")
-    result_json = JSON.parse(result)
-    score = result_json["data"][0]["attributes"]["score"]
-
-    render json: score
-  end
-
   def github_projects_list
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    @client = Octokit::Client.new(access_token: @current_user.access_token)
+    client = Adapter::GitHubProject.new(request)
 
-    user_login = @client.user.login
+    user_login = client.get_github_user
+
+    @form_params_user = { user: [] }
+    @form_params_user[:user].push(login: user_login)
+
     user_repos = []
-    @repos = @client.repositories(user_login)
-    @form_params = { user: [] }
-    @form_params[:user].push(login: user_login)
 
-    @repos.each do |repo|
+    (client.get_github_repos(user_login)).each do |repo|
       user_repos.push(repo.name)
     end
-    @form_params[:user].push(repos: user_repos)
 
-    @orgs = @client.organizations(user_login)
-    @form_params2 = { orgs: [] }
-    @orgs.each do |org|
-      repos = @client.organization_repositories(org.login)
+    @form_params_user[:user].push(repos: user_repos)
+
+    @form_params_orgs = { orgs: [] }
+
+    (client.get_github_orgs(user_login)).each do |org|
       repos_names = []
-      repos.each do |repo|
+      (client.get_github_orgs_repos(org)).each do |repo|
         repos_names.push(repo.name)
       end
-      @form_params2[:orgs].push(name: org.login, repos: repos_names)
+      @form_params_orgs[:orgs].push(name: org.login, repos: repos_names)
     end
 
-    @form_params3 = @form_params2.merge(@form_params)
+    @form_params_user_orgs = @form_params_orgs.merge(@form_params_user)
 
-
-    render json: @form_params3
+    render json: @form_params_user_orgs
   end
 
   def show
@@ -67,8 +56,6 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.create(project_params)
     @project.user_id = @current_user.id
-
-    puts @project.github_slug
 
     if @project.save
       render json: @project, status: :created
@@ -90,12 +77,11 @@ class ProjectsController < ApplicationController
   end
 
   def get_contributors
-    @current_user = AuthorizeApiRequest.call(request.headers).result
-    @client = Octokit::Client.new(access_token: @current_user.access_token)
+    client = Adapter::GitHubProject.new(request)
 
     contributors = []
 
-    @client.contributors(@project.github_slug).each do |contributor|
+    (client.get_contributors(@project.github_slug)).each do |contributor|
       contributors.push(contributor.login)
     end
 

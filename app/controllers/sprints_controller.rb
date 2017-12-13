@@ -1,5 +1,8 @@
 class SprintsController < ApplicationController
   include ValidationsHelper
+  include VelocityHelper
+  include BurndownHelper
+  include MetricHelper
 
   before_action :set_sprint, only: [:show, :update, :destroy, :get_burndown]
 
@@ -7,7 +10,7 @@ class SprintsController < ApplicationController
     validate_release(0, :release_id)
   end
 
-  before_action only: [:show, :update, :destroy] do
+  before_action only: [:show, :update, :destroy, :get_velocity, :get_metrics] do
     validate_sprint(:id, 0)
   end
 
@@ -54,43 +57,45 @@ class SprintsController < ApplicationController
     update_amount_of_sprints
   end
 
+  def get_velocity
+    release = @sprint.release
+    if release.project.is_scoring == true
+      velocity = get_sprints_informations(release.sprints, @sprint)
+
+      render json: velocity
+    else
+      render json: { error: "The Velocity is only available in projects that use Story Points" }, status: :unprocessable_entity
+    end
+  end
+
   def get_burndown
     project = @sprint.release.project
-    if project.is_scoring != false
-      total_points = 0
+    if project.is_scoring == true
       burned_stories = {}
       coordenates = []
+      date_axis = []
+      points_axis = []
+      ideal_line = []
 
-      for story in @sprint.stories
-        total_points += story.story_points
-        if story.pipeline == "Done"
-          if burned_stories[story.final_date] == nil
-            burned_stories[story.final_date] = story.story_points
-          else
-            burned_stories[story.final_date] += story.story_points
-          end
-        end
-      end
+      total_points = get_total_points(@sprint)
+      burned_stories = get_burned_points(@sprint, burned_stories)
 
+      range_dates = (@sprint.initial_date .. @sprint.final_date)
 
-      range = (@sprint.initial_date .. @sprint.final_date)
+      set_dates_and_points(burned_stories, date_axis, points_axis, range_dates, total_points)
+      days_of_sprint = date_axis.length - 1
+      set_ideal_line(days_of_sprint, ideal_line, total_points)
 
-      range.each do |date|
-        if burned_stories[date] == nil
-          burned_stories[date] = total_points
-        else
-          total_points -= burned_stories[date]
-          burned_stories[date] = total_points
-        end
-        coordanate = { x: date, y: burned_stories[date] }
-        coordenates.push(coordanate)
-      end
+      coordenates = { x: date_axis, y: points_axis, ideal_line: ideal_line }
+
       burned_stories = burned_stories.sort_by { |key, value| key }
+
       render json: coordenates
     else
       render json: { error: "The Burndown Chart is only available in projects that use Story Points" }, status: :unprocessable_entity
     end
   end
+
   private
     def set_sprint
       @sprint = Sprint.find(params[:id])

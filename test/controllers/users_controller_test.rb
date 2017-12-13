@@ -6,15 +6,17 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       name: "Ronaldo",
       email: "ronaldofenomeno@gmail.com",
       password: "123456789",
-      password_confirmation: "123456789",
-      github: "ronaldobola"
+      password_confirmation: "123456789"
     )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
   end
 
   test "should login in" do
-    post "/authenticate", params: { email: "ronaldofenomeno@gmail.com", password: "123456789" }
+    post "/authenticate", params: {
+      email: "ronaldofenomeno@gmail.com",
+      password: "123456789"
+    }
 
     assert_response :success
   end
@@ -26,8 +28,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
           "email": "robakasdddi@email.com",
           "name": "Fulvvano",
           "password": "123456789",
-          "password_confirmation": "123456789",
-          "github": "fulanao"
+          "password_confirmation": "123456789"
         }
       }, headers: { Authorization: @token.result }
 
@@ -36,13 +37,19 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
  end
 
   test "should login with rights params" do
-    post "/authenticate", params: { email: "ronaldofenomeno@gmail.com", password: "123456789" }
+    post "/authenticate", params: {
+      email: "ronaldofenomeno@gmail.com",
+      password: "123456789"
+    }
 
     assert_response :success
   end
 
   test "should not login with wrongs params" do
-    post "/authenticate", params: { email: "fenomeno@gmail.com", password: "123456789" }
+    post "/authenticate", params: {
+      email: "fenomeno@gmail.com",
+      password: "123456789"
+    }
 
     assert_response :unauthorized
   end
@@ -54,8 +61,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
           "email": "robakasdddi@email.com",
           "name": "Fulvvano",
           "password": "123456789",
-          "password_confirmation": "123456789",
-          "github": "fulanao"
+          "password_confirmation": "123456789"
         }
       }
 
@@ -70,8 +76,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
           "email": "robakasdddi@email.com",
           "name": "Fu",
           "password": "123456789",
-          "password_confirmation": "123456789",
-          "github": "fulanao"
+          "password_confirmation": "123456789"
         }
       }
 
@@ -86,8 +91,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
           "email": "robakasdddi@email.com",
           "name": "F" * 81,
           "password": "123456789",
-          "password_confirmation": "123456789",
-          "github": "fulanao"
+          "password_confirmation": "123456789"
         }
       }
 
@@ -112,7 +116,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     patch "/users/#{@user.id}", params: {
       "user": {
         "name": "Fulvvano123",
-        "github": "fulanao123"
       }
     }, headers: { Authorization: @token.result }
 
@@ -126,7 +129,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       "user": {
         "email": "robakasdddi@email.com",
         "name": "Fulvvano",
-        "github": "fulanao"
       }
     }
     @user.reload
@@ -140,8 +142,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         "email": "robakasdddi@email.com",
         "name": "Fulvvano",
         "password": "12345",
-        "password_confirmation": "123456789",
-        "github": "fulanao"
+        "password_confirmation": "123456789"
        }
      }, headers: { Authorization: @token.result }
     @user.reload
