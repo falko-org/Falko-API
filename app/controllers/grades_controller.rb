@@ -42,8 +42,8 @@ class GradesController < ApplicationController
   def show
     # issue: Caso o projeto não tenha releases ou a release não tenha sprints, isto deve ser tratado
     # begin
-      final_metric = get_metrics(@grade)
-      render json: final_metric
+    final_metric = get_metrics(@grade)
+    render json: final_metric
     # rescue HasNoSprints
     #   render json: { errors: "Could not calculate grade. This release has no sprints" },
     #     status: :unprocessable_entity

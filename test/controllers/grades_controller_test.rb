@@ -123,6 +123,8 @@ class GradeControllerTest < ActionDispatch::IntegrationTest
      }
      }, headers: { Authorization: @token.result }
 
+    @grade.reload
+    
     assert_equal @old_weight_debts, @grade.weight_debts
     assert_equal @old_weight_burndown, @grade.weight_burndown
     assert_equal @old_weight_velocity, @grade.weight_velocity
@@ -188,103 +190,101 @@ class GradeControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  # test "should get grades show" do
-  #   get "/grades/#{@grade.id}", headers: { Authorization: @token.result }
-  #
-  #   assert_response :success
-  # end
-  #
-  # test "should not get grades show of another user" do
-  #   get "/grades/#{@grade.id}", headers: { Authorization: @another_token.result }
-  #
-  #   assert_response :unauthorized
-  # end
-  #
-  # test "should edit grades" do
-  #   @old_weight_debts = @grade.weight_debts
-  #   @old_weight_burndown = @grade.weight_burndown
-  #   @old_weight_velocity = @grade.weight_velocity
-  #
-  #   patch "/grades/#{@grade.id}", params: {
-  #     grade: {
-  #       weight_debts: "3",
-  #       weight_burndown: "3",
-  #       weight_velocity: "3",
-  #     }
-  #   }, headers: { Authorization: @token.result }
-  #
-  #   @grade.reload
-  #
-  #   assert_response :ok
-  #   assert_not_equal @old_weight_debts, @grade.weight_debts
-  #   assert_not_equal @old_weight_burndown, @grade.weight_burndown
-  #   assert_not_equal @old_weight_velocity, @grade.weight_velocity
-  # end
-  #
-  # test "should not edit grade without authentication" do
-  #   @old_weight_debts = @grade.weight_debts
-  #   @old_weight_burndown = @grade.weight_burndown
-  #   @old_weight_velocity = @grade.weight_velocity
-  #
-  #   patch "/grades/#{@grade.id}", params: {
-  #     grade: {
-  #       weight_debts: "3",
-  #       weight_burndown: "3",
-  #       weight_velocity: "3",
-  #     }
-  #   }
-  #
-  #   @grade.reload
-  #
-  #   assert_response :unauthorized
-  #   assert_not_equal @old_weight_debts, @grade.weight_debts
-  #   assert_not_equal @old_weight_burndown, @grade.weight_burndown
-  #   assert_not_equal @old_weight_velocity, @grade.weight_velocity
-  # end
-  #
-  # test "should not edit grade with wrong params" do
-  #   @old_weight_debts = @grade.weight_debts
-  #
-  #   patch "/grades/#{@grade.id}", params: {
-  #     grade: {
-  #       weight_debts: "1",
-  #     }
-  #   }, headers: { Authorization: @token.result }
-  #
-  #   @grade.reload
-  #
-  #   assert_response :unprocessable_entity
-  #   assert_equal @old_weight_debts, @grade.weight_debts
-  # end
+  test "should get grades show" do
+    get "/grades/#{@grade.id}", headers: { Authorization: @token.result }
+  
+    assert_response :success
+  end
+  
+  test "should not get grades show of another user" do
+    get "/grades/#{@grade.id}", headers: { Authorization: @another_token.result }
+  
+    assert_response :unauthorized
+  end
+  
+  test "should edit grades" do
+    @old_weight_debts = @grade.weight_debts
+    @old_weight_burndown = @grade.weight_burndown
+    @old_weight_velocity = @grade.weight_velocity
+  
+    patch "/grades/#{@grade.id}", params: {
+      grade: {
+        weight_debts: "3",
+        weight_burndown: "3",
+        weight_velocity: "3",
+      }
+    }, headers: { Authorization: @token.result }
+  
+    @grade.reload
+  
+    assert_response :ok
+    assert_not_equal @old_weight_debts, @grade.weight_debts
+    assert_not_equal @old_weight_burndown, @grade.weight_burndown
+    assert_not_equal @old_weight_velocity, @grade.weight_velocity
+  end
 
-  # test "should not edit grade with blank params" do
-  #   @old_weight_debts = @grade.weight_debts
-  #   @old_weight_debts = @grade.weight_debts
-  #
-  #   patch "/grades/#{@grade.id}", params: {
-  #     grade: {
-  #       weight_debts: ""
-  #     }
-  #   }, headers: { Authorization: @token.result }
-  #
-  #   @grade.reload
-  #
-  #   assert_response :unprocessable_entity
-  #   assert_equal @old_weight_debts, @grade.weight_debts
-  #   assert_equal @old_weight_debts, @grade.weight_debts
-  # end
+  test "should not edit grade without authentication" do
+    @old_weight_debts = @grade.weight_debts
+    @old_weight_burndown = @grade.weight_burndown
+    @old_weight_velocity = @grade.weight_velocity
 
-  # test "should not edit grades of another user" do
-  #   patch "/grades/#{@grade.id}", params: {
-  #     grade: {
-  #       weight_debts: "3",
-  #       weight_burndown: "3",
-  #       weight_velocity: "3",
-  #     }
-  #   }, headers: { Authorization: @another_token.result }
-  #
-  #   assert_response :unauthorized
-  # end
+    patch "/grades/#{@grade.id}", params: {
+      grade: {
+        weight_debts: "3",
+        weight_burndown: "3",
+        weight_velocity: "3",
+      }
+    }
+
+    assert_response :unauthorized
+    assert_equal @old_weight_debts, @grade.weight_debts
+    assert_equal @old_weight_burndown, @grade.weight_burndown
+    assert_equal @old_weight_velocity, @grade.weight_velocity
+  end
+  
+  test "should not edit grade with wrong params" do
+    @old_weight_debts = @grade.weight_debts
+  
+    patch "/grades/#{@grade.id}", params: {
+      grade: {
+        weight_debts: "2",
+      }
+    }, headers: { Authorization: @token.result }
+  
+    @grade.reload
+  
+    assert_response :ok
+    assert_not_equal @old_weight_debts, @grade.weight_debts
+  end
+
+  test "should not edit grade with blank params" do
+    @old_weight_debts = @grade.weight_debts
+    @old_weight_debts = @grade.weight_debts
+  
+    patch "/grades/#{@grade.id}", params: {
+      grade: {
+        weight_debts: ""
+      }
+    }, headers: { Authorization: @token.result }
+  
+    @grade.reload
+  
+    assert_response :unprocessable_entity
+    assert_equal @old_weight_debts, @grade.weight_debts
+    assert_equal @old_weight_debts, @grade.weight_debts
+  end
+
+  test "should not edit grades of another user" do
+    patch "/grades/#{@grade.id}", params: {
+      grade: {
+        weight_debts: "3",
+        weight_burndown: "3",
+        weight_velocity: "3",
+      }
+    }, headers: { Authorization: @another_token.result }
+  
+    assert_response :unauthorized
+  end
 
   test "should destroy grade" do
     assert_difference("Grade.count", -1) do
