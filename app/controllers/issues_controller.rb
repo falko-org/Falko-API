@@ -134,8 +134,8 @@ class IssuesController < ApplicationController
     end
 
     def assingnee_counter(issue)
+      assignees = []
       if issue.assignees.count > 0
-        assignees = []
         issue.assignees.each do |assignee|
           assignees.push(assignee.login)
         end
