@@ -16,7 +16,7 @@ module MetricHelper
                             (grade.weight_burndown * metrics[:metric_burndown_value])) /
                             sum_of_weights
 
-      return final_metric
+      return final_metric.round(1)
     # end
   end
 
