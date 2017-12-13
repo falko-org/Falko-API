@@ -19,9 +19,11 @@ ENV RAILS_ENV=production
 
 ENV BUNDLE_PATH /bundle-cache
 
-ENV CLIENT_ID=1254ef5e2765397c4fb4
+# Client ID provided by the GitHub Prod app
+ENV CLIENT_ID=cbd5f91719282354f09b
 
-ENV CLIENT_SECRET=c566f60e74a49bd8e664033e2978a31d3b39748d
+# Client secret provided by the GitHub Prod app
+ENV CLIENT_SECRET=634dd13c943b8196d4345334031c43d6d5a75fc8
 
 COPY . /Falko-2017.2-BackEnd
 

@@ -1,6 +1,8 @@
 require "rest-client"
 
 class IssuesController < ApplicationController
+  include IssueGraphicHelper
+
   before_action :set_authorization, except: [:update_assignees]
   before_action :set_project
 
@@ -54,6 +56,26 @@ class IssuesController < ApplicationController
     render status: :ok
   end
 
+  def issue_graphic_data
+    client = Adapter::GitHubIssue.new(request)
+
+    @issues = client.list_all_issues(@project.github_slug)
+
+    if @issues.count != 0
+
+      actual_date = params[:actual_date].to_date
+      option = params[:option]
+
+      data_of_issues = {}
+
+      data_of_issues = get_issues_graphic(actual_date, option, @issues)
+
+      render json: data_of_issues
+    else
+      render json: { error: "Issues don't exists" }, status: :not_found
+    end
+  end
+
   def reopen_issue
     client = Adapter::GitHubIssue.new(request)
 
@@ -90,7 +112,11 @@ class IssuesController < ApplicationController
     end
 
     def set_project
-      @project = Project.find(params[:id])
+      begin
+        @project = Project.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        render json: { errors: "Project not found" }, status: :not_found
+      end
     end
 
     def convert_form_params(issue)
