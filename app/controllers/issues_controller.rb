@@ -124,11 +124,11 @@ class IssuesController < ApplicationController
       if issue.kind_of?(Array)
         @issues.each do |issue|
           assignees = assingnee_counter(issue)
-          @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body, issue_id: issue.id, assignees: assignees)
+          @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body, issue_id: issue.id, assignees: assignees) unless issue.pull_request
         end
       else
         assignees = assingnee_counter(issue)
-        @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body, issue_id: issue.id, assignees: assignees)
+        @form_params[:issues_infos].push(name: issue.title, number: issue.number, body: issue.body, issue_id: issue.id, assignees: assignees) unless issue.pull_request
       end
       @form_params
     end
