@@ -87,7 +87,6 @@ class SprintsController < ApplicationController
           end
         end
       end
-    
       planned_points = total_points
 
       range = (@sprint.initial_date .. @sprint.final_date)

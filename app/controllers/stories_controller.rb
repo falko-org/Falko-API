@@ -63,7 +63,7 @@ class StoriesController < ApplicationController
 
   def update
     if story_params[:pipeline] == "Done"
-        @story.final_date = Date.today
+      @story.final_date = Date.today
     end
     if @story.update(story_params)
       render json: @story
