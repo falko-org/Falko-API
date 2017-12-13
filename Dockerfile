@@ -19,6 +19,10 @@ ENV RAILS_ENV=production
 
 ENV BUNDLE_PATH /bundle-cache
 
+ENV CLIENT_ID=1254ef5e2765397c4fb4
+
+ENV CLIENT_SECRET=c566f60e74a49bd8e664033e2978a31d3b39748d
+
 COPY . /Falko-2017.2-BackEnd
 
 COPY Gemfile /Falko-2017.2-BackEnd/Gemfile
