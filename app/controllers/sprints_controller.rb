@@ -78,6 +78,7 @@ class SprintsController < ApplicationController
 
       for story in @sprint.stories
         total_points += story.story_points
+
         if story.pipeline == "Done"
           if burned_stories[story.final_date] == nil
             burned_stories[story.final_date] = story.story_points
@@ -86,12 +87,12 @@ class SprintsController < ApplicationController
           end
         end
       end
-
+    
       planned_points = total_points
 
       range = (@sprint.initial_date .. @sprint.final_date)
-
       range.each do |date|
+
         if burned_stories[date] == nil
           burned_stories[date] = total_points
         else
@@ -109,6 +110,7 @@ class SprintsController < ApplicationController
       end
 
       coordenates = { x: date_axis, y: points_axis, ideal_line: ideal_line }
+
       burned_stories = burned_stories.sort_by { |key, value| key }
 
       render json: coordenates
