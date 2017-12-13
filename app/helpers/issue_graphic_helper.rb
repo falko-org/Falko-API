@@ -10,14 +10,21 @@ module IssueGraphicHelper
       dates = [(actual_date - 2.month).strftime("%B"), (actual_date - 1.month).strftime("%B"), (actual_date).strftime("%B")]
     end
 
+
     issues.each do |issue|
-      if issue.created_at.to_date <= actual_date && issue.created_at.to_date >= first_date
-        interval_issues(issue, total_open_issues, actual_date)
-        interval_issues(issue, total_closed_issues, actual_date)
-      end
+      increase_issues(issue, actual_date, total_open_issues, total_closed_issues, first_date)
     end
     number_of_issues = { opened_issues: total_open_issues, closed_issues: total_closed_issues, months: dates }
     return number_of_issues
+  end
+
+  def increase_issues(issue, actual_date, total_open_issues, total_closed_issues, first_date)
+    if issue.created_at.to_date <= actual_date && issue.created_at.to_date >= first_date
+      interval_issues(issue, total_open_issues, actual_date)
+      if issue.closed_at != nil
+        interval_issues(issue, total_closed_issues, actual_date)
+      end
+    end
   end
 
   def interval_issues (issue, total_open_issues, actual_date)
