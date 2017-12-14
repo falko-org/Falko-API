@@ -6,8 +6,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       "name": "Ronaldo",
       "email": "ronaldofenomeno@gmail.com",
       "password": "123456789",
-      "password_confirmation": "123456789",
-      "github": "ronaldobola"
+      "password_confirmation": "123456789"
+    )
+
+    @second_user = User.create(
+      "name": "Fernando",
+      "email": "fernando@gmail.com",
+      "password": "123456",
+      "password_confirmation": "123456"
     )
 
     @project = Project.create(
@@ -29,6 +35,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
+    @second_token = AuthenticateUser.call(@second_user.email, @second_user.password)
   end
 
   test "should create project" do
@@ -64,6 +71,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get "/projects/#{@project.id}", headers: { Authorization: @token.result }
 
     assert_response :success
+  end
+
+  test "should not to show another user projects" do
+    get "/projects/#{@project.id}", headers: { Authorization: @second_token.result }
+    assert_response :unauthorized
   end
 
   test "should update project" do
@@ -223,32 +235,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       get "/repos", headers: { Authorization: "aVeryFuckedUpToken-NoWayThisIsRight" }
 
       assert_response :unauthorized
-    end
-  end
-
-  test "should receive an numeric score" do
-    @token = AuthenticateUser.call(@user.email, @user.password)
-    codeclimate_response = '{
-        "data": [{
-            "id": "696a76232df2736347000001",
-            "type": "repos",
-            "attributes": {
-              "analysis_version": 3385,
-              "badge_token": "16096d266f46b7c68dd4",
-              "branch": "master",
-              "created_at": "2017-07-15T20:08:03.732Z",
-              "github_slug": "twinpeaks\/ranchorosa",
-              "human_name": "ranchorosa",
-              "last_activity_at": "2017-07-15T20:09:41.846Z",
-              "score": 2.92
-            }
-          }]
-        }'
-
-    RestClient.stub :get, codeclimate_response do
-      get "/projects/#{@project.id}/gpa", headers: { Authorization: @token.result }
-      assert_response :success
-      assert response.parsed_body == 2.92
     end
   end
 

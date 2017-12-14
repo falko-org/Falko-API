@@ -6,8 +6,7 @@ class StoryTest < ActiveSupport::TestCase
       name: "Gilberto",
       email: "gilbertin@teste.com",
       password: "1234567",
-      password_confirmation: "1234567",
-      github: "gilbertoCoder"
+      password_confirmation: "1234567"
     )
 
     @project = Project.create(
@@ -120,12 +119,5 @@ class StoryTest < ActiveSupport::TestCase
 
     @story.pipeline = "s" * 16
     assert @story.save
-  end
-
-  test "should note create a story with duplicate issue_number" do
-    duplicate_story = @story.dup
-    duplicate_story.issue_number = @story.issue_number
-    @story.save
-    assert_not duplicate_story.save
   end
 end
