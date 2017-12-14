@@ -6,8 +6,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       name: "Robert",
       email: "robert@email.com",
       password: "123123",
-      password_confirmation: "123123",
-      github: "robertGit"
+      password_confirmation: "123123"
     )
 
     @project = Project.create(
@@ -45,14 +44,44 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       sprint_id: @sprint.id
     )
 
+    @story_to_do = Story.create(
+      name: "Story 1",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "To Do",
+      initial_date: "01/01/2017",
+      issue_number: "10",
+      sprint_id: @sprint.id
+    )
+
+    @story_doing = Story.create(
+      name: "Story 1",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "Doing",
+      initial_date: "01/01/2017",
+      issue_number: "10",
+      sprint_id: @sprint.id
+    )
+
+    @story_done = Story.create(
+      name: "Story 1",
+      description: "Story 1 us14",
+      assign: "Lucas",
+      pipeline: "Done",
+      initial_date: "01/01/2017",
+      final_date: "05/01/2017",
+      issue_number: "10",
+      sprint_id: @sprint.id
+    )
+
     @token = AuthenticateUser.call(@user.email, @user.password)
 
     @another_user = User.create(
       name: "Ronaldo",
       email: "ronaldo@email.com",
       password: "123123",
-      password_confirmation: "123123",
-      github: "ronaldoGit"
+      password_confirmation: "123123"
     )
 
     @another_project = Project.create(
@@ -95,8 +124,7 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
       name: "Ronaldo",
       email: "ronaldo@email.com",
       password: "123123",
-      password_confirmation: "123123",
-      github: "ronaldoGit"
+      password_confirmation: "123123"
     )
 
     @another_token = AuthenticateUser.call(@another_user.email, @another_user.password)
@@ -411,5 +439,23 @@ class StoriesControllerTest < ActionDispatch::IntegrationTest
     }, headers: { Authorization: @another_token.result }
 
     assert_response :created
+  end
+
+  test "should render a story with to do pipeline" do
+    get "/sprints/#{@sprint.id}/to_do_stories", headers: { Authorization: @token.result }
+
+    assert_response :success
+  end
+
+  test "should render a story with doing pipeline" do
+    get "/sprints/#{@sprint.id}/doing_stories", headers: { Authorization: @token.result }
+
+    assert_response :success
+  end
+
+  test "should render a story with done pipeline" do
+    get "/sprints/#{@sprint.id}/done_stories", headers: { Authorization: @token.result }
+
+    assert_response :success
   end
 end

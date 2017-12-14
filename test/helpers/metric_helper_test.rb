@@ -2,6 +2,7 @@ require "test_helper"
 
 class VelocityHelperTest < ActiveSupport::TestCase
   include VelocityHelper
+  include MetricHelper
 
   def setup
     @user = User.create(
@@ -106,48 +107,32 @@ class VelocityHelperTest < ActiveSupport::TestCase
     @token = AuthenticateUser.call(@user.email, @user.password)
   end
 
-  test "should get correct sprints informations" do
-    sprints = []
-    sprints.push(@first_sprint)
+  test "Should calculate debts metric" do
+    grade_value_test = 0
+    grades = {}
 
-    velocity = get_sprints_informations(sprints, @first_sprint)
+    planned_points = @another_first_story.story_points +
+                     @another_second_story.story_points
+    burned_points = @another_first_story.story_points +
+                    @another_second_story.story_points
 
-    total_points = @first_story.story_points + @second_story.story_points + @third_story.story_points
+    metric_value_test = Float(planned_points - burned_points) / planned_points
 
-    total_completed_points = @second_story.story_points + @third_story.story_points
+    if metric_value_test <= 0.2
+      grade_value_test += 4
+    elsif metric_value_test <= 0.4
+      grade_value_test += 3
+    elsif metric_value_test <= 0.6
+      grade_value_test += 2
+    elsif metric_value_test <= 0.9
+      grade_value_test += 1
+    elsif metric_value_test <= 1
+      grade_value_test += 0
+    end
 
-    assert_equal [@first_sprint.name], velocity[:names]
-    assert_equal [total_points], velocity[:total_points]
-    assert_equal [total_completed_points], velocity[:completed_points]
-    assert_equal [calculate_velocity([total_completed_points])], velocity[:velocities]
-  end
+    grades = calculate_metrics(@release)
+    grade_value = grades[:metric_debts_value]
 
-  test "should calculate velocity" do
-    sprint_1_points = @second_story.story_points +
-                      @third_story.story_points
-
-    sprint_2_points = @another_first_story.story_points +
-                      @another_second_story.story_points
-
-    completed_points = []
-    completed_points.push(sprint_1_points)
-    completed_points.push(sprint_2_points)
-
-    velocity = Float(sprint_1_points + sprint_2_points) / 2
-
-    assert_equal velocity, calculate_velocity(completed_points)
-  end
-
-  test "Should calculate total points of one Release" do
-    sprint_1_points = @first_story.story_points +
-                      @second_story.story_points +
-                      @third_story.story_points
-
-    sprint_2_points = @another_first_story.story_points +
-                      @another_second_story.story_points
-
-    total_points = sprint_1_points + sprint_2_points
-
-    assert_equal total_points, get_total_points_release(@release)
+    assert_equal grade_value_test, grade_value
   end
 end

@@ -6,8 +6,7 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
       name: "Ronald",
       email: "ronald@gmail.com",
       password: "123456789",
-      password_confirmation: "123456789",
-      github: "ronaldGit"
+      password_confirmation: "123456789"
     )
 
     @project = Project.create(
@@ -57,8 +56,7 @@ class RetrospectivesControllerTest < ActionDispatch::IntegrationTest
       name: "Felipe",
       email: "felipe@gmail.com",
       password: "123456789",
-      password_confirmation: "123456789",
-      github: "felipeGit"
+      password_confirmation: "123456789"
     )
 
     @another_project = Project.create(

@@ -1,6 +1,6 @@
 Homolog Environment
-host 45.55.176.99
-  HostName 45.55.176.99
+host 138.197.16.42
+  HostName 138.197.16.42
   IdentityFile your/ssh-key/path
   User root
 

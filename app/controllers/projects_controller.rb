@@ -18,16 +18,6 @@ class ProjectsController < ApplicationController
     render json: @projects
   end
 
-  def get_gpa
-    project = Project.find(params[:id])
-    github_slug = project.github_slug
-    result = RestClient.get("http://api.codeclimate.com/v1/repos?github_slug=#{github_slug}")
-    result_json = JSON.parse(result)
-    score = result_json["data"][0]["attributes"]["score"]
-
-    render json: score
-  end
-
   def github_projects_list
     client = Adapter::GitHubProject.new(request)
 

@@ -6,8 +6,7 @@ class UserTest < ActiveSupport::TestCase
       name: "Gilberto",
       email: "gilbertin@teste.com",
       password: "1234567",
-      password_confirmation: "1234567",
-      github: "gilbertoCoder"
+      password_confirmation: "1234567"
     )
   end
 
@@ -73,7 +72,6 @@ class UserTest < ActiveSupport::TestCase
       email: "gilbertin@teste.com",
       password: "",
       password_confirmation: "",
-      github: "gilbertoCoder"
     )
 
     assert_not @user_wrong.save
@@ -85,7 +83,6 @@ class UserTest < ActiveSupport::TestCase
       email: "gilbertin@teste.com",
       password: "g",
       password_confirmation: "g",
-      github: "gilbertoCoder"
     )
 
     assert_not @user_wrong.save
@@ -97,7 +94,6 @@ class UserTest < ActiveSupport::TestCase
       email: "gilbertin@teste.com",
       password: "g" * 81,
       password_confirmation: "g" * 81,
-      github: "gilbertoCoder"
     )
 
     assert_not @user_wrong.save
@@ -105,11 +101,5 @@ class UserTest < ActiveSupport::TestCase
 
   test "The number of characters in user password is between 6 and 80" do
     assert @user.save
-  end
-
-  test "User should have a github" do
-    @user.github = ""
-
-    assert_not @user.save
   end
 end

@@ -19,27 +19,27 @@ class StoriesController < ApplicationController
   end
 
   def to_do_list
-    sprint = Sprint.find(params[:id])
+    @sprint = Sprint.find(params[:id])
 
-    stories = sprint.stories.select { |story| story.pipeline == "To Do" }
+    @stories = @sprint.stories.select { |story| story.pipeline == "To Do" }
 
-    render json: format_json_output(stories)
+    render json: format_json_output(@stories)
   end
 
   def doing_list
-    sprint = Sprint.find(params[:id])
+    @sprint = Sprint.find(params[:id])
 
-    stories = sprint.stories.select { |story| story.pipeline == "Doing" }
+    @stories = @sprint.stories.select { |story| story.pipeline == "Doing" }
 
-    render json: format_json_output(stories)
+    render json: format_json_output(@stories)
   end
 
   def done_list
-    sprint = Sprint.find(params[:id])
+    @sprint = Sprint.find(params[:id])
 
-    stories = sprint.stories.select { |story| story.pipeline == "Done" }
+    @stories = @sprint.stories.select { |story| story.pipeline == "Done" }
 
-    render json: format_json_output(stories)
+    render json: format_json_output(@stories)
   end
 
   def show
@@ -62,10 +62,10 @@ class StoriesController < ApplicationController
     end
 
   def update
+    if story_params[:pipeline] == "Done"
+      @story.final_date = Date.today
+    end
     if @story.update(story_params)
-      if @story.pipeline == "Done"
-        @story.final_date = Date.today
-      end
       render json: @story
     else
       render json: @story.errors, status: :unprocessable_entity
@@ -98,6 +98,6 @@ class StoriesController < ApplicationController
     end
 
     def story_params
-      params.require(:story).permit(:name, :description, :assign, :pipeline, :initial_date, :story_points, :final_date, :issue_number)
+      params.require(:story).permit(:name, :description, :assign, :pipeline, :initial_date, :story_points, :final_date, :issue_number, :issue_id)
     end
 end
