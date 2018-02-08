@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171212131724) do
+ActiveRecord::Schema.define(version: 20171213000135) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,25 @@ ActiveRecord::Schema.define(version: 20171212131724) do
     t.float "budget_actual_cost"
     t.integer "planned_sprints"
     t.integer "planned_release_points"
+  end
+  
+  create_table "grades", force: :cascade do |t|
+    t.float "weight_burndown"
+    t.float "weight_velocity"
+    t.float "weight_debts"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_grades_on_project_id"
+  end
+
+  create_table "issues", force: :cascade do |t|
+    t.string "title"
+    t.text "body"
+    t.string "assignee"
+    t.integer "milestone"
+    t.string "labels"
+    t.string "assignees"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "release_id"
@@ -131,6 +150,7 @@ ActiveRecord::Schema.define(version: 20171212131724) do
 
   add_foreign_key "earned_value_managements", "releases"
   add_foreign_key "evm_sprints", "earned_value_managements"
+  add_foreign_key "grades", "projects"
   add_foreign_key "projects", "users"
   add_foreign_key "releases", "projects"
   add_foreign_key "retrospectives", "sprints"

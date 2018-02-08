@@ -106,48 +106,42 @@ class VelocityHelperTest < ActiveSupport::TestCase
     @token = AuthenticateUser.call(@user.email, @user.password)
   end
 
-  test "should get correct sprints informations" do
-    sprints = []
-    sprints.push(@first_sprint)
+  test "Should get burned sprint points" do
+    final_date = @another_first_story.final_date
 
-    velocity = get_sprints_informations(sprints, @first_sprint)
+    burned_stories_test = {}
+    burned_stories = {}
 
-    total_points = @first_story.story_points + @second_story.story_points + @third_story.story_points
+    burned_stories_test[final_date] =
+                        @another_first_story.story_points +
+                        @another_second_story.story_points
 
-    total_completed_points = @second_story.story_points + @third_story.story_points
 
-    assert_equal [@first_sprint.name], velocity[:names]
-    assert_equal [total_points], velocity[:total_points]
-    assert_equal [total_completed_points], velocity[:completed_points]
-    assert_equal [calculate_velocity([total_completed_points])], velocity[:velocities]
+    assert_equal burned_stories_test, get_burned_points(@second_sprint, burned_stories)
   end
 
-  test "should calculate velocity" do
-    sprint_1_points = @second_story.story_points +
-                      @third_story.story_points
+  test "Should set ideal axis" do
+    date_axis_test = []
+    ideal_line_test = []
+    ideal_line = []
 
-    sprint_2_points = @another_first_story.story_points +
-                      @another_second_story.story_points
+    planned_points = @another_first_story.story_points +
+                     @another_second_story.story_points
 
-    completed_points = []
-    completed_points.push(sprint_1_points)
-    completed_points.push(sprint_2_points)
+    range_dates = (@another_first_story.initial_date .. @another_first_story.final_date)
 
-    velocity = Float(sprint_1_points + sprint_2_points) / 2
+    range_dates.each do |date|
+      date_axis_test.push(date)
+    end
 
-    assert_equal velocity, calculate_velocity(completed_points)
-  end
+    days_of_sprint = date_axis_test.length - 1
 
-  test "Should calculate total points of one Release" do
-    sprint_1_points = @first_story.story_points +
-                      @second_story.story_points +
-                      @third_story.story_points
+    for day in (days_of_sprint).downto(0)
+      ideal_line_test.push(planned_points * (day / (Float days_of_sprint)))
+    end
 
-    sprint_2_points = @another_first_story.story_points +
-                      @another_second_story.story_points
+    set_ideal_line(days_of_sprint, ideal_line, planned_points)
 
-    total_points = sprint_1_points + sprint_2_points
-
-    assert_equal total_points, get_total_points_release(@release)
+    assert_equal ideal_line_test, ideal_line
   end
 end

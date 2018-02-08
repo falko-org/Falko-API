@@ -9,6 +9,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       "password_confirmation": "123456789"
     )
 
+    @second_user = User.create(
+      "name": "Fernando",
+      "email": "fernando@gmail.com",
+      "password": "123456",
+      "password_confirmation": "123456"
+    )
+
     @project = Project.create(
       "name": "Falko",
       "description": "Some project description 1.",
@@ -28,6 +35,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     )
 
     @token = AuthenticateUser.call(@user.email, @user.password)
+    @second_token = AuthenticateUser.call(@second_user.email, @second_user.password)
   end
 
   test "should create project" do
@@ -63,6 +71,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get "/projects/#{@project.id}", headers: { Authorization: @token.result }
 
     assert_response :success
+  end
+
+  test "should not to show another user projects" do
+    get "/projects/#{@project.id}", headers: { Authorization: @second_token.result }
+    assert_response :unauthorized
   end
 
   test "should update project" do

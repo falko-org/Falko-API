@@ -18,6 +18,14 @@ module ValidationsHelper
       @release = Release.find(@evm.release_id)
     end
   end
+  
+  def project_grade
+    @project = Project.find(@grade.project.id)
+  end
+
+  def release
+    @release = Release.find(@sprint.release_id)
+  end
 
   def sprint(component_type)
     if component_type == "story"
@@ -57,6 +65,15 @@ module ValidationsHelper
     elsif component_type == "earned_value_management" && current_id != 0
       id = current_id
       @sprint = Sprint.find(params[:id].to_i)
+    elsif component_type == "grade" && current_id != 0
+      id = current_id
+      @grade = Grade.find(params[:id].to_i)
+    elsif component_type == "grade" && previous_id != 0
+      grade_id = previous_id
+      @grade = Grade.find(params[:grade_id].to_i)
+    elsif component_type == "sprint" && current_id != 0
+      id = current_id
+      @sprint = Sprint.find(params[:id].to_i)
     elsif component_type == "sprint" && previous_id != 0
       sprint_id = previous_id
       @sprint = Sprint.find(params[:sprint_id].to_i)
@@ -77,6 +94,20 @@ module ValidationsHelper
   def validate_project(id, project_id)
     current_user
     verifies_id(id, project_id, "project")
+    user
+
+    if @current_user.id == @user.id
+      return true
+    else
+      render json: { error: "Not Authorized" }, status: 401
+    end
+  end
+
+
+  def validate_grade(id, grade_id)
+    current_user
+    verifies_id(id, grade_id, "grade")
+    project_grade
     user
 
     if @current_user.id == @user.id
