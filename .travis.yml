@@ -4,8 +4,6 @@ group: deprecated-2017Q3
 
 language: ruby
 
-ruby: 2.4.1
-
 env:
   global:
   - CC_TEST_REPORTER_ID=095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3
@@ -17,6 +15,10 @@ services:
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_16fe788254fd_key -iv $encrypted_16fe788254fd_iv -in .travis/alax-digitalocean-key.enc -out .travis/alax-digitalocean-key -d
+  - docker-compose -f docker-compose.test.yml up -d
+  - docker exec falko-test bash -c "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > cc-test-reporter"
+  - docker exec falko-test bash -c "chmod +x cc-test-reporter"
+  - docker exec falko-test bash -c "./cc-test-reporter before-build"
 
 install: true
 
@@ -37,10 +39,6 @@ notifications:
   slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
 
 script:
-  - docker-compose -f docker-compose.test.yml up -d
-  - docker exec falko-test bash -c "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter"
-  - docker exec falko-test bash -c "chmod +x cc-test-reporter"
-  - docker exec falko-test bash -c "./cc-test-reporter before-build"
   - docker exec -it falko-test bash -c "./wait-4-postgres.sh"
   - docker exec -it falko-test bundle install
   - docker exec -it falko-test bundle exec rails db:create
