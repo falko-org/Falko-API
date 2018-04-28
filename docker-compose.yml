@@ -4,8 +4,6 @@ services:
   db:
     container_name: falko-database
     image: postgres:9.6
-    volumes:
-      - ./tmp/db:/var/lib/postgresql/data
 
   api:
     container_name: falko-server
