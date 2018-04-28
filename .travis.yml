@@ -1,8 +1,8 @@
 sudo: required
 
-group: deprecated-2017Q3
-
 language: ruby
+rvm:
+  - 2.4.4
 
 env:
   global:
@@ -39,7 +39,7 @@ notifications:
   slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
 
 script:
-  - docker exec -it falko-test bash -c "./wait-4-postgres.sh"
+  - docker exec -it falko-test bash -c "./scripts/sh/wait-4-postgres.sh"
   - docker exec -it falko-test bundle install
   - docker exec -it falko-test bundle exec rails db:create
   - docker exec -it falko-test bundle exec rails db:migrate
