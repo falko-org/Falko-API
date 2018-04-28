@@ -9,7 +9,6 @@ done
 
 >&2 echo "Postgres is up - executing commands"
 
-
 if bundle exec rake db:exists; then
 	bundle exec rake db:migrate
 else
