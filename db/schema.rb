@@ -25,17 +25,6 @@ ActiveRecord::Schema.define(version: 20171213000135) do
     t.index ["project_id"], name: "index_grades_on_project_id"
   end
 
-  create_table "issues", force: :cascade do |t|
-    t.string "title"
-    t.text "body"
-    t.string "assignee"
-    t.integer "milestone"
-    t.string "labels"
-    t.string "assignees"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.text "description"

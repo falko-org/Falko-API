@@ -2,9 +2,7 @@ version: '3'
 services:
   falko-test:
     container_name: falko-test
-    build: 
-      context: .
-      dockerfile: Dockerfile.test
+    image: alaxalves/api:1.6
     command: bash -c "sleep infinity"
     environment:
       - RAILS_ENV=test
