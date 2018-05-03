@@ -1,25 +1,24 @@
-## Mudanças Propostas
+## Proposed Changes
 
-Descreva brevemente as mudanças feitas. Tenha certeza que linkou o pull request à uma issue existente.
+Describe briefly your changes. Be sure you've tracked this pull request to an issue.
 
-## Tipo de Mudança
+## Type of Change
 
-Que tipo de mudanças este Pull Request introduz ao Falko?
-_Marque um `x` ao que se aplicar_
+What kind of changes this Pull Request introduces to Falko?
+_`x` to what it applies_
 
-- [ ] Conserto de Bug
-- [ ] Nova Feature
+- [ ] Bugfix
+- [ ] New Feature
 
 ## Checklist
 
-_Marque um `x`ao que se aplicar. Se você não tiver certeza sobre algum dos tópicos, não hesite em perguntar. Estamos aqui para ajudar!_
+_`x`to what it applies. If not sure about some topics, don't hesitate to ask. We're here to help!_
 
-- [ ] O nome do pull request deve ser auto-explicativo e deve estar em português.
-- [ ] Os commits seguem a [política de commits do repositório](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/wiki/Plano-de-Gerenciamento-de-Configura%C3%A7%C3%A3o-de-Software#41---pol%C3%ADtica-de-commits).
-- [ ] Não há erros no rubocop.
-- [ ] A build está passando (testes, code climate e codacy).
-- [ ] O pull request está linkado à uma issue existente.
-- [ ] Foram criados seeds para as novas User Stories.
+- [ ] Pull Request's name is self-explanatory and its in English.
+- [ ] There are no _Rubocop_ issues.
+- [ ] Travis build has success (tests, code climate and codacy checks).
+- [ ] Pull Request is linked to an existing issue.
+- [ ] Seeds have been created to the new User Stories.
 
-## Outros Comentários
-Se for uma mudança relativamente grande/complexa e você tiver algum comentário/pergunta a fazer, explicação de sua escolha da sua solução ou qualquer coisa que ache relevante, não hesite em compartilhar.
+## Other Comments
+If it's a change relatively big/complex and/or you have any comment/question to do, feel free to explain or comment anything you feel relevant.
