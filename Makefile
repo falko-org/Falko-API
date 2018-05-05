@@ -64,6 +64,12 @@ rm-network:
 	@echo "**********************************\n"
 	@docker network rm $(sudo docker network ls -q)
 
+rm-flk-network:
+	@echo "**********************************\n"
+	@echo "Removing Falko network!\n"
+	@echo "**********************************\n"
+	@docker network rm falko-backend
+
 rm-volume:
 	@echo "*********************\n"
 	@echo "Removing all volumes!\n"
