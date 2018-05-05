@@ -11,11 +11,11 @@
     <a href="https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/wiki"><strong>Visite nossa Wiki &raquo;</strong></a>
     <br>
     <br>
-    <a href="http://falko.solutions">Acesse o Falko</a>
+    <a href="http://falko.solutions">Access Falko</a>
     &middot;
-    <a href="https://github.com/fga-gpp-mds/Falko-2017.2-FrontEnd">Repositório de FrontEnd</a>
+    <a href="https://github.com/fga-gpp-mds/Falko-2017.2-FrontEnd">FrontEnd Repository</a>
     &middot;
-    <a href="https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/issues">Reporte um Problema</a>
+    <a href="https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/issues">Report an Issue</a>
   </p>
 </p>
 
@@ -29,26 +29,66 @@
 
 <br></br>
 
-## Introdução
+## Introduction
 
-Falko é uma aplicação web, desenvolvida com Ruby on Rails API e Vue.js. É um projeto de Software Livre, desenvolvido para a disciplina de GPP/MDS do curso de Engenharia de Software Universidade de Brasília - Campus de Engenharia do Gama (FGA).
-O Falko tem como objetivo prover uma plataforma que facilite a gestão de projetos ágeis por meio da exibição de métricas e informações relevantes, contribuindo para tomadas de decisão mais eficientes.
+Falko is an web application, developed using Ruby on Rails API and Vue.js. It is a Freen Software Project, developed initially to GPP/MDS subjects of UnB - University of Brasília - Engeneering Campus (FGA). Falko aims to promote a platform that makes easier for managers _to manage_ agile projects through displaying metrics and relevant info regarding the project, also contributing to more eficient decision making.
 
-## Instalação de Ambiente
+## Development setup
 
-O ambiente de desenvolvimento é implantado por meio de contêineres utilizando _Docker_. Para realizar a instalação, basta seguir o guia de [Como Usar o Docker](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/wiki/Como-Usar-o-Docker).
+Development environment uses the containers architecture through _Docker_. To install, simply follow the guide [How to Use Docker](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/wiki/How-to-Use-Docker).
+If you're not familiar with docker, you can just simplify some default commands with _make_.
 
-## Documentação
+### *_Make_ usage*
+#### Enters the Rails Console
+`$ make console`
 
-A documentação completa da aplicação está disponível em nossa [Wiki](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/wiki).
+#### Creates the development and test database
+`$ make create-db`
 
-## Como Contribuir
+#### Drops down the docker environment
+`$ make down`
 
-Para contribuir com o Falko, o colaborador deve criar seu próprio Fork e enviar um [pull request](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/pulls) com a contribuição para a branch 'devel' do projeto.
-O código enviado será submetido a uma avaliação por um dos administradores do repositório e, se aprovado, incluído ao _core_ da aplicação.
+#### Migrates the Rails database
+`$ make migrate`
 
-## Licença
+#### Lists all your running services
+`$ make ps`
+
+#### Removes all your docker networks
+`$ make rm-network`
+
+#### Removes all your docker mapped volumes
+`$ make rm-volume`
+
+#### Creates the Falko environment and run it
+`$ make run`
+
+#### Creates the Falko environment and run it as daemon
+`$ make quiet-run`
+
+#### Creates only the API environment, without database service
+`$ make run-api`
+
+#### Creates only the Postgres database environment, without API service
+`$ make run-db`
+
+#### Seeds the Rails database environment
+`$ make seed`
+
+#### Executes all of Rails' tests
+`$ make test`
+
+## Documentation
+
+Additional documentation is avaiable at [Official Wiki](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/wiki).
+
+## How to Contribute
+
+To contribute with us, the colaborator must _fork_ and send a [pull request](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/pulls) with his/her contribution to _devel_ branch.
+The code will be analized by one of the project's owners and, if approved, included to the application's core.
+
+## License
 
 [MIT](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/blob/devel/LICENSE)
 
-Copyright (c) 2017 Falko - UnB-FGA (GPP/MDS) Grupo 8 Segundo Semestre de 2017
+Copyright (c) 2017 Falko Organization
