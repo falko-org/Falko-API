@@ -1,13 +1,12 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: 5
   username: postgres
-  password: 
-  host: falko-database
+  password:
+  host: db
 
-
-development: &development
+development:
   <<: *default
   database: Falko-2017_2-BackEnd_development
 
