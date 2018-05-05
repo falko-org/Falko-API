@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y curl apt-transport-https wget && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update && apt-get install -y yarn postgresql-client
 
-RUN mkdir Falko-2017.2-BackEnd
 WORKDIR /Falko-2017.2-BackEnd
 
 ENV RAILS_ENV=production
@@ -28,8 +27,7 @@ ENV CLIENT_SECRET=634dd13c943b8196d4345334031c43d6d5a75fc8
 COPY . /Falko-2017.2-BackEnd
 
 COPY Gemfile /Falko-2017.2-BackEnd/Gemfile
-
-RUN chmod +x start-prod.sh
+COPY Gemfile.lock /Falko-2017.2-BackEnd/Gemfile.lock
 
 EXPOSE 3000
 

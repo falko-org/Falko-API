@@ -7,7 +7,7 @@ services:
 
   api:
     container_name: falko-server
-    image: alaxalves/api:1.6
+    image: alaxalves/api:1.7
     command: ["sh", "scripts/sh/start-dev.sh"]
     environment:
       - CLIENT_ID=1254ef5e2765397c4fb4
@@ -22,3 +22,4 @@ services:
 
 volumes:
   bundle-cache:
+    
