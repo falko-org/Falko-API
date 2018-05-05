@@ -117,13 +117,13 @@ GEM
     net-http-persistent (2.9.4)
     net-http-pipeline (1.0.1)
     netrc (0.11.0)
-    nio4r (2.3.0)
+    nio4r (2.3.1)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
     octokit (4.8.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     orm_adapter (0.5.0)
-    pg (0.21.0)
+    pg (1.0.0)
     puma (3.11.4)
     pusher-client (0.6.2)
       json
@@ -238,10 +238,10 @@ DEPENDENCIES
   minitest (~> 5.8, >= 5.8.4)
   minitest-reporters
   octokit (~> 4.0)
-  pg (~> 0.18)
+  pg (~> 1.0.0)
   puma (~> 3.7)
   rack-cors
-  rails (~> 5.1.3)
+  rails (~> 5.1.6)
   rails_12factor
   rest-client
   simple_command
@@ -253,7 +253,7 @@ DEPENDENCIES
   tzinfo-data
 
 RUBY VERSION
-   ruby 2.4.4p296
+   ruby 2.4.1p111
 
 BUNDLED WITH
    1.16.1

@@ -2,7 +2,7 @@ sudo: required
 
 language: ruby
 rvm:
-  - 2.4.4
+  - 2.4.1
 
 env:
   global:
@@ -40,6 +40,7 @@ notifications:
   slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
 
 script:
+  - docker exec -it falko-server gem install bundler
   - docker exec -it falko-server bundle install
   - docker exec -it falko-server bundle exec rails db:create
   - docker exec -it falko-server bundle exec rails db:migrate
