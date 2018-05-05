@@ -1,27 +1,21 @@
-## Comportamento esperado
+## Expected Behaviour 
 
-Descreva qual o comportamento que o sistema deveria possuir.
+Describe the behaviour the system should have.
 
-## *Comportamento atual
+## *Current Beahaviour
 
-Descreva como o sistema se comporta atualmente.
+Describe the system's current behaviour.
 
-## *Passos para reproduzir o comportamento
+## *Steps to reproduce unexpected behaviour
 
-Em caso de bugs, cite quais passos foram executados para chegar no problema.
-
-## **Critérios de Aceitação
-
-Diga quais os critérios o sistema deve possuir para que seja enviado o Pull Request.
-
-
+In case of bugs, tell us the steps to reach the problem.
 
 ## Checklist
 
-- [ ] A issue possui Labels.
-- [ ] A issue possui prints de tela quando necessário.
-- [ ] A issue possui nome significativo.
+- [ ] Issue has labels.
+- [ ] Issue has screenshots if required.
+- [ ] Issue has an significant name.
 
-**Exclua caso a issue seja um bug
+**Delete if it's a bug
 
-*Exclua caso a issue seja uma história
+*Delete if it's a User Story

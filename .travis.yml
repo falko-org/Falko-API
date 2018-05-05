@@ -1,8 +1,11 @@
 sudo: required
 
 language: ruby
+<<<<<<< HEAD
 rvm:
   - 2.4.1
+=======
+>>>>>>> 08a99ebf65743ca1532e15678c6841ae091f3253
 
 env:
   global:
