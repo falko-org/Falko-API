@@ -1,11 +1,9 @@
-version: '3.5'
+version: '3'
 services:
 
   db:
     container_name: falko-database
     image: postgres:9.6
-    networks:
-      - falko-backend
 
   api:
     container_name: falko-api
@@ -17,8 +15,6 @@ services:
     volumes:
       - .:/Falko-2017.2-BackEnd
       - bundle-cache:/bundle-cache
-    networks:
-      - falko-backend
     ports:
       - 3000:3000
     depends_on:
@@ -26,7 +22,3 @@ services:
 
 volumes:
   bundle-cache:
-
-networks:
-  falko-backend:
-    name: falko-backend
