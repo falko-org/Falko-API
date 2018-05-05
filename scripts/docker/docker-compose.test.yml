@@ -1,32 +1,18 @@
-version: '3.5'
+version: '3'
 services:
 
-  db:
+  db-test:
     container_name: falko-database
     image: postgres:9.6
-    networks:
-      - falko-backend
 
-  api:
+  api-test:
     container_name: falko-api
-    image: alaxalves/api:1.7
+    image: alaxalves/api:1.7-test
     command: ["sh", "scripts/sh/start-dev.sh"]
     environment:
       - CLIENT_ID=1254ef5e2765397c4fb4
       - CLIENT_SECRET=c566f60e74a49bd8e664033e2978a31d3b39748d
-    volumes:
-      - .:/Falko-2017.2-BackEnd
-      - bundle-cache:/bundle-cache
-    networks:
-      - falko-backend
     ports:
       - 3000:3000
     depends_on:
-      - db
-
-volumes:
-  bundle-cache:
-
-networks:
-  falko-backend:
-    name: falko-backend
+      - db-test

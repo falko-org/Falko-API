@@ -16,7 +16,7 @@ services:
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_16fe788254fd_key -iv $encrypted_16fe788254fd_iv -in .travis/alax-digitalocean-key.enc -out .travis/alax-digitalocean-key -d
-  - docker-compose up -d
+  - docker-compose -f scripts/docker/docker-compose.test.yml up -d
   - docker exec falko-api bash -c "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > cc-test-reporter"
   - docker exec falko-api bash -c "chmod +x cc-test-reporter"
   - docker exec falko-api bash -c "./cc-test-reporter before-build"
@@ -40,12 +40,13 @@ notifications:
   slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
 
 script:
-  - docker exec -it falko-api gem install bundler
-  - docker exec -it falko-api bundle install
-  - docker exec -it falko-api bundle exec rails db:create
-  - docker exec -it falko-api bundle exec rails db:migrate
-  - docker exec -it falko-api bundle exec rails db:test:prepare
-  - docker exec -it falko-api bundle exec rails test
+  - docker exec falko-api gem install bundler
+  - docker exec falko-api bundle config build.nokogiri --use-system-libraries
+  - docker exec falko-api bundle install
+  - docker exec falko-api bundle exec rails db:create
+  - docker exec falko-api bundle exec rails db:migrate
+  - docker exec falko-api bundle exec rails db:test:prepare
+  - docker exec falko-api bundle exec rails test
 
 after_script:
   - docker exec falko-api bash -c "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT --coverage-input-type simplecov --id $CC_TEST_REPORTER_ID"
