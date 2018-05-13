@@ -40,11 +40,6 @@ notifications:
   slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
 
 script:
-  - docker exec falko-api gem install bundler
-  - docker exec falko-api bundle config build.nokogiri --use-system-libraries
-  - docker exec falko-api bundle install
-  - docker exec falko-api bundle exec rails db:create
-  - docker exec falko-api bundle exec rails db:migrate
   - docker exec falko-api bundle exec rails db:test:prepare
   - docker exec falko-api bundle exec rails test
 

@@ -17,7 +17,7 @@ else
 	bundle exec rake db:create
 	bundle exec rake db:migrate
 fi
-	
+
 bundle exec rake db:seed
 
 pidfile='/Falko-2017.2-BackEnd/tmp/pids/server.pid'
