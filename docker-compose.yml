@@ -1,28 +1,42 @@
-version: '3'
+version: '3.5'
 services:
 
-  falko-database:
+  db:
     container_name: falko-database
     image: postgres:9.6
-    ports:
-      - 5000:5432
+    networks:
+      - falko-backend
     environment:
-      - PG_PASSWORD=password
+      - PG_USERNAME=postgres
       - PG_DATABASE=Falko-2017_2-BackEnd_development
-    volumes:
-      - ./tmp/data/postgresql:/postgresql
-      - .:/Falko-2017.2-BackEnd
+      - PG_HOST=falko-database
 
-  falko-server:
-    container_name: falko-server
-    image: alaxalves/api:1.5
-    command: /bin/bash -l -c "chmod +x start-dev.sh && ./start-dev.sh"
+  api:
+    container_name: falko-api
+    image: alaxalves/api:1.7
+    command: ["sh", "scripts/sh/start-dev.sh"]
     environment:
+      - PG_USERNAME=postgres
+      - PG_DATABASE=Falko-2017_2-BackEnd_development
+      - PG_HOST=falko-database
+      - PG_PORT=5432
+      - RAILS_ENV=development
       - CLIENT_ID=1254ef5e2765397c4fb4
       - CLIENT_SECRET=c566f60e74a49bd8e664033e2978a31d3b39748d
     volumes:
       - .:/Falko-2017.2-BackEnd
+      - bundle-cache:/bundle-cache
+    networks:
+      - falko-backend
     ports:
       - 3000:3000
     depends_on:
-      - falko-database
+      - db
+
+volumes:
+  bundle-cache:
+    name: bundle-cache
+
+networks:
+  falko-backend:
+    name: falko-backend

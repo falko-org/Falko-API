@@ -1,8 +1,8 @@
 sudo: required
 
-group: deprecated-2017Q3
-
 language: ruby
+rvm:
+  - 2.4.1
 
 env:
   global:
@@ -11,25 +11,16 @@ env:
 
 services:
   - docker
-  - postgresql
-
-before_install:
-  - openssl aes-256-cbc -K $encrypted_16fe788254fd_key -iv $encrypted_16fe788254fd_iv -in .travis/alax-digitalocean-key.enc -out .travis/alax-digitalocean-key -d
-  - docker-compose -f docker-compose.test.yml up -d
-  - docker exec falko-test bash -c "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > cc-test-reporter"
-  - docker exec falko-test bash -c "chmod +x cc-test-reporter"
-  - docker exec falko-test bash -c "./cc-test-reporter before-build"
-
-install: true
 
 before_script:
-  - psql -c "create database travis_ci_test;" -U postgres
-  - sudo service postgresql stop
-  - while sudo lsof -Pi :5432 -sTCP:LISTEN -t; do sleep 1; done
+  - openssl aes-256-cbc -K $encrypted_16fe788254fd_key -iv $encrypted_16fe788254fd_iv -in .travis/alax-digitalocean-key.enc -out .travis/alax-digitalocean-key -d
+  - mv scripts/docker/docker-compose.test.yml .
+  - docker-compose -f docker-compose.test.yml up -d
+  - docker exec falko-api-test bash -c "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > cc-test-reporter"
+  - docker exec falko-api-test bash -c "chmod +x cc-test-reporter"
+  - docker exec falko-api-test bash -c "./cc-test-reporter before-build"
 
-test:
-  adapter: postgresql
-  database: travis_ci_test
+install: true
 
 addons:
   code_climate:
@@ -39,15 +30,16 @@ notifications:
   slack: gppmds8-github:sJE6QlBfPGMkfUf48wuTsKa7
 
 script:
-  - docker exec -it falko-test bash -c "./wait-4-postgres.sh"
-  - docker exec -it falko-test bundle install
-  - docker exec -it falko-test bundle exec rails db:create
-  - docker exec -it falko-test bundle exec rails db:migrate
-  - docker exec -it falko-test bundle exec rake db:test:prepare
-  - docker exec -it falko-test bundle exec rails test
+  - >
+    while ! docker logs falko-api-test | grep "Listening on tcp://0.0.0.0:3000"; do
+        echo "Waiting for start script to finish..."
+        sleep 5
+    done;
+  - docker exec -it falko-api-test bundle exec rails db:test:prepare
+  - docker exec -it falko-api-test bundle exec rails test
 
 after_script:
-  - docker exec falko-test bash -c "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT --coverage-input-type simplecov --id $CC_TEST_REPORTER_ID"
+  - docker exec -it falko-api-test bash -c "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT --coverage-input-type simplecov --id $CC_TEST_REPORTER_ID"
   - docker-compose down --remove-orphans
 
 after_success:
