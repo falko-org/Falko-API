@@ -4,6 +4,12 @@ run:
 	@echo "*********************************\n"
 	@docker-compose up
 
+quiet-run:
+	@echo "*********************************\n"
+	@echo "Lifting up the whole environment!\n"
+	@echo "*********************************\n"
+	@docker-compose up --detach
+
 run-db:
 	@echo "************************\n"
 	@echo "Lifting up the database!\n"
