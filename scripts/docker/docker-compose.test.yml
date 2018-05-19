@@ -1,18 +1,23 @@
 version: '3'
 services:
 
-  db-test:
-    container_name: falko-database
+  db:
+    container_name: falko-database-test
     image: postgres:9.6
 
-  api-test:
-    container_name: falko-api
-    image: alaxalves/api:1.7-test
+  api:
+    container_name: falko-api-test
+    image: alaxalves/api:1.7
     command: ["sh", "scripts/sh/start-dev.sh"]
     environment:
+      - PG_USERNAME=postgres
+      - PG_DATABASE=travis_ci_test
+      - PG_HOST=falko-database-test
+      - PG_PORT=5432
+      - RAILS_ENV=test
       - CLIENT_ID=1254ef5e2765397c4fb4
       - CLIENT_SECRET=c566f60e74a49bd8e664033e2978a31d3b39748d
-    ports:
-      - 3000
+    volumes:
+      - .:/Falko-2017.2-BackEnd
     depends_on:
-      - db-test
+      - db

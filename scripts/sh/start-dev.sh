@@ -2,7 +2,7 @@
 
 bundle check || bundle install
 
-while ! pg_isready -h falko-database -p 5432 -q -U postgres; do
+while ! pg_isready -h $PG_HOST -p $PG_PORT -q -U $PG_USERNAME; do
   >&2 echo "Postgres is unavailable - sleeping..."
   sleep 1
 done
@@ -13,7 +13,7 @@ if bundle exec rake db:exists; then
 	>&2 echo "Database exists, only migrating..."
 	bundle exec rake db:migrate
 else 
-	>&2 echo "Database doesn't exists, creating and migrating it..."
+	>&2 echo "Database doesn't exist, creating and migrating it..."
 	bundle exec rake db:create
 	bundle exec rake db:migrate
 fi

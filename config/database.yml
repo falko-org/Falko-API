@@ -2,17 +2,18 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  username: postgres
+  username: <%= ENV["PG_USERNAME"] %>
   password:
-  host: db
 
 development:
   <<: *default
-  database: Falko-2017_2-BackEnd_development
+  database: <%= ENV["PG_DATABASE"] %>
+  host: <%= ENV["PG_HOST"] %>
 
 test:
   <<: *default
-  database: travis_ci_test
+  database: <%= ENV["PG_DATABASE"] %>
+  host: <%= ENV["PG_HOST"] %>
 
 production:
   adapter: postgresql
