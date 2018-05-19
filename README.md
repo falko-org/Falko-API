@@ -78,6 +78,61 @@ If you're not familiar with docker, you can just simplify some default commands 
 #### Executes all of Rails' tests
 `$ make test`
 
+### Docker Usage
+* Download and install Docker CE at the [official site](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/#install-from-a-package).
+
+* Download and install Docker Compose at the [official site](https://docs.docker.com/compose/install/#master-builds).
+
+#### Clone the repository and enter it
+```
+git clone https://github.com/falko-org/Falko-API && cd Falko-API/
+```
+
+#### Make sure you're at _devel_ branch
+```
+git checkout devel
+```
+
+#### Lift your environment
+```
+docker-compose up
+```
+
+#### Useful commands
+#### How to download a docker image
+```
+docker pull imageYouWant
+```
+
+#### Listing local images
+```
+docker images
+```
+
+#### Deleting images
+```
+docker rmi -f imageId
+```
+
+#### Listing running containers
+```
+docker ps
+```
+
+#### Removing containers
+```
+docker rm [-f] containerNameOrId
+```
+
+#### Executing commands from outside the container
+```
+docker exec <container-name> <desired-command>
+```
+Example:
+```
+docker exec falko-api rails generate model User name:string
+```
+
 ## Documentation
 
 Additional documentation is avaiable at [Official Wiki](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/wiki).
@@ -91,4 +146,4 @@ The code will be analized by one of the project's owners and, if approved, inclu
 
 [MIT](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/blob/devel/LICENSE)
 
-Copyright (c) 2017 Falko Organization
+Copyright (c) 2018 Falko Organization
