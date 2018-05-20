@@ -1,0 +1,33 @@
+image: docker:18.03.1-ce
+
+cache:
+  paths:
+    - vendor/ruby
+
+rubocop:
+  script:
+  - rubocop
+
+variables:
+  PG_USERNAME=postgres
+  PG_DATABASE=travis_ci_test
+  PG_HOST=falko-database-test
+  PG_PORT=5432
+  RAILS_ENV=test
+  CLIENT_ID=1254ef5e2765397c4fb4
+  CLIENT_SECRET=c566f60e74a49bd8e664033e2978a31d3b39748d
+
+before_script:
+  - mv scripts/docker/docker-compose.test.yml .
+  - docker-compose -f docker-compose.test.yml up -d
+  - >
+    while ! docker logs falko-api-test | grep "Listening on tcp://0.0.0.0:3000"; do
+        echo "Waiting for start script to finish..."
+        sleep 5
+    done;
+  - docker exec -it falko-api-test bundle exec rails db:test:prepare
+
+rails:
+  script:
+  - docker exec -it falko-api-test bundle exec rails test
+  - docker-compose down --remove-orphans
