@@ -1,12 +1,16 @@
-## Expected Behaviour 
+## ** ***Question
+
+Describe your question with details, if possible add screenshots and such.
+
+## * **Expected Behaviour 
 
 Describe the behaviour the system should have.
 
-## *Current Beahaviour
+## * **Current Behaviour
 
 Describe the system's current behaviour.
 
-## *Steps to reproduce unexpected behaviour
+## * **Steps to reproduce unexpected behaviour
 
 In case of bugs, tell us the steps to reach the problem.
 
@@ -14,8 +18,10 @@ In case of bugs, tell us the steps to reach the problem.
 
 - [ ] Issue has labels.
 - [ ] Issue has screenshots if required.
-- [ ] Issue has an significant name.
+- [ ] Issue has a significant name.
 
-**Delete if it's a bug
+*Remove if it is a question
 
-*Delete if it's a User Story
+**Remove if it is a request for a new feature
+
+***Remove if it is a bug
