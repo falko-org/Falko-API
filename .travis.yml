@@ -6,8 +6,8 @@ rvm:
 
 env:
   global:
+  - RAILS_ENV=test
   - CC_TEST_REPORTER_ID=095bc7916972a84272890f2c79eaba7fd64124a4b5b4e826ba0a4d0599b6bfe3
-  - DB=pgsql
 
 services:
   - docker
@@ -37,6 +37,7 @@ script:
     done;
   - docker exec -it falko-api-test bundle exec rails db:test:prepare
   - docker exec -it falko-api-test bundle exec rails test
+  - docker exec -it falko-api-test bundle exec rubocop
 
 after_script:
   - docker exec -it falko-api-test bash -c "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT --coverage-input-type simplecov --id $CC_TEST_REPORTER_ID"

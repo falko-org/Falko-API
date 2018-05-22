@@ -1,0 +1,28 @@
+image: ruby:2.4.1
+
+services:
+  - postgres:9.6
+
+variables:
+  PG_USERNAME: "postgres"
+  PG_DATABASE: "travis_ci_test"
+  PG_HOST: "postgres"
+  RAILS_ENV: "test"
+
+cache:
+  paths:
+    - vendor/ruby
+
+rubocop:
+  script:
+  - rubocop
+
+rails:
+  variables:
+    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$PG_DATABASE"
+  script:
+  - bundle install
+  - rails db:create
+  - rails db:migrate
+  - rails db:test:prepare
+  - rails test
