@@ -15,7 +15,6 @@ cache:
 
 rubocop:
   script:
-  - gem install rubocop
   - rubocop
 
 rails:
