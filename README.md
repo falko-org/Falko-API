@@ -28,7 +28,7 @@
 
 ## Introduction
 
-Falko is an web application, developed using Ruby on Rails API and Vue.js. It is a Freen Software Project, developed initially to GPP/MDS subjects of UnB - University of Brasília - Engeneering Campus (FGA). Falko aims to promote a platform that makes easier for managers _to manage_ agile projects through displaying metrics and relevant info regarding the project, also contributing to more eficient decision making.
+Falko is an web application, developed using Ruby on Rails API and Vue.js. It is a Freen Software Project, developed initially to GPP/MDS subjects of UnB - University of Brasília - Engineering Campus (FGA). Falko aims to promote a platform that makes easier for managers _to manage_ agile projects through displaying metrics and relevant info regarding the project, also contributing to more eficient decision making.
 
 ## Development setup
 
