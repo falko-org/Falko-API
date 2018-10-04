@@ -1,4 +1,4 @@
-FROM ruby:2.4.1
+FROM ruby:2.4.4
 
 MAINTAINER alaxallves@gmail.com
 
@@ -32,4 +32,3 @@ COPY Gemfile.lock /Falko-2017.2-BackEnd/Gemfile.lock
 EXPOSE 3000
 
 ENTRYPOINT ["./start-prod.sh"]
-
