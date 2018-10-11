@@ -2,7 +2,7 @@ sudo: required
 
 language: ruby
 rvm:
-  - 2.4.1
+  - 2.4.4
 
 env:
   global:
