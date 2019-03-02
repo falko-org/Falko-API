@@ -6,10 +6,6 @@ services:
     image: postgres:9.6
     networks:
       - falko-backend
-    environment:
-      - PG_USERNAME=postgres
-      - PG_DATABASE=Falko-2017_2-BackEnd_development
-      - PG_HOST=falko-database
 
   api:
     container_name: falko-api
@@ -17,7 +13,7 @@ services:
     command: ["sh", "scripts/sh/start-dev.sh"]
     environment:
       - PG_USERNAME=postgres
-      - PG_DATABASE=Falko-2017_2-BackEnd_development
+      - PG_DATABASE=falko-dev-db
       - PG_HOST=falko-database
       - PG_PORT=5432
       - RAILS_ENV=development
