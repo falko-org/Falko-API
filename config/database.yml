@@ -24,4 +24,3 @@ production:
   password:
   url: <%= ENV["DATABASE_URL"] %>
   host: dokku.postgres.falko-database
-  
