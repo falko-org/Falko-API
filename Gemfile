@@ -21,6 +21,8 @@ gem "jwt", "~> 1.5.6"
 gem "simple_command"
 gem "rest-client"
 
+gem "apipie-rails", "~> 0.5.11"
+
 gem "travis", "~> 1.8", ">= 1.8.8"
 
 gem "codeclimate-test-reporter", group: :test, require: nil

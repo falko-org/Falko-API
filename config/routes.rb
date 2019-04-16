@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  apipie
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   post "authenticate", to: "authentication#authenticate"
   post "request_github_token", to: "users#request_github_token"

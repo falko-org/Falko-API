@@ -13,6 +13,7 @@ class ProjectsController < ApplicationController
     validate_project(:id, 0)
   end
 
+  api :GET, "/users/:user_id/projects", "Show projects for a user"
   def index
     @projects = User.find(params[:user_id]).projects
     render json: @projects
@@ -49,10 +50,19 @@ class ProjectsController < ApplicationController
     render json: @form_params_user_orgs
   end
 
+  api :GET, "/projects/:id", "Show a project"
+  param :id, :number
   def show
     render json: @project
   end
 
+  api :POST, "/users/:user_id/projects", "Create a project"
+  description 'Create project for a specific user'
+  param :id, :number, "Project's id", :required => true
+  param :name, String, "Project's name"
+  param :description, String, "Project's description"
+  param :is_project_from_github, :boolean, "Verify if project is from a github account"
+  param :is_scoring, :boolean
   def create
     @project = Project.create(project_params)
     @project.user_id = @current_user.id

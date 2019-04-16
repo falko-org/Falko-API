@@ -11,6 +11,8 @@ class GradesController < ApplicationController
     validate_grade(:id, 0)
   end
 
+  api :GET, "/projects/:project_id/grades", "Show grades for a project"
+  param :id, :number, desc: "Grade's id"
   def index
     grade = @project.grade
     render json: grade
