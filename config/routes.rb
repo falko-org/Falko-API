@@ -5,6 +5,10 @@ Rails.application.routes.draw do
   post "request_github_token", to: "users#request_github_token"
   post "remove_github_token", to: "users#remove_github_token"
 
+  post "password/forgot", to: "passwords#forgot"
+  post "password/reset", to: "passwords#reset"
+
+
   get "sprints/:id/burndown", to: "sprints#get_burndown"
 
   get "repos", to: "projects#github_projects_list"
