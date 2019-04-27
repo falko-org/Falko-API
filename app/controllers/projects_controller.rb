@@ -14,14 +14,13 @@ class ProjectsController < ApplicationController
   end
 
   def_param_group :project do
-    param :id, :number, "Project's id", :required => true
     param :name, String, "Project's name"
     param :description, String, "Project's description"
     param :created_at, Date, "Project's time of creation", :allow_nil => false
     param :updated_at, Date, "Project's time of edition", :allow_nil => false
     param :user_id, :number, "User's id of project's owner"
     param :is_project_from_github, :boolean, "Verify if project is from a github account"
-    param :is_scoring, :boolean
+    param :is_scoring, :boolean, "Verify if project counts story points"
   end
 
   api :GET, "/users/:user_id/projects", "Show projects for a user"
@@ -164,10 +163,6 @@ class ProjectsController < ApplicationController
     @project.destroy
   end
 
-  api :GET, "/projects/:id/contributors", "Show project contributors"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
   def get_contributors
     client = Adapter::GitHubProject.new(request)
 
