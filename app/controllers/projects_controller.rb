@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
     param :is_scoring, :boolean, "Verify if project counts story points"
   end
 
-  api :GET, "/users/:user_id/projects", "Show projects for a user"
+  api :GET, "/users/:user_id/projects", "Show projects for an user"
   error :code => 401, :desc => "Unauthorized"
   error :code => 404, :desc => "Not Found"
   error :code => 500, :desc => "Internal Server Error"
