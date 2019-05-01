@@ -9,13 +9,47 @@ class UsersController < ApplicationController
     validate_user(:id, 0)
   end
 
+  def_param_group :user do
+    param :name, String, "User' name"
+    param :email, String, "User's email"
+    param :password_digest, String, "User's password"
+    param :created_at, Date, "User's time of creation", :allow_nil => false
+    param :updated_at, Date, "User's time of edition", :allow_nil => false
+    param :description, String, "User's acess token"
+  end
+
   # GET /users/1
+  api :GET, "/users/:id", "Show a user"
+  error :code => 401, :desc => "Unauthorized"
+  error :code => 404, :desc => "Not Found"
+  error :code => 500, :desc => "Internal Server Error"
+  description "Show a specific user"
+  returns :code => 200, :desc => "Ok" do
+    param_group :user
+  end
+  example <<-EOS
+  {
+    "id": 1,
+    "name": "Vitor Barbosa",
+    "email": "barbosa@gmail.com",
+    "password_digest": "$2a$10$GDiOPE7a2YMzhaOdgW88NOecH3.eiBLcCZQjDjoi2ykrAdgreV2ge",
+    "created_at": "2019-04-11T15:42:33.741Z",
+    "updated_at": "2019-04-11T15:42:33.741Z",
+    "access_token": null
+  }
+  EOS
   def show
     @user = User.find(params[:id].to_i)
     render json: @user
   end
 
   # POST /users
+  api :POST, "/users", "Create a user"
+  error :code => 401, :desc => "Unauthorized"
+  error :code => 404, :desc => "Not Found"
+  error :code => 500, :desc => "Internal Server Error"
+  description 'Create a specific user'
+  param_group :user
   def create
     @user = User.new(user_params)
     if @user.save
@@ -69,6 +103,12 @@ class UsersController < ApplicationController
   end
 
   # PATCH/PUT /users/1
+  api :PATCH, "/users/:id", "Update a user"
+  error :code => 401, :desc => "Unauthorized"
+  error :code => 404, :desc => "Not Found"
+  error :code => 500, :desc => "Internal Server Error"
+  description 'Update a specific user'
+  param_group :user
   def update
     if @user.update(user_params)
       render json: @user
@@ -78,6 +118,12 @@ class UsersController < ApplicationController
   end
 
   # DELETE /users/1
+  api :DELETE, "/users/:id", "Delete a user"
+  error :code => 401, :desc => "Unauthorized"
+  error :code => 404, :desc => "Not Found"
+  error :code => 500, :desc => "Internal Server Error"
+  description 'Delete a specific user'
+  param_group :user
   def destroy
     @user.destroy
     render json: { status: 200, message: "User deleted successfully" }.to_json
