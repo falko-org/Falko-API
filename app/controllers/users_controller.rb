@@ -13,18 +13,18 @@ class UsersController < ApplicationController
     param :name, String, "User' name"
     param :email, String, "User's email"
     param :password_digest, String, "User's password"
-    param :created_at, Date, "User's time of creation", :allow_nil => false
-    param :updated_at, Date, "User's time of edition", :allow_nil => false
+    param :created_at, Date, "User's time of creation", allow_nil: false
+    param :updated_at, Date, "User's time of edition", allow_nil: false
     param :description, String, "User's acess token"
   end
 
   # GET /users/1
   api :GET, "/users/:id", "Show a user"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Show a specific user"
-  returns :code => 200, :desc => "Ok" do
+  returns code: 200, desc: "Ok" do
     param_group :user
   end
   example <<-EOS
@@ -45,10 +45,10 @@ class UsersController < ApplicationController
 
   # POST /users
   api :POST, "/users", "Create a user"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
-  description 'Create a specific user'
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
+  description "Create a specific user"
   param_group :user
   def create
     @user = User.new(user_params)
@@ -104,10 +104,10 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   api :PATCH, "/users/:id", "Update a user"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
-  description 'Update a specific user'
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
+  description "Update a specific user"
   param_group :user
   def update
     if @user.update(user_params)
@@ -119,10 +119,10 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   api :DELETE, "/users/:id", "Delete a user"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
-  description 'Delete a specific user'
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
+  description "Delete a specific user"
   param_group :user
   def destroy
     @user.destroy

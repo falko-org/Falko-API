@@ -16,19 +16,19 @@ class ProjectsController < ApplicationController
   def_param_group :project do
     param :name, String, "Project's name"
     param :description, String, "Project's description"
-    param :created_at, Date, "Project's time of creation", :allow_nil => false
-    param :updated_at, Date, "Project's time of edition", :allow_nil => false
+    param :created_at, Date, "Project's time of creation", allow_nil: false
+    param :updated_at, Date, "Project's time of edition", allow_nil: false
     param :user_id, :number, "User's id of project's owner"
     param :is_project_from_github, :boolean, "Verify if project is from a github account"
     param :is_scoring, :boolean, "Verify if project counts story points"
   end
 
   api :GET, "/users/:user_id/projects", "Show projects for an user"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Show all projects of a specific user"
-  returns :code => 200, :desc => "Ok" do
+  returns code: 200, desc: "Ok" do
     param_group :project
   end
   example <<-EOS
@@ -63,9 +63,9 @@ class ProjectsController < ApplicationController
   end
 
   api :GET, "/repos", "Show a github projects list"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Show a projects list of current user from github"
   def github_projects_list
     client = Adapter::GitHubProject.new(request)
@@ -99,10 +99,10 @@ class ProjectsController < ApplicationController
   end
 
   api :GET, "/projects/:id", "Show a specific project"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
-  returns :code => 200, :desc => "Ok" do
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
+  returns code: 200, desc: "Ok" do
     param_group :project
   end
   example <<-EOS
@@ -123,10 +123,10 @@ class ProjectsController < ApplicationController
   end
 
   api :POST, "/users/:user_id/projects", "Create a project"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
-  description 'Create project for a specific user'
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
+  description "Create project for a specific user"
   param_group :project
   def create
     @project = Project.create(project_params)
@@ -140,10 +140,10 @@ class ProjectsController < ApplicationController
   end
 
   api :PATCH, "/projects/:id", "Update a project"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
-  description 'Update project for a specific user'
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
+  description "Update project for a specific user"
   param_group :project
   def update
     if @project.update(project_params)
@@ -154,10 +154,10 @@ class ProjectsController < ApplicationController
   end
 
   api :DELETE, "/projects/:id", "Delete a project"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
-  description 'Delete project for a specific user'
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
+  description "Delete project for a specific user"
   param_group :project
   def destroy
     @project.destroy

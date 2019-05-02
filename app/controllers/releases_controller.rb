@@ -15,19 +15,19 @@ class ReleasesController < ApplicationController
     param :name, String, "Release's name"
     param :description, String, "Release's description"
     param :amount_of_sprints, Integer, "Release's number of sprints"
-    param :created_at, Date, "Release's time of creation", :allow_nil => false
-    param :updated_at, Date, "Release's time of edition", :allow_nil => false
+    param :created_at, Date, "Release's time of creation", allow_nil: false
+    param :updated_at, Date, "Release's time of edition", allow_nil: false
     param :project_id, :number, "Project's id"
     param :initial_date, Date, "Release's initial date"
     param :final_date, Date, "Release's final date"
   end
 
   api :GET, "/projects/:project_id/releases", "Show releases for a project"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Show all releases of a specific project"
-  returns :code => 200, :desc => "Ok" do
+  returns code: 200, desc: "Ok" do
     param_group :release
   end
   example <<-EOS
@@ -62,11 +62,11 @@ class ReleasesController < ApplicationController
   end
 
   api :GET, "releases/:id", "Show a release for a project"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Show a specific release of a project"
-  returns :code => 200, :desc => "Ok" do
+  returns code: 200, desc: "Ok" do
     param_group :release
   end
   example <<-EOS
@@ -88,9 +88,9 @@ class ReleasesController < ApplicationController
   end
 
   api :POST, "/projects/:project_id/releases", "Create a release"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Create release of a project"
   param_group :release
   def create
@@ -105,9 +105,9 @@ class ReleasesController < ApplicationController
   end
 
   api :PATCH, "/releases/:id", "Update a release"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Update release of a project"
   param_group :release
   def update
@@ -119,9 +119,9 @@ class ReleasesController < ApplicationController
   end
 
   api :DELETE, "/releases/:id", "Delete a release"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Delete release of a project"
   param_group :release
   def destroy

@@ -17,19 +17,19 @@ class SprintsController < ApplicationController
   def_param_group :sprint do
     param :name, String, "Sprint' name"
     param :description, String, "Sprint's description"
-    param :created_at, Date, "Sprint's time of creation", :allow_nil => false
-    param :updated_at, Date, "Sprint's time of edition", :allow_nil => false
+    param :created_at, Date, "Sprint's time of creation", allow_nil: false
+    param :updated_at, Date, "Sprint's time of edition", allow_nil: false
     param :release_id, :number, "Id of release that the sprint belongs"
     param :initial_date, Date, "Sprint's initial date"
     param :final_date, Date, "Sprint's final date"
   end
 
   api :GET, "/releases/:release_id/sprints", "Show sprints for a release"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Show all sprints of a specific release"
-  returns :code => 200, :desc => "Ok" do
+  returns code: 200, desc: "Ok" do
     param_group :sprint
   end
   example <<-EOS
@@ -62,11 +62,11 @@ class SprintsController < ApplicationController
   end
 
   api :GET, "/sprints/:id", "Show a sprint"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Show a specific sprint"
-  returns :code => 200, :desc => "Ok" do
+  returns code: 200, desc: "Ok" do
     param_group :sprint
   end
   example <<-EOS
@@ -86,10 +86,10 @@ class SprintsController < ApplicationController
   end
 
   api :POST, "/releases/:release_id/sprints", "Create a sprint"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
-  description 'Create a specific sprint'
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
+  description "Create a specific sprint"
   param_group :sprint
   def create
     @sprint = Sprint.new(sprint_params)
@@ -109,10 +109,10 @@ class SprintsController < ApplicationController
   end
 
   api :PATCH, "/sprints/:id", "Update a sprint"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
-  description 'Update a specific sprint'
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
+  description "Update a specific sprint"
   param_group :sprint
   def update
     if validate_sprints_date("sprint", sprint_params)
@@ -127,10 +127,10 @@ class SprintsController < ApplicationController
   end
 
   api :DELETE, "/sprints/:id", "Update a sprint"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
-  description 'Delete a specific sprint'
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
+  description "Delete a specific sprint"
   param_group :sprint
   def destroy
     @sprint.destroy
@@ -138,11 +138,11 @@ class SprintsController < ApplicationController
   end
 
   api :GET, "/sprints/:id/velocity", "Show velocity of a sprint"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Show velocity of a specific sprint"
-  returns :code => 200, :desc => "Ok" do
+  returns code: 200, desc: "Ok" do
     param_group :sprint
   end
   example <<-EOS
@@ -173,11 +173,11 @@ class SprintsController < ApplicationController
   end
 
   api :GET, "/sprints/:id/burndown", "Show burndown of a sprint"
-  error :code => 401, :desc => "Unauthorized"
-  error :code => 404, :desc => "Not Found"
-  error :code => 500, :desc => "Internal Server Error"
+  error code: 401, desc: "Unauthorized"
+  error code: 404, desc: "Not Found"
+  error code: 500, desc: "Internal Server Error"
   description "Show burndown of a specific sprint"
-  returns :code => 200, :desc => "Ok" do
+  returns code: 200, desc: "Ok" do
     param_group :sprint
   end
   example <<-EOS
