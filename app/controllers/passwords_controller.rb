@@ -10,13 +10,12 @@ class PasswordsController < ApplicationController
 
     if user.present?
       user.generate_password_token!
-      # send email here
+      UserMailer.with(user: user).recover_password_email.deliver_now
       render json: { status: "ok" }, status: :ok
     else
-      render json: { error: ["Email address not found."] }, status: :not_found
+      render json: { status: "ok" }, status: :ok
     end
   end
-
 
   def reset
     if password_params[:token].blank?
@@ -38,8 +37,8 @@ class PasswordsController < ApplicationController
     end
   end
 
-  private
 
+  private
 
     def password_params
       params.permit(:email, :token, :password)

@@ -22,7 +22,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     post "/password/forgot/", params: {
       "email": "nonexistent@gmail.com"
     }
-    assert_response :not_found
+    assert_response :ok
   end
 
   test "should not create token given a blank email" do
