@@ -37,6 +37,21 @@ class PasswordsController < ApplicationController
     end
   end
 
+  def validate_token
+    if password_params[:token].blank?
+      return render json: { error: "Token not present" }, status: :bad_request
+    else
+      token = password_params[:token].to_s
+    end
+
+    user = User.find_by(reset_password_token: token)
+
+    if user.present? && user.password_token_valid?
+      render json: { status: "true" }, status: :ok
+    else
+      render json: { status: "false", error: ["Link not valid or expired. Try generating a new one."] }, status: :ok
+    end
+  end
 
   private
 

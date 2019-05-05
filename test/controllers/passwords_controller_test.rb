@@ -89,4 +89,49 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     }
     assert_response :bad_request
   end
+
+  test "should return ok given a valid token" do
+    post "/password/forgot", params: {
+      "email": "eduardo@gmail.com"
+    }
+
+    token = User.find_by(id: @user.id).reset_password_token
+
+    get "/password/validate_token?token=#{token}"
+
+    assert_response :ok
+    body = JSON.parse(response.body)
+    assert_equal(body["status"], "true")
+  end
+
+  test "should not return true given an expired token" do
+    post "/password/forgot", params: {
+      "email": "eduardo@gmail.com"
+    }
+
+    token = User.find_by(id: @user.id).reset_password_token
+
+    travel 5.hour
+
+    get "/password/validate_token?token=#{token}"
+
+    assert_response :ok
+    body = JSON.parse(response.body)
+    assert_equal(body["status"], "false")
+    assert_equal(body["error"], ["Link not valid or expired. Try generating a new one."])
+  end
+
+  test "should not return true given an invalid token" do
+    post "/password/forgot", params: {
+      "email": "eduardo@gmail.com"
+    }
+    assert_response :ok
+
+    get "/password/validate_token?token=#{SecureRandom.hex(10)}"
+
+    assert_response :ok
+    body = JSON.parse(response.body)
+    assert_equal(body["status"], "false")
+    assert_equal(body["error"], ["Link not valid or expired. Try generating a new one."])
+  end
 end

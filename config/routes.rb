@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   post "password/forgot", to: "passwords#forgot"
   post "password/reset", to: "passwords#reset"
+  get  "password/validate_token", to: "passwords#validate_token"
 
 
   get "sprints/:id/burndown", to: "sprints#get_burndown"
