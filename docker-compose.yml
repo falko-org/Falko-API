@@ -19,7 +19,7 @@ services:
       - RAILS_ENV=development
       - CLIENT_ID=1254ef5e2765397c4fb4
       - CLIENT_SECRET=c566f60e74a49bd8e664033e2978a31d3b39748d
-      - RECOVERY_EMAIL_URI=http:8080/#/users/resetpassword?token=<token>
+      - PASSWORD_RESET_ADDRESS=http://localhost:8080/#/users/resetpassword?token=<token>
     volumes:
       - .:/Falko-2017.2-BackEnd
       - bundle-cache:/bundle-cache

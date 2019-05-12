@@ -3,7 +3,7 @@ class UserMailer < ApplicationMailer
 
   def recover_password_email
     @user = params[:user]
-    @uri = ENV["RECOVERY_EMAIL_URI"].gsub(/<token>/, @user.reset_password_token)
+    @uri = ENV["PASSWORD_RESET_ADDRESS"].gsub(/<token>/, @user.reset_password_token)
     mail(to: @user.email, subject: "Falko password recovery")
   end
 end
