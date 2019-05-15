@@ -1,5 +1,6 @@
 class GradesController < ApplicationController
   include MetricHelper
+  include GradesDoc
 
   before_action :set_grade, only: [:show, :update, :destroy]
 

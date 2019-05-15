@@ -2,6 +2,7 @@ require "rest-client"
 
 class ProjectsController < ApplicationController
   include ValidationsHelper
+  include ProjectsDoc
 
   before_action :set_project, only: [:destroy, :show, :get_contributors]
 

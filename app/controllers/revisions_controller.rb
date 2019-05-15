@@ -1,5 +1,6 @@
 class RevisionsController < ApplicationController
   include ValidationsHelper
+  include RevisionsDoc
 
   before_action :set_revision, only: [:show, :update]
 

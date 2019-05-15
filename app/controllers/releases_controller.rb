@@ -1,5 +1,6 @@
 class ReleasesController < ApplicationController
   include ValidationsHelper
+  include ReleasesDoc
 
   before_action :set_release, only: [:show, :update, :destroy]
 

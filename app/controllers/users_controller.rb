@@ -1,6 +1,7 @@
 require "rest-client"
 class UsersController < ApplicationController
   include ValidationsHelper
+  include UsersDoc
 
   skip_before_action :authenticate_request, only: [:create, :all]
 

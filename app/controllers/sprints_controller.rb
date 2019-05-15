@@ -3,6 +3,7 @@ class SprintsController < ApplicationController
   include VelocityHelper
   include BurndownHelper
   include MetricHelper
+  include SprintsDoc
 
   before_action :set_sprint, only: [:show, :update, :destroy, :get_burndown]
 

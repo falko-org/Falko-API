@@ -1,5 +1,6 @@
 class StoriesController < ApplicationController
   include ValidationsHelper
+  include StoriesDoc
 
   before_action :set_story, only: [:show, :update, :destroy]
 

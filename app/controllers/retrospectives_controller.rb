@@ -1,5 +1,6 @@
 class RetrospectivesController < ApplicationController
   include ValidationsHelper
+  include RetrospectivesDoc
 
   before_action :set_retrospective, only: [:show, :update, :destroy]
 
