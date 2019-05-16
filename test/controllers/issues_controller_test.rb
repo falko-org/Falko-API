@@ -60,13 +60,17 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
       Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), login: "username_test")
     end
 
-    def mock.list_issues(github_slug)
+    def mock.list_issues(github_slug, page_number)
+      [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: "3", body: "This is a template body", assignees: [ login: "ThalissonMelo" ]) ]
+    end
+
+    def mock.total_issues_pages(last_page)
       [ Sawyer::Resource.new(Sawyer::Agent.new("/issues_test"), title: "issue", number: "3", body: "This is a template body", assignees: [ login: "ThalissonMelo" ]) ]
     end
 
 
     Adapter::GitHubIssue.stub :new, mock do
-      get "/projects/#{@project.id}/issues", headers: { Authorization: @token.result }
+      get "/projects/#{@project.id}/issues/1", headers: { Authorization: @token.result }
 
       assert response.parsed_body["issues_infos"][0]["name"] == "issue"
       assert response.parsed_body["issues_infos"][0]["number"] == "3"
@@ -89,7 +93,7 @@ class IssuesControllerTest < ActionDispatch::IntegrationTest
 
 
     Adapter::GitHubIssue.stub :new, mock do
-      get "/projects/#{@project.id}/issues"
+      get "/projects/#{@project.id}/issues/1"
 
       assert_response :unauthorized
     end
