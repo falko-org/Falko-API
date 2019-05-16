@@ -33,7 +33,7 @@ module Adapter
     def initialize(request)
       @logged_user = AuthorizeApiRequest.call(request.headers).result
       @client = Octokit::Client.new(access_token: @logged_user.access_token)
-      Octokit.auto_paginate = true
+      @client.auto_paginate = false
       @client
     end
 
@@ -41,8 +41,18 @@ module Adapter
       user_login = @client.user.login
     end
 
-    def list_issues(github_slug)
-      @client.list_issues(github_slug)
+    def list_issues(github_slug, page_number)
+      @client.list_issues(github_slug, page: page_number, per_page: 15)
+    end
+
+    def total_issues_pages(last_page)
+      header_response = @client.last_response.rels[:last]
+      if header_response.class != NilClass
+        number_of_pages = header_response.href.match(/page=(\d+).*$/)[1]
+        return number_of_pages.to_i
+      else
+        return last_page.to_i
+      end
     end
 
     def list_all_issues(github_slug)
