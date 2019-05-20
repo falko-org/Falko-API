@@ -47,7 +47,7 @@ module Adapter
 
     def total_issues_pages(last_page)
       header_response = @client.last_response.rels[:last]
-      if header_response.class != NilClass
+      unless header_response.nil?
         number_of_pages = header_response.href.match(/page=(\d+).*$/)[1]
         return number_of_pages.to_i
       else
