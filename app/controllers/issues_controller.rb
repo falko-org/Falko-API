@@ -9,7 +9,9 @@ class IssuesController < ApplicationController
   def index
     client = Adapter::GitHubIssue.new(request)
 
-    @issues = client.list_issues(@project.github_slug)
+    @issues = client.list_issues(@project.github_slug, params[:page])
+
+    total_pages = client.total_issues_pages(params[:page])
 
     convert_form_params(@issues)
 
@@ -18,12 +20,14 @@ class IssuesController < ApplicationController
     all_stories_number = []
 
     all_stories.each do |story|
-      all_stories_number.push(story.issue_id.to_i)
+      all_stories_number.push(story.issue_number.to_i)
     end
 
-    @filter_form = { issues_infos: [] }
+    @filter_form = { issues_infos: [], total_pages: total_pages }
 
-    @filter_form[:issues_infos] = @form_params[:issues_infos].reject { |h| all_stories_number.include? h[:issue_id] }
+    @filter_form[:issues_infos] = @form_params[:issues_infos].reject do |h|
+      all_stories_number.include? h[:issue_id]
+    end
 
     render json: @filter_form
   end
