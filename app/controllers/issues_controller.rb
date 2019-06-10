@@ -9,9 +9,13 @@ class IssuesController < ApplicationController
   def index
     client = Adapter::GitHubIssue.new(request)
 
-    @issues = client.list_issues(@project.github_slug, params[:page])
-
-    total_pages = client.total_issues_pages(params[:page])
+    if params[:page].present?
+      @issues = client.list_issues(@project.github_slug, params[:page])
+      total_pages = client.total_issues_pages(params[:page])
+    else
+      @issues = client.list_all_issues(@project.github_slug)
+      total_pages = 1
+    end
 
     convert_form_params(@issues)
 
