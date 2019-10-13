@@ -10,4 +10,20 @@ class AuthenticationController < ApplicationController
       render json: { error: command.errors } , status: :unauthorized
     end
   end
+
+  def confirm_email
+    begin
+      token = params[:token]
+      decoded_token = JWT.decode(token, Rails.application.secrets.secret_key_base)[0]
+      current_user = User.find(decoded_token["user_id"])
+      email = current_user.email
+      current_user.confirmation_token = true
+      current_user.save
+      render json: { status: 200, message: "User confirmed" }.to_json
+    rescue JWT::DecodeError => e
+      render json: { status: 401, message: "Invalid token" }.to_json
+    end    
+  end
+
+
 end
