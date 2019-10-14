@@ -1,5 +1,6 @@
 class UserMailer < ApplicationMailer
   default from: "noreply@falko.com"
+  layout "verify_email"
 
   def recover_password_email
     @user = params[:user]
@@ -8,8 +9,13 @@ class UserMailer < ApplicationMailer
   end
 
   def verify_email
-    @email = params[:email]
-    @token = params[:token]
+    # @email = params[:email]
+    # @token = params[:token]
+    @user = params[:user]
+    # puts "user = ", user[:email]
+    @email = @user[:email]
+    # puts "user = ", email
     # @url
+    mail to: @email, subject: "Email confirmation token"
   end
 end
