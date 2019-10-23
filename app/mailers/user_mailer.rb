@@ -14,8 +14,11 @@ class UserMailer < ApplicationMailer
     @user = params[:user]
     # puts "user = ", user[:email]
     @email = @user[:email]
+    userToken = params[:token]
+    @token = userToken.result
     # puts "user = ", email
     # @url
+    puts "token = ", @token
     mail to: @email, subject: "Email confirmation token"
   end
 end

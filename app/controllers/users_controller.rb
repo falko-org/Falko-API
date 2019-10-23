@@ -36,7 +36,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       @token = GenerateVerifyToken.call(@user.id)
-      UserMailer.with(user: @user).verify_email.deliver_now!
+      UserMailer.with(user: @user, token: @token).verify_email.deliver_now!
       render json: @token, status: :created
     else
       render json: @user.errors, status: :unprocessable_entity
