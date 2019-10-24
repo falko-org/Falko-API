@@ -17,27 +17,15 @@ class UsersController < ApplicationController
   end
 
   # POST /users V1
-  # def create
-  #   @user = User.new(user_params)
-  #   if @user.save
-  #     @token = AuthenticateUser.call(@user.email, @user.password)
-
-  #     @result = { token: @token.result }
-
-  #     response.set_header("auth_token", @token.result)
-  #     render json: @result, status: :created
-  #   else
-  #     render json: @user.errors, status: :unprocessable_entity
-  #   end
-  # end
-
-  # POST /users V2
   def create
     @user = User.new(user_params)
     if @user.save
-      @token = GenerateVerifyToken.call(@user.id)
-      UserMailer.with(user: @user, token: @token).verify_email.deliver_now!
-      render json: @token, status: :created
+      @token = AuthenticateUser.call(@user.email, @user.password)
+
+      @result = { token: @token.result }
+
+      response.set_header("auth_token", @token.result)
+      render json: @result, status: :created
     else
       render json: @user.errors, status: :unprocessable_entity
     end

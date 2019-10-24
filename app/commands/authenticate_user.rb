@@ -7,7 +7,7 @@ class AuthenticateUser
   end
 
   def call
-    JsonWebToken.encode(payload: {user_id: user.id}, secret_key: Rails.application.secrets.secret_key_base) if user
+    JsonWebToken.encode(payload: { user_id: user.id }, secret_key: Rails.application.secrets.secret_key_base) if user
   end
 
     private

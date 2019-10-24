@@ -5,11 +5,11 @@ require_relative "application"
 Rails.application.initialize!
 
 ActionMailer::Base.smtp_settings = {
-  :user_name => 'apikey',
-  :password => '',
-  :domain => 'gmail.com',
-  :address => 'smtp.sendgrid.net',
-  :port => 587,
-  :authentication => :plain,
-  :enable_starttls_auto => true
+  user_name: "apikey",
+  password: "",
+  domain: "gmail.com",
+  address: "smtp.sendgrid.net",
+  port: 587,
+  authentication: :plain,
+  enable_starttls_auto: true
 }

@@ -1,7 +1,6 @@
 class JsonWebToken
   class << self
     def encode(payload:, exp: 24.hours.from_now, secret_key:)
-      puts secret_key
       payload[:exp] = exp.to_i
       JWT.encode(payload, secret_key)
     end

@@ -22,8 +22,6 @@ class AuthenticationController < ApplicationController
       render json: { status: 200, message: "User confirmed" }.to_json
     rescue JWT::DecodeError => e
       render json: { status: 401, message: "Invalid token" }.to_json
-    end    
+    end
   end
-
-
 end
