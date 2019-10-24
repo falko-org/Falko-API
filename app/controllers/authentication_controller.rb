@@ -14,8 +14,8 @@ class AuthenticationController < ApplicationController
   def confirm_email
     begin
       token = params[:token]
-      decoded_token = JWT.decode(token, Rails.application.secrets.secret_key_base)[0]
-      current_user = User.find(decoded_token["user_id"])
+      decoded_token = JWT.decode(token, Rails.application.secrets.secret_key_email)[0]
+      current_user = User.find(decoded_token["user_id"].to_i)
       email = current_user.email
       current_user.confirmation_token = true
       current_user.save

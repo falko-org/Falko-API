@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   post "request_github_token", to: "users#request_github_token"
   post "remove_github_token", to: "users#remove_github_token"
 
-  post "verify_token", to: "authentication#confirm_email"
+  get "verify_token", to: "authentication#confirm_email"
 
   post "password/forgot", to: "passwords#forgot"
   post "password/reset", to: "passwords#reset"

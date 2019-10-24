@@ -9,16 +9,10 @@ class UserMailer < ApplicationMailer
   end
 
   def verify_email
-    # @email = params[:email]
-    # @token = params[:token]
     @user = params[:user]
-    # puts "user = ", user[:email]
     @email = @user[:email]
-    userToken = params[:token]
-    @token = userToken.result
-    # puts "user = ", email
-    # @url
-    puts "token = ", @token
+    user_token = params[:token]
+    @token = user_token.result
     mail to: @email, subject: "Email confirmation token"
   end
 end
