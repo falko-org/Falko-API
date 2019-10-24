@@ -10,7 +10,7 @@ class V1::UsersController < ApplicationController
     validate_user(:id, 0)
   end
 
-  # POST /users 
+  # POST /users
   def create
     @user = User.new(user_params)
     if @user.save
