@@ -12,8 +12,14 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    @user = User.find(params[:id].to_i)
-    render json: @user
+    begin
+      @user = User.find(params[:id].to_i)
+      render json: @user
+    rescue ActiveRecord::RecordNotFound => e
+      render json: {
+        error: e.to_s
+      }, status: :not_found
+    end
   end
 
   # POST /users V1
