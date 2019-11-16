@@ -12,11 +12,17 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    @user = User.find(params[:id].to_i)
-    render json: @user
+    begin
+      @user = User.find(params[:id].to_i)
+      render json: @user
+    rescue ActiveRecord::RecordNotFound => e
+      render json: {
+        error: e.to_s
+      }, status: :not_found
+    end
   end
 
-  # POST /users
+  # POST /users V1
   def create
     @user = User.new(user_params)
     if @user.save
@@ -86,7 +92,13 @@ class UsersController < ApplicationController
 
   private
     def set_user
-      @user = User.find(params[:id])
+      begin
+        @user = User.find(params[:id])
+      rescue ActiveRecord::RecordNotFound => e
+        render json: {
+          error: e.to_s
+        }, status: :not_found
+      end
     end
 
     def user_params

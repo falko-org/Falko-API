@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   post "request_github_token", to: "users#request_github_token"
   post "remove_github_token", to: "users#remove_github_token"
 
+  get "verify_token", to: "authentication#confirm_email"
+
   post "password/forgot", to: "passwords#forgot"
   post "password/reset", to: "passwords#reset"
   get  "password/validate_token", to: "passwords#validate_token"
@@ -32,6 +34,10 @@ Rails.application.routes.draw do
 
   post "projects/:id/reopen_issue", to: "issues#reopen_issue"
   post "/projects/:id/issues/graphic", to: "issues#issue_graphic_data"
+
+  namespace :v1 do
+    post "/users", to: "users#create"
+  end
 
   resources :users, shallow: true do
     resources :projects do
