@@ -8,7 +8,8 @@ class SprintsController < ApplicationController
   before_action :set_sprint, only: [:show, :update, :destroy, :get_burndown]
 
   before_action only: [:index, :create] do
-    validate_release(0, :release_id)
+    # validate_release(0, :release_id)
+    validate_grade_and_release(0, :release_id, "release")
   end
 
   before_action only: [:show, :update, :destroy, :get_velocity, :get_metrics] do

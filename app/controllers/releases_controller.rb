@@ -9,7 +9,8 @@ class ReleasesController < ApplicationController
   end
 
   before_action only: [:show, :edit, :update, :destroy] do
-    validate_release(:id, 0)
+    # validate_release(:id, 0)
+    validate_grade_and_release(:id, 0, "release")
   end
 
   def index
