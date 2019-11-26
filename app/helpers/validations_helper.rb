@@ -86,24 +86,14 @@ module ValidationsHelper
     end
   end
 
-
-  def validate_grade(id, grade_id)
+  def validate_grade_and_release(id, element_id, component_type)
     current_user
-    verifies_id(id, grade_id, "grade")
-    project_grade
-    user
-
-    if @current_user.id == @user.id
-      return true
+    verifies_id(id, element_id, component_type)
+    if component_type == "grade"
+      project_grade
     else
-      render json: { error: "Not Authorized" }, status: 401
+      project
     end
-  end
-
-  def validate_release(id, release_id)
-    current_user
-    verifies_id(id, release_id, "release")
-    project
     user
 
     if @current_user.id == @user.id
