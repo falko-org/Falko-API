@@ -9,7 +9,6 @@ class GradesController < ApplicationController
   end
 
   before_action only: [:show, :update] do
-    # validate_grade(:id, 0)
     validate_grade_and_release(:id, 0, "grade")
   end
 

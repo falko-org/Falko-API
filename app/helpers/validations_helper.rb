@@ -90,10 +90,8 @@ module ValidationsHelper
     current_user
     verifies_id(id, element_id, component_type)
     if component_type == "grade"
-      # verifies_id(id, element_id, component_type)
       project_grade
     else
-      # verifies_id(id, release_id, "release")
       project
     end
     user
@@ -104,32 +102,6 @@ module ValidationsHelper
       render json: { error: "Not Authorized" }, status: 401
     end
   end
-
-  # def validate_grade(id, grade_id)
-  #   current_user
-  #   verifies_id(id, grade_id, "grade")
-  #   project_grade
-  #   user
-
-  #   if @current_user.id == @user.id
-  #     return true
-  #   else
-  #     render json: { error: "Not Authorized" }, status: 401
-  #   end
-  # end
-
-  # def validate_release(id, release_id)
-  #   current_user
-  #   verifies_id(id, release_id, "release")
-  #   project
-  #   user
-
-  #   if @current_user.id == @user.id
-  #     return true
-  #   else
-  #     render json: { error: "Not Authorized" }, status: 401
-  #   end
-  # end
 
   def validate_sprint(id, sprint_id)
     current_user
