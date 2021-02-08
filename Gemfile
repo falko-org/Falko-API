@@ -27,7 +27,7 @@ gem "travis", "~> 1.8", ">= 1.8.8"
 
 gem "codeclimate-test-reporter", group: :test, require: nil
 
-gem "carrierwave", "~> 1.1"
+gem "carrierwave", "~> 1.3"
 gem "carrierwave-base64", "~> 2.5", ">= 2.5.3"
 
 gem "simple_token_authentication", "~> 1.0"
